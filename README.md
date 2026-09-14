@@ -37,17 +37,3 @@ cd frontend
 npm install
 npm run dev
 # App runs on http://localhost:5173
-```
-
----
-
-## 👥 Default Demo Credentials
-
-| Role | Email | Password |
-| :--- | :--- | :--- |
-| **Super Admin** | `superadmin@cyberaware.io` | `Password123!` |
-| **Company Admin** | `admin@acmefinance.com` | `Password123!` |
-| **Employee / Learner** | `ahmed@acmefinance.com` | `Password123!` |
-
-- **Sample Verified Certificate ID**: `CA-2026-000001`
-- **Sample Verification URL**: `http://localhost:5173/verify/CA-2026-000001`
