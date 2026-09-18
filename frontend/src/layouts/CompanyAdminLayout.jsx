@@ -31,7 +31,7 @@ export default function CompanyAdminLayout() {
   ];
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#070b14' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: "#fafafa"}}>
       <DemoRoleBar />
 
       <div style={{ display: 'flex', flex: 1 }}>
@@ -54,7 +54,7 @@ export default function CompanyAdminLayout() {
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
               <Building2 size={16} color="#06b6d4" />
-              <div style={{ fontSize: '0.875rem', fontWeight: 700, color: '#f8fafc', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <div style={{ fontSize: '0.875rem', fontWeight: 700, color: '#18181b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {companyName}
               </div>
             </div>

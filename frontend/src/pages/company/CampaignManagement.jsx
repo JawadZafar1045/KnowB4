@@ -48,7 +48,7 @@ export default function CampaignManagement() {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#f8fafc' }}>Training Campaigns</h1>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#18181b' }}>Training Campaigns</h1>
           <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Deploy awareness programs and track audience coverage</p>
         </div>
         <button className="btn-primary" onClick={() => setShowCreate(true)}><Plus size={14} /> Launch Campaign</button>
@@ -60,7 +60,7 @@ export default function CampaignManagement() {
           <div key={c._id} className="glass-card" style={{ padding: '22px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <div>
-                <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#f8fafc', marginBottom: '6px' }}>{c.name}</h3>
+                <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#18181b', marginBottom: '6px' }}>{c.name}</h3>
                 <p style={{ fontSize: '0.82rem', color: '#94a3b8', marginBottom: '10px' }}>{c.description?.substring(0, 100)}</p>
                 <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                   {c.courses?.map(course => (
@@ -95,7 +95,7 @@ export default function CampaignManagement() {
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, overflowY: 'auto', padding: '40px 0' }}>
           <div className="glass-card" style={{ padding: '32px', width: '560px', maxHeight: '90vh', overflowY: 'auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-              <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#f8fafc' }}>Launch New Campaign</h2>
+              <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#18181b' }}>Launch New Campaign</h2>
               <button onClick={() => setShowCreate(false)} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}><X size={18}/></button>
             </div>
             <form onSubmit={handleLaunch} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>

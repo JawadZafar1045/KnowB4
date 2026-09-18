@@ -14,7 +14,7 @@ export default function EmployeeLayout() {
   ];
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#070b14' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: "#fafafa"}}>
       <DemoRoleBar />
 
       {/* Top Navbar */}
@@ -41,7 +41,7 @@ export default function EmployeeLayout() {
             }}>
               <Shield size={18} color="#ffffff" />
             </div>
-            <div style={{ fontWeight: 800, fontSize: '1rem', color: '#f8fafc' }}>
+            <div style={{ fontWeight: 800, fontSize: '1rem', color: '#18181b' }}>
               Cyber<span style={{ color: '#06b6d4' }}>Aware</span>
             </div>
             <span style={{
@@ -110,7 +110,7 @@ export default function EmployeeLayout() {
           </a>
 
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#f8fafc' }}>
+            <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#18181b' }}>
               {user?.name || 'Ahmed Khan'}
             </div>
             <div style={{ fontSize: '0.72rem', color: '#64748b' }}>

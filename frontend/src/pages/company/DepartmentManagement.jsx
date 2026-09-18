@@ -27,7 +27,7 @@ export default function DepartmentManagement() {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#f8fafc' }}>Departments</h1>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#18181b' }}>Departments</h1>
           <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Organize employees by functional department</p>
         </div>
         <button className="btn-primary" onClick={() => setShowModal(true)}><Plus size={14} /> Add Department</button>
@@ -42,7 +42,7 @@ export default function DepartmentManagement() {
                   <Layers size={20} color="#06b6d4" />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#f8fafc' }}>{dept.name}</h3>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#18181b' }}>{dept.name}</h3>
                   <p style={{ fontSize: '0.78rem', color: '#64748b' }}>{dept.description || 'No description'}</p>
                 </div>
               </div>
@@ -59,7 +59,7 @@ export default function DepartmentManagement() {
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
           <div className="glass-card" style={{ padding: '32px', width: '440px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-              <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#f8fafc' }}>Create Department</h2>
+              <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#18181b' }}>Create Department</h2>
               <button onClick={() => setShowModal(false)} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}><X size={18}/></button>
             </div>
             <form onSubmit={handleCreate} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>

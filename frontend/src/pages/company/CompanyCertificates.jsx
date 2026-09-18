@@ -21,7 +21,7 @@ export default function CompanyCertificates() {
   return (
     <div>
       <div style={{ marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#f8fafc' }}>Issued Certificates</h1>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#18181b' }}>Issued Certificates</h1>
         <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Verified digital security credentials issued to your workforce</p>
       </div>
 

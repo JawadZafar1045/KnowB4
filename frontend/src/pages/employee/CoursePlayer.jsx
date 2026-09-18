@@ -66,7 +66,7 @@ export default function CoursePlayer() {
         <Link to="/employee" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#64748b', fontSize: '0.8rem', textDecoration: 'none', marginBottom: '16px' }}>
           <ChevronLeft size={14} /> Back to Training
         </Link>
-        <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#f8fafc', marginBottom: '4px' }}>{course.title}</h3>
+        <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#18181b', marginBottom: '4px' }}>{course.title}</h3>
         <div style={{ fontSize: '0.78rem', color: '#64748b', marginBottom: '16px' }}>
           {completedCount}/{totalLessons} lessons completed
         </div>
@@ -134,7 +134,7 @@ export default function CoursePlayer() {
         {activeLesson ? (
           <div>
             <div style={{ marginBottom: '20px' }}>
-              <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#f8fafc', marginBottom: '4px' }}>{activeLesson.title}</h2>
+              <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#18181b', marginBottom: '4px' }}>{activeLesson.title}</h2>
               <p style={{ fontSize: '0.85rem', color: '#64748b' }}>
                 {activeLesson.description}
               </p>
@@ -153,7 +153,7 @@ export default function CoursePlayer() {
                   whiteSpace: 'pre-wrap'
                 }}>
                   {activeLesson.textContent.split('\n').map((line, i) => {
-                    if (line.startsWith('###')) return <h3 key={i} style={{ fontSize: '1.15rem', fontWeight: 700, color: '#f8fafc', marginTop: '20px', marginBottom: '10px' }}>{line.replace(/^###\s*/, '')}</h3>;
+                    if (line.startsWith('###')) return <h3 key={i} style={{ fontSize: '1.15rem', fontWeight: 700, color: '#18181b', marginTop: '20px', marginBottom: '10px' }}>{line.replace(/^###\s*/, '')}</h3>;
                     if (line.startsWith('####')) return <h4 key={i} style={{ fontSize: '1rem', fontWeight: 600, color: '#e2e8f0', marginTop: '16px', marginBottom: '6px' }}>{line.replace(/^####\s*/, '')}</h4>;
                     if (line.startsWith('- ')) return <li key={i} style={{ marginLeft: '16px', marginBottom: '4px', color: '#94a3b8' }}>{line.replace(/^- /, '')}</li>;
                     if (line.startsWith('1.') || line.startsWith('2.') || line.startsWith('3.')) return <li key={i} style={{ marginLeft: '16px', marginBottom: '4px', color: '#94a3b8' }}>{line}</li>;

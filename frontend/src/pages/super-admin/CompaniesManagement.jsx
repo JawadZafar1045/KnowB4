@@ -25,7 +25,7 @@ export default function CompaniesManagement() {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#f8fafc' }}>Customer Organizations</h1>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#18181b' }}>Customer Organizations</h1>
           <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Manage multi-tenant customer accounts</p>
         </div>
       </div>
@@ -42,7 +42,7 @@ export default function CompaniesManagement() {
                 <Building2 size={24} color="#06b6d4" />
               </div>
               <div>
-                <div style={{ fontSize: '1.05rem', fontWeight: 700, color: '#f8fafc' }}>{company.name}</div>
+                <div style={{ fontSize: '1.05rem', fontWeight: 700, color: '#18181b' }}>{company.name}</div>
                 <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
                   {company.industry} &bull; {company.email}
                 </div>

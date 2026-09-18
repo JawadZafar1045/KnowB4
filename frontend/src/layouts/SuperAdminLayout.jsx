@@ -16,7 +16,7 @@ export default function SuperAdminLayout() {
   ];
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#070b14' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: "#fafafa"}}>
       <DemoRoleBar />
       
       <div style={{ display: 'flex', flex: 1 }}>
@@ -45,7 +45,7 @@ export default function SuperAdminLayout() {
               <Shield size={22} color="#ffffff" />
             </div>
             <div>
-              <div style={{ fontWeight: 800, fontSize: '1.05rem', letterSpacing: '-0.02em', color: '#f8fafc' }}>
+              <div style={{ fontWeight: 800, fontSize: '1.05rem', letterSpacing: '-0.02em', color: '#18181b' }}>
                 Cyber<span style={{ color: '#06b6d4' }}>Aware</span>
               </div>
               <div style={{ fontSize: '0.7rem', color: '#06b6d4', fontWeight: 600, letterSpacing: '0.05em' }}>

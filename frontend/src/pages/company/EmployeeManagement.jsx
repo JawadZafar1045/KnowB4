@@ -64,7 +64,7 @@ export default function EmployeeManagement() {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#f8fafc' }}>Employee Roster</h1>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#18181b' }}>Employee Roster</h1>
           <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Manage your organization's learner workforce</p>
         </div>
         <div style={{ display: 'flex', gap: '10px' }}>
@@ -138,7 +138,7 @@ export default function EmployeeManagement() {
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
           <div className="glass-card" style={{ padding: '32px', width: '460px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#f8fafc' }}>Add New Employee</h2>
+              <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#18181b' }}>Add New Employee</h2>
               <button onClick={() => setShowAddModal(false)} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}><X size={18}/></button>
             </div>
             <form onSubmit={handleAddEmployee} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -162,7 +162,7 @@ export default function EmployeeManagement() {
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
           <div className="glass-card" style={{ padding: '32px', width: '560px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#f8fafc' }}>Bulk CSV Import</h2>
+              <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#18181b' }}>Bulk CSV Import</h2>
               <button onClick={() => { setShowCSVModal(false); setCsvResult(null); }} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}><X size={18}/></button>
             </div>
             <label className="form-label">Paste CSV (Required: name, email | Optional: department)</label>

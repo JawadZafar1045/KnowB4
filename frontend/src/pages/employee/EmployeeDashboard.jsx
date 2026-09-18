@@ -34,7 +34,7 @@ export default function EmployeeDashboard() {
     <div>
       {/* Welcome Header */}
       <div style={{ marginBottom: '28px' }}>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#f8fafc' }}>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#18181b' }}>
           Welcome back, <span style={{ color: '#06b6d4' }}>{user?.name?.split(' ')[0] || 'Learner'}</span>
         </h1>
         <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Your assigned cybersecurity training and progress</p>
@@ -56,7 +56,7 @@ export default function EmployeeDashboard() {
       </div>
 
       {/* Assigned Training Cards */}
-      <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#f8fafc', marginBottom: '16px' }}>My Training</h2>
+      <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#18181b', marginBottom: '16px' }}>My Training</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginBottom: '28px' }}>
         {enrollments.map(en => {
           const course = en.courseId;
@@ -65,7 +65,7 @@ export default function EmployeeDashboard() {
             <div key={en._id} className="glass-card" style={{ padding: '22px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
                 <div>
-                  <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#f8fafc', marginBottom: '4px' }}>{course.title}</h3>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#18181b', marginBottom: '4px' }}>{course.title}</h3>
                   <div style={{ fontSize: '0.78rem', color: '#64748b' }}>{course.category} &bull; {course.estimatedDuration}min</div>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -99,7 +99,7 @@ export default function EmployeeDashboard() {
       {/* Certificates */}
       {certificates.length > 0 && (
         <>
-          <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#f8fafc', marginBottom: '16px' }}>My Certificates</h2>
+          <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#18181b', marginBottom: '16px' }}>My Certificates</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
             {certificates.map(cert => (
               <div key={cert._id} className="glass-card" style={{
@@ -110,7 +110,7 @@ export default function EmployeeDashboard() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
                   <Award size={24} color="#f59e0b" />
                   <div>
-                    <div style={{ fontWeight: 700, color: '#f8fafc' }}>{cert.courseName}</div>
+                    <div style={{ fontWeight: 700, color: '#18181b' }}>{cert.courseName}</div>
                     <div style={{ fontSize: '0.75rem', color: '#64748b', fontFamily: 'var(--font-mono)' }}>{cert.certificateId}</div>
                   </div>
                 </div>

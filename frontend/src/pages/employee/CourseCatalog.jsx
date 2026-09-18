@@ -18,7 +18,7 @@ export default function CourseCatalog() {
   return (
     <div>
       <div style={{ marginBottom: '28px' }}>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#f8fafc' }}>Course Catalog</h1>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#18181b' }}>Course Catalog</h1>
         <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Available cybersecurity training courses</p>
       </div>
 
@@ -32,7 +32,7 @@ export default function CourseCatalog() {
                     <BookOpen size={20} color="#06b6d4" />
                   </div>
                   <div>
-                    <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#f8fafc' }}>{c.title}</h3>
+                    <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#18181b' }}>{c.title}</h3>
                     <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{c.category}</div>
                   </div>
                 </div>

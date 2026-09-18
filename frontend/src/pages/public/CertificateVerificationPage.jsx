@@ -58,7 +58,7 @@ export default function CertificateVerificationPage() {
         }}>
           <Shield size={28} color="#ffffff" />
         </div>
-        <h1 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f8fafc', letterSpacing: '-0.02em' }}>
+        <h1 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#18181b', letterSpacing: '-0.02em' }}>
           Cyber<span style={{ color: '#06b6d4' }}>Aware</span> Certificate Verification
         </h1>
         <p style={{ color: '#64748b', fontSize: '0.85rem', marginTop: '4px' }}>
@@ -125,7 +125,7 @@ export default function CertificateVerificationPage() {
                 <User size={20} color="#3b82f6" />
                 <div>
                   <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>Recipient</div>
-                  <div style={{ fontSize: '1rem', fontWeight: 700, color: '#f8fafc' }}>{cert.recipientName}</div>
+                  <div style={{ fontSize: '1rem', fontWeight: 700, color: '#18181b' }}>{cert.recipientName}</div>
                 </div>
               </div>
 
@@ -133,7 +133,7 @@ export default function CertificateVerificationPage() {
                 <Shield size={20} color="#06b6d4" />
                 <div>
                   <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>Training Course</div>
-                  <div style={{ fontSize: '1rem', fontWeight: 700, color: '#f8fafc' }}>{cert.courseName}</div>
+                  <div style={{ fontSize: '1rem', fontWeight: 700, color: '#18181b' }}>{cert.courseName}</div>
                 </div>
               </div>
 
@@ -141,7 +141,7 @@ export default function CertificateVerificationPage() {
                 <Building2 size={20} color="#a78bfa" />
                 <div>
                   <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>Organization</div>
-                  <div style={{ fontSize: '1rem', fontWeight: 700, color: '#f8fafc' }}>{cert.companyName}</div>
+                  <div style={{ fontSize: '1rem', fontWeight: 700, color: '#18181b' }}>{cert.companyName}</div>
                 </div>
               </div>
 
@@ -158,7 +158,7 @@ export default function CertificateVerificationPage() {
                   <Calendar size={20} color="#f59e0b" />
                   <div>
                     <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>Issued Date</div>
-                    <div style={{ fontSize: '1rem', fontWeight: 700, color: '#f8fafc' }}>
+                    <div style={{ fontSize: '1rem', fontWeight: 700, color: '#18181b' }}>
                       {new Date(cert.issuedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                     </div>
                   </div>

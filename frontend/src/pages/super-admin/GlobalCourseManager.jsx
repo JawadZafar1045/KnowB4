@@ -20,7 +20,7 @@ export default function GlobalCourseManager() {
   return (
     <div>
       <div style={{ marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#f8fafc' }}>Global Course Catalog</h1>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#18181b' }}>Global Course Catalog</h1>
         <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Manage cybersecurity training curriculum available across all tenants</p>
       </div>
 
@@ -37,7 +37,7 @@ export default function GlobalCourseManager() {
                   <BookOpen size={20} color="#06b6d4" />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#f8fafc' }}>{course.title}</h3>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#18181b' }}>{course.title}</h3>
                   <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{course.category}</div>
                 </div>
               </div>

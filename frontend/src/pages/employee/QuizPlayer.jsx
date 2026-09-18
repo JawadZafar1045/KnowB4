@@ -79,7 +79,7 @@ export default function QuizPlayer() {
       <div style={{ maxWidth: '600px', margin: '60px auto', textAlign: 'center' }}>
         <div className="glass-card" style={{ padding: '48px' }}>
           <CheckCircle2 size={64} color="#10b981" />
-          <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f8fafc', marginTop: '16px' }}>Assessment Passed!</h2>
+          <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#18181b', marginTop: '16px' }}>Assessment Passed!</h2>
           <p style={{ color: '#94a3b8', marginTop: '8px' }}>You already achieved a passing score of <strong style={{ color: '#10b981' }}>{quiz.bestScore}%</strong></p>
           <Link to="/employee" className="btn-primary" style={{ marginTop: '20px' }}>
             <ArrowRight size={16} /> Return to Dashboard
@@ -95,7 +95,7 @@ export default function QuizPlayer() {
       <div style={{ maxWidth: '600px', margin: '60px auto', textAlign: 'center' }}>
         <div className="glass-card" style={{ padding: '48px' }}>
           <XCircle size={64} color="#f43f5e" />
-          <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f8fafc', marginTop: '16px' }}>All Attempts Exhausted</h2>
+          <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#18181b', marginTop: '16px' }}>All Attempts Exhausted</h2>
           <p style={{ color: '#94a3b8', marginTop: '8px' }}>You've used all {quiz.attemptsAllowed} attempts. Best score: {quiz.bestScore}%. Contact your administrator.</p>
           <Link to="/employee" className="btn-secondary" style={{ marginTop: '20px' }}>Return to Dashboard</Link>
         </div>
@@ -112,7 +112,7 @@ export default function QuizPlayer() {
           border: result.passed ? '1px solid rgba(16,185,129,0.4)' : '1px solid rgba(244,63,94,0.4)'
         }}>
           {result.passed ? <CheckCircle2 size={64} color="#10b981" /> : <XCircle size={64} color="#f43f5e" />}
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#f8fafc', marginTop: '16px' }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#18181b', marginTop: '16px' }}>
             {result.passed ? '🎉 Assessment Passed!' : 'Assessment Not Passed'}
           </h2>
           <div style={{ fontSize: '3rem', fontWeight: 900, color: result.passed ? '#10b981' : '#f43f5e', marginTop: '12px' }}>
@@ -124,14 +124,14 @@ export default function QuizPlayer() {
           {result.certificate && (
             <div style={{ marginTop: '20px', padding: '16px', borderRadius: '10px', background: 'rgba(6,182,212,0.1)', border: '1px solid rgba(6,182,212,0.3)' }}>
               <Award size={28} color="#f59e0b" />
-              <div style={{ fontWeight: 700, color: '#f8fafc', marginTop: '8px' }}>Certificate Issued!</div>
+              <div style={{ fontWeight: 700, color: '#18181b', marginTop: '8px' }}>Certificate Issued!</div>
               <div style={{ fontFamily: 'var(--font-mono)', color: '#06b6d4', fontSize: '0.9rem' }}>{result.certificate.certificateId}</div>
             </div>
           )}
 
           {/* Review Answers */}
           <div style={{ marginTop: '28px', textAlign: 'left' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#f8fafc', marginBottom: '16px' }}>Answer Review</h3>
+            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#18181b', marginBottom: '16px' }}>Answer Review</h3>
             {(result.feedback || []).map((fb, i) => (
               <div key={i} style={{
                 padding: '16px', borderRadius: '10px', marginBottom: '12px',
@@ -173,7 +173,7 @@ export default function QuizPlayer() {
       {/* Quiz Header */}
       <div className="glass-card" style={{ padding: '20px', marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#f8fafc' }}>{quiz.title}</h2>
+          <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#18181b' }}>{quiz.title}</h2>
           <div style={{ fontSize: '0.78rem', color: '#64748b' }}>
             Pass: {quiz.passingScore}% &bull; Attempt {quiz.attemptsCount + 1} of {quiz.attemptsAllowed}
           </div>
@@ -217,7 +217,7 @@ export default function QuizPlayer() {
 
       {/* Question Card */}
       <div className="glass-card" style={{ padding: '32px' }}>
-        <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#f8fafc', marginBottom: '6px' }}>
+        <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#18181b', marginBottom: '6px' }}>
           Question {currentQ + 1}
         </h3>
         <p style={{ fontSize: '0.95rem', color: '#e2e8f0', marginBottom: '24px', lineHeight: '1.6' }}>

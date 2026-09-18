@@ -17,7 +17,7 @@ export default function TrainingReports() {
   return (
     <div>
       <div style={{ marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#f8fafc' }}>Training Analytics & Reports</h1>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#18181b' }}>Training Analytics & Reports</h1>
         <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Detailed per-employee enrollment status and scores</p>
       </div>
 
