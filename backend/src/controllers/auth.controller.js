@@ -30,14 +30,30 @@ const login = async (req, res, next) => {
       });
     }
 
+        // Check if account is locked due to repeated failed attempts
+    if (user.isLocked && user.isLocked()) {
+      const unlockAt = user.lockUntil;
+      return res.status(423).json({
+        success: false,
+        message: `Account locked due to multiple failed login attempts. Try again at ${unlockAt.toISOString()}`
+      });
+    }
+
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {
+      // Increment failed attempts and possibly lock the account
+      await user.incrementFailedLogin();
       return res.status(401).json({
         success: false,
         message: 'Invalid email or password'
       });
     }
 
+    // Successful login: reset failed attempts
+    if (user.failedLoginAttempts && user.failedLoginAttempts > 0) {
+      await user.resetFailedLogin();
+    }
+    
     if (user.status === 'SUSPENDED' || user.status === 'DEACTIVATED') {
       return res.status(403).json({
         success: false,
