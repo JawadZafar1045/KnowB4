@@ -18,15 +18,15 @@ export default function SuperAdminLayout() {
   const initials = (user?.name || 'Admin').split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#fafafa' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#F6F7F9' }}>
       <DemoRoleBar />
 
       <div style={{ display: 'flex', flex: 1 }}>
         {/* Sidebar */}
         <aside style={{
           width: '268px',
-          background: 'linear-gradient(160deg, #1e1b4b 0%, #0f0a2e 55%, #1a0e2e 100%)',
-          borderRight: '1px solid rgba(168,85,247,0.12)',
+          background: 'linear-gradient(160deg, #2f6c8b 0%, #356c89 55%, #3d7491 100%)',
+          borderRight: '1px solid rgba(255,255,255,0.1)',
           display: 'flex',
           flexDirection: 'column',
           padding: '24px 18px',
@@ -38,20 +38,20 @@ export default function SuperAdminLayout() {
               width: '42px',
               height: '42px',
               borderRadius: '12px',
-              background: 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)',
+              background: '#ffffff',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 0 0 4px rgba(236,72,153,0.1), 0 4px 16px rgba(168, 85, 247, 0.4)',
+              boxShadow: '0 0 0 4px rgba(255,255,255,0.12), 0 4px 14px rgba(0,0,0,0.2)',
               flexShrink: 0
             }}>
-              <Shield size={23} color="#ffffff" />
+              <Shield size={23} color="#356c89" />
             </div>
             <div>
-              <div style={{ fontWeight: 800, fontSize: '1.08rem', letterSpacing: '-0.01em', color: '#f8fafc', lineHeight: 1.1 }}>
-                Cyber<span style={{ color: '#f472b6' }}>Aware</span>
+              <div style={{ fontWeight: 800, fontSize: '1.08rem', letterSpacing: '-0.01em', color: '#ffffff', lineHeight: 1.1 }}>
+                Cyber<span style={{ color: '#a5c8d7' }}>Aware</span>
               </div>
-              <div style={{ fontSize: '0.66rem', color: '#f472b6', fontWeight: 700, letterSpacing: '0.08em', marginTop: '2px' }}>
+              <div style={{ fontSize: '0.66rem', color: '#a5c8d7', fontWeight: 700, letterSpacing: '0.08em', marginTop: '2px' }}>
                 SUPER ADMIN
               </div>
             </div>
@@ -59,7 +59,7 @@ export default function SuperAdminLayout() {
 
           {/* Navigation */}
           <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#475569', letterSpacing: '0.1em', padding: '0 12px 6px' }}>
+            <div style={{ fontSize: '0.65rem', fontWeight: 700, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.1em', padding: '0 12px 6px' }}>
               MENU
             </div>
             {navItems.map((item) => {
@@ -78,12 +78,11 @@ export default function SuperAdminLayout() {
                     textDecoration: 'none',
                     fontSize: '0.875rem',
                     fontWeight: 600,
-                    color: isActive ? '#ffffff' : '#94a3b8',
+                    color: isActive ? '#ffffff' : 'rgba(255,255,255,0.7)',
                     background: isActive
-                      ? 'linear-gradient(90deg, rgba(168,85,247,0.22), rgba(236,72,153,0.12))'
+                      ? 'rgba(255,255,255,0.16)'
                       : 'transparent',
-                    borderLeft: isActive ? '3px solid #ec4899' : '3px solid transparent',
-                    boxShadow: isActive ? '0 0 16px rgba(236,72,153,0.15)' : 'none',
+                    borderLeft: isActive ? '3px solid #a5c8d7' : '3px solid transparent',
                     transition: 'all 0.15s ease'
                   })}
                 >
@@ -98,11 +97,11 @@ export default function SuperAdminLayout() {
           <div style={{
             marginTop: 'auto',
             padding: '14px',
-            background: 'rgba(255,255,255,0.03)',
+            background: 'rgba(255,255,255,0.08)',
             borderRadius: '12px',
-            border: '1px solid rgba(148,163,184,0.1)'
+            border: '1px solid rgba(255,255,255,0.15)'
           }}>
-            <div style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600, letterSpacing: '0.03em', marginBottom: '8px' }}>PUBLIC TOOLS</div>
+            <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.6)', fontWeight: 600, letterSpacing: '0.03em', marginBottom: '8px' }}>PUBLIC TOOLS</div>
             <a
               href="/verify/CA-2026-000001"
               target="_blank"
@@ -111,7 +110,7 @@ export default function SuperAdminLayout() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '6px',
-                color: '#e879f9',
+                color: '#a5c8d7',
                 fontSize: '0.82rem',
                 fontWeight: 600,
                 textDecoration: 'none'
@@ -127,22 +126,22 @@ export default function SuperAdminLayout() {
             alignItems: 'center',
             justifyContent: 'space-between',
             paddingTop: '18px',
-            borderTop: '1px solid rgba(148,163,184,0.1)'
+            borderTop: '1px solid rgba(255,255,255,0.15)'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', overflow: 'hidden' }}>
               <div style={{
                 width: '34px', height: '34px', borderRadius: '50%', flexShrink: 0,
-                background: 'linear-gradient(135deg, #a855f7, #ec4899)',
+                background: '#ffffff',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '0.72rem', fontWeight: 700, color: '#ffffff'
+                fontSize: '0.72rem', fontWeight: 700, color: '#356c89'
               }}>
                 {initials}
               </div>
               <div style={{ overflow: 'hidden' }}>
-                <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#f1f5f9', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
+                <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#ffffff', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
                   {user?.name || 'Administrator'}
                 </div>
-                <div style={{ fontSize: '0.72rem', color: '#64748b' }}>Platform Owner</div>
+                <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.7)' }}>Platform Owner</div>
               </div>
             </div>
             <button
@@ -151,7 +150,7 @@ export default function SuperAdminLayout() {
               style={{
                 background: 'transparent',
                 border: 'none',
-                color: '#64748b',
+                color: 'rgba(255,255,255,0.7)',
                 cursor: 'pointer',
                 padding: '6px',
                 borderRadius: '6px',

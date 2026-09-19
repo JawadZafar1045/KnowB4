@@ -4,7 +4,7 @@
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* Bright theme, purple-pink accent (matches sidebar) */
+  /* Bright theme, steel-blue accent (matches sidebar & background art) */
   --bg-canvas: #fafafa;
   --bg-surface: #ffffff;
   --bg-surface-hover: #f4f4f5;
@@ -12,12 +12,12 @@
   --bg-glass: #ffffff;
 
   --border-subtle: #e4e4e7;
-  --border-glow: rgba(168, 85, 247, 0.25);
+  --border-glow: rgba(53, 108, 137, 0.25);
 
-  --accent-cyan: #a855f7;
-  --accent-cyan-glow: rgba(168, 85, 247, 0.15);
-  --accent-blue: #6366f1;
-  --accent-indigo: #7c3aed;
+  --accent-cyan: #356c89;
+  --accent-cyan-glow: rgba(53, 108, 137, 0.15);
+  --accent-blue: #4e86a0;
+  --accent-indigo: #2f6c8b;
   --accent-emerald: #059669;
   --accent-amber: #d97706;
   --accent-rose: #dc2626;
@@ -71,7 +71,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+  background: linear-gradient(135deg, #356c89 0%, #4e86a0 100%);
   color: #ffffff;
   font-weight: 600;
   font-size: 0.875rem;
@@ -80,11 +80,11 @@ body {
   border: none;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 14px rgba(168, 85, 247, 0.3);
+  box-shadow: 0 4px 14px rgba(53, 108, 137, 0.3);
 }
 .btn-primary:hover {
   filter: brightness(1.08);
-  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
+  box-shadow: 0 6px 20px rgba(53, 108, 137, 0.4);
   transform: translateY(-1px);
 }
 
@@ -114,8 +114,8 @@ body {
   justify-content: center;
   gap: 8px;
   background: transparent;
-  color: #a855f7;
-  border: 1px solid rgba(168, 85, 247, 0.4);
+  color: #356c89;
+  border: 1px solid rgba(53, 108, 137, 0.4);
   font-weight: 600;
   font-size: 0.875rem;
   padding: 8px 16px;
@@ -124,8 +124,8 @@ body {
   transition: all 0.2s ease;
 }
 .btn-outline:hover {
-  background: rgba(168, 85, 247, 0.08);
-  border-color: #a855f7;
+  background: rgba(53, 108, 137, 0.08);
+  border-color: #356c89;
 }
 
 .btn-danger {
@@ -158,7 +158,7 @@ body {
   font-size: 0.75rem;
   font-weight: 600;
 }
-.badge-cyan { background: #faf5ff; color: #9333ea; border: 1px solid #e9d5ff; }
+.badge-cyan { background: #eef4f7; color: #356c89; border: 1px solid #cfe0e8; }
 .badge-green { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
 .badge-amber { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
 .badge-rose { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
@@ -177,8 +177,8 @@ body {
   transition: border-color 0.2s ease;
 }
 .form-input:focus {
-  border-color: #a855f7;
-  box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.15);
+  border-color: #356c89;
+  box-shadow: 0 0 0 2px rgba(53, 108, 137, 0.15);
 }
 
 .form-label {
