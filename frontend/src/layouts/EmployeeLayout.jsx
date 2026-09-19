@@ -14,13 +14,13 @@ export default function EmployeeLayout() {
   ];
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: "#fafafa"}}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#fafafa' }}>
       <DemoRoleBar />
 
       {/* Top Navbar */}
       <header style={{
-        background: '#0a0f1d',
-        borderBottom: '1px solid #1e293b',
+        background: 'linear-gradient(100deg, #1e1b4b 0%, #0f0a2e 55%, #1a0e2e 100%)',
+        borderBottom: '1px solid rgba(168,85,247,0.12)',
         padding: '0 32px',
         height: '64px',
         display: 'flex',
@@ -34,23 +34,24 @@ export default function EmployeeLayout() {
               width: '32px',
               height: '32px',
               borderRadius: '8px',
-              background: 'linear-gradient(135deg, #06b6d4 0%, #2563eb 100%)',
+              background: 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              boxShadow: '0 0 0 3px rgba(236,72,153,0.1), 0 4px 12px rgba(168, 85, 247, 0.35)'
             }}>
               <Shield size={18} color="#ffffff" />
             </div>
-            <div style={{ fontWeight: 800, fontSize: '1rem', color: '#18181b' }}>
-              Cyber<span style={{ color: '#06b6d4' }}>Aware</span>
+            <div style={{ fontWeight: 800, fontSize: '1rem', color: '#f8fafc' }}>
+              Cyber<span style={{ color: '#f472b6' }}>Aware</span>
             </div>
             <span style={{
               fontSize: '0.72rem',
-              color: '#94a3b8',
-              background: '#111a2e',
+              color: '#c4b5fd',
+              background: 'rgba(255,255,255,0.05)',
               padding: '2px 8px',
               borderRadius: '6px',
-              border: '1px solid #1e293b'
+              border: '1px solid rgba(168,85,247,0.2)'
             }}>
               {user?.company?.name || 'Acme Financial'}
             </span>
@@ -70,13 +71,16 @@ export default function EmployeeLayout() {
                     alignItems: 'center',
                     gap: '8px',
                     padding: '8px 16px',
-                    borderRadius: '8px',
+                    borderRadius: '10px',
                     fontSize: '0.85rem',
                     fontWeight: 600,
                     textDecoration: 'none',
-                    color: isActive ? '#38bdf8' : '#94a3b8',
-                    background: isActive ? 'rgba(6, 182, 212, 0.12)' : 'transparent',
-                    border: isActive ? '1px solid rgba(6, 182, 212, 0.3)' : '1px solid transparent',
+                    color: isActive ? '#ffffff' : '#94a3b8',
+                    background: isActive
+                      ? 'linear-gradient(90deg, rgba(168,85,247,0.22), rgba(236,72,153,0.12))'
+                      : 'transparent',
+                    border: isActive ? '1px solid rgba(236,72,153,0.35)' : '1px solid transparent',
+                    boxShadow: isActive ? '0 0 14px rgba(236,72,153,0.15)' : 'none',
                     transition: 'all 0.15s ease'
                   })}
                 >
@@ -98,23 +102,33 @@ export default function EmployeeLayout() {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '6px',
-              color: '#64748b',
+              color: '#c4b5fd',
               fontSize: '0.75rem',
               textDecoration: 'none',
               padding: '4px 10px',
               borderRadius: '6px',
-              border: '1px solid #1e293b'
+              border: '1px solid rgba(168,85,247,0.2)'
             }}
           >
             Verify Certificate <ExternalLink size={10} />
           </a>
 
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#18181b' }}>
-              {user?.name || 'Ahmed Khan'}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{
+              width: '32px', height: '32px', borderRadius: '50%', flexShrink: 0,
+              background: 'linear-gradient(135deg, #a855f7, #ec4899)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: '0.7rem', fontWeight: 700, color: '#ffffff'
+            }}>
+              {(user?.name || 'Ahmed Khan').split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase()}
             </div>
-            <div style={{ fontSize: '0.72rem', color: '#64748b' }}>
-              {user?.jobTitle || 'Senior Financial Analyst'}
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#f8fafc' }}>
+                {user?.name || 'Ahmed Khan'}
+              </div>
+              <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
+                {user?.jobTitle || 'Senior Financial Analyst'}
+              </div>
             </div>
           </div>
 
@@ -122,9 +136,9 @@ export default function EmployeeLayout() {
             onClick={logout}
             title="Logout"
             style={{
-              background: '#111a2e',
-              border: '1px solid #1e293b',
-              color: '#94a3b8',
+              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(168,85,247,0.2)',
+              color: '#c4b5fd',
               cursor: 'pointer',
               padding: '8px',
               borderRadius: '8px',

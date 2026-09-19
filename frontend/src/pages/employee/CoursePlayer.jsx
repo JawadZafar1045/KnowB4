@@ -47,7 +47,7 @@ export default function CoursePlayer() {
     }
   };
 
-  if (loading) return <div style={{ color: '#94a3b8', padding: '60px', textAlign: 'center' }}>Loading course content...</div>;
+  if (loading) return <div style={{ color: '#71717a', padding: '60px', textAlign: 'center' }}>Loading course content...</div>;
   if (!course) return <div style={{ color: '#f43f5e', padding: '40px' }}>Course not found.</div>;
 
   const allLessons = [];
@@ -60,24 +60,25 @@ export default function CoursePlayer() {
     <div style={{ display: 'flex', gap: '24px', minHeight: 'calc(100vh - 160px)' }}>
       {/* Sidebar: Module/Lesson Checklist */}
       <aside style={{
-        width: '300px', flexShrink: 0, background: '#0a0f1d',
-        borderRadius: '12px', border: '1px solid #1e293b', padding: '20px', overflowY: 'auto'
+        width: '300px', flexShrink: 0, background: '#ffffff',
+        borderRadius: '12px', border: '1px solid #e4e4e7', padding: '20px', overflowY: 'auto',
+        boxShadow: '0 1px 2px rgba(0,0,0,0.03)'
       }}>
-        <Link to="/employee" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#64748b', fontSize: '0.8rem', textDecoration: 'none', marginBottom: '16px' }}>
+        <Link to="/employee" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#71717a', fontSize: '0.8rem', textDecoration: 'none', marginBottom: '16px' }}>
           <ChevronLeft size={14} /> Back to Training
         </Link>
         <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#18181b', marginBottom: '4px' }}>{course.title}</h3>
-        <div style={{ fontSize: '0.78rem', color: '#64748b', marginBottom: '16px' }}>
+        <div style={{ fontSize: '0.78rem', color: '#71717a', marginBottom: '16px' }}>
           {completedCount}/{totalLessons} lessons completed
         </div>
         {/* Progress bar */}
-        <div style={{ width: '100%', height: '6px', borderRadius: '3px', background: '#1e293b', marginBottom: '20px' }}>
-          <div style={{ width: `${totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0}%`, height: '100%', borderRadius: '3px', background: '#06b6d4', transition: 'width 0.4s ease' }} />
+        <div style={{ width: '100%', height: '6px', borderRadius: '3px', background: '#e4e4e7', marginBottom: '20px' }}>
+          <div style={{ width: `${totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0}%`, height: '100%', borderRadius: '3px', background: 'linear-gradient(90deg, #a855f7, #ec4899)', transition: 'width 0.4s ease' }} />
         </div>
 
         {(course.modules || []).map((mod, modIdx) => (
           <div key={mod._id} style={{ marginBottom: '16px' }}>
-            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>
+            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#71717a', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>
               Module {modIdx + 1}: {mod.title}
             </div>
             {(mod.lessons || []).map((lesson) => {
@@ -90,9 +91,9 @@ export default function CoursePlayer() {
                   style={{
                     display: 'flex', alignItems: 'center', gap: '10px',
                     width: '100%', padding: '8px 12px', borderRadius: '8px',
-                    border: isActive ? '1px solid rgba(6,182,212,0.4)' : '1px solid transparent',
-                    background: isActive ? 'rgba(6,182,212,0.12)' : 'transparent',
-                    color: done ? '#10b981' : isActive ? '#38bdf8' : '#94a3b8',
+                    border: isActive ? '1px solid rgba(168,85,247,0.4)' : '1px solid transparent',
+                    background: isActive ? 'rgba(168,85,247,0.12)' : 'transparent',
+                    color: done ? '#059669' : isActive ? '#a855f7' : '#71717a',
                     cursor: 'pointer', textAlign: 'left',
                     fontSize: '0.82rem', fontWeight: isActive ? 600 : 400,
                     marginBottom: '4px', transition: 'all 0.15s ease'
@@ -108,15 +109,15 @@ export default function CoursePlayer() {
 
         {/* Quiz Link */}
         {course.quiz && (
-          <div style={{ marginTop: '8px', paddingTop: '12px', borderTop: '1px solid #1e293b' }}>
+          <div style={{ marginTop: '8px', paddingTop: '12px', borderTop: '1px solid #e4e4e7' }}>
             <Link
               to={`/employee/course/${courseId}/quiz`}
               style={{
                 display: 'flex', alignItems: 'center', gap: '8px',
                 padding: '10px 14px', borderRadius: '8px',
-                background: allDone ? 'rgba(16,185,129,0.15)' : 'rgba(100,116,139,0.1)',
-                border: `1px solid ${allDone ? 'rgba(16,185,129,0.3)' : '#1e293b'}`,
-                color: allDone ? '#34d399' : '#64748b',
+                background: allDone ? 'rgba(16,185,129,0.1)' : 'rgba(148,163,184,0.08)',
+                border: `1px solid ${allDone ? 'rgba(5,150,105,0.3)' : '#e4e4e7'}`,
+                color: allDone ? '#059669' : '#71717a',
                 textDecoration: 'none', fontSize: '0.85rem', fontWeight: 700,
                 transition: 'all 0.15s ease'
               }}
@@ -135,7 +136,7 @@ export default function CoursePlayer() {
           <div>
             <div style={{ marginBottom: '20px' }}>
               <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#18181b', marginBottom: '4px' }}>{activeLesson.title}</h2>
-              <p style={{ fontSize: '0.85rem', color: '#64748b' }}>
+              <p style={{ fontSize: '0.85rem', color: '#71717a' }}>
                 {activeLesson.description}
               </p>
               <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
@@ -155,8 +156,8 @@ export default function CoursePlayer() {
                   {activeLesson.textContent.split('\n').map((line, i) => {
                     if (line.startsWith('###')) return <h3 key={i} style={{ fontSize: '1.15rem', fontWeight: 700, color: '#18181b', marginTop: '20px', marginBottom: '10px' }}>{line.replace(/^###\s*/, '')}</h3>;
                     if (line.startsWith('####')) return <h4 key={i} style={{ fontSize: '1rem', fontWeight: 600, color: '#e2e8f0', marginTop: '16px', marginBottom: '6px' }}>{line.replace(/^####\s*/, '')}</h4>;
-                    if (line.startsWith('- ')) return <li key={i} style={{ marginLeft: '16px', marginBottom: '4px', color: '#94a3b8' }}>{line.replace(/^- /, '')}</li>;
-                    if (line.startsWith('1.') || line.startsWith('2.') || line.startsWith('3.')) return <li key={i} style={{ marginLeft: '16px', marginBottom: '4px', color: '#94a3b8' }}>{line}</li>;
+                    if (line.startsWith('- ')) return <li key={i} style={{ marginLeft: '16px', marginBottom: '4px', color: '#27272a' }}>{line.replace(/^- /, '')}</li>;
+                    if (line.startsWith('1.') || line.startsWith('2.') || line.startsWith('3.')) return <li key={i} style={{ marginLeft: '16px', marginBottom: '4px', color: '#27272a' }}>{line}</li>;
                     if (line.startsWith('*') && line.endsWith('*')) return <em key={i} style={{ display: 'block', color: '#38bdf8', marginTop: '12px' }}>{line.replace(/\*/g, '')}</em>;
                     if (line.trim() === '') return <br key={i} />;
                     return <p key={i} style={{ marginBottom: '8px' }}>{line}</p>;
@@ -164,12 +165,12 @@ export default function CoursePlayer() {
                 </div>
               ) : activeLesson.contentType === 'VIDEO' ? (
                 <div style={{ textAlign: 'center', padding: '60px' }}>
-                  <Play size={48} color="#06b6d4" />
-                  <p style={{ color: '#94a3b8', marginTop: '12px' }}>Video content: {activeLesson.contentUrl || 'No URL configured'}</p>
+                  <Play size={48} color="#a855f7" />
+                  <p style={{ color: '#71717a', marginTop: '12px' }}>Video content: {activeLesson.contentUrl || 'No URL configured'}</p>
                 </div>
               ) : (
-                <div style={{ textAlign: 'center', padding: '60px', color: '#94a3b8' }}>
-                  <BookOpen size={48} color="#64748b" />
+                <div style={{ textAlign: 'center', padding: '60px', color: '#71717a' }}>
+                  <BookOpen size={48} color="#a1a1aa" />
                   <p style={{ marginTop: '12px' }}>Content type: {activeLesson.contentType}</p>
                 </div>
               )}
@@ -189,7 +190,7 @@ export default function CoursePlayer() {
             </div>
           </div>
         ) : (
-          <div style={{ textAlign: 'center', padding: '80px', color: '#64748b' }}>
+          <div style={{ textAlign: 'center', padding: '80px', color: '#71717a' }}>
             Select a lesson from the sidebar to begin.
           </div>
         )}

@@ -19,6 +19,7 @@ export default function CompanyAdminLayout() {
   const { user, logout } = useAuth();
 
   const companyName = user?.company?.name || 'Customer Organization';
+  const initials = (user?.name || 'Admin').split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
 
   const navItems = [
     { to: '/company', label: 'Org Dashboard', icon: LayoutDashboard, end: true },
@@ -31,15 +32,15 @@ export default function CompanyAdminLayout() {
   ];
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: "#fafafa"}}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#fafafa' }}>
       <DemoRoleBar />
 
       <div style={{ display: 'flex', flex: 1 }}>
         {/* Sidebar */}
         <aside style={{
           width: '265px',
-          background: '#0a0f1d',
-          borderRight: '1px solid #1e293b',
+          background: 'linear-gradient(160deg, #1e1b4b 0%, #0f0a2e 55%, #1a0e2e 100%)',
+          borderRight: '1px solid rgba(168,85,247,0.12)',
           display: 'flex',
           flexDirection: 'column',
           padding: '20px 16px',
@@ -48,13 +49,13 @@ export default function CompanyAdminLayout() {
           {/* Company Brand */}
           <div style={{
             padding: '12px',
-            background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%)',
+            background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.16) 0%, rgba(236, 72, 153, 0.08) 100%)',
             borderRadius: '10px',
-            border: '1px solid rgba(6, 182, 212, 0.2)'
+            border: '1px solid rgba(168, 85, 247, 0.25)'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-              <Building2 size={16} color="#06b6d4" />
-              <div style={{ fontSize: '0.875rem', fontWeight: 700, color: '#18181b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <Building2 size={16} color="#e879f9" />
+              <div style={{ fontSize: '0.875rem', fontWeight: 700, color: '#f8fafc', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {companyName}
               </div>
             </div>
@@ -62,7 +63,7 @@ export default function CompanyAdminLayout() {
               <span className="badge badge-cyan" style={{ fontSize: '0.68rem', padding: '2px 6px' }}>
                 TENANT ADMIN
               </span>
-              <span style={{ fontSize: '0.7rem', color: '#64748b' }}>
+              <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>
                 {user?.company?.subscriptionPlan || 'Enterprise'}
               </span>
             </div>
@@ -70,6 +71,9 @@ export default function CompanyAdminLayout() {
 
           {/* Navigation */}
           <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#475569', letterSpacing: '0.1em', padding: '0 12px 6px' }}>
+              MENU
+            </div>
             {navItems.map((item) => {
               const Icon = item.icon;
               return (
@@ -82,13 +86,16 @@ export default function CompanyAdminLayout() {
                     alignItems: 'center',
                     gap: '12px',
                     padding: '9px 14px',
-                    borderRadius: '8px',
+                    borderRadius: '10px',
                     textDecoration: 'none',
                     fontSize: '0.85rem',
                     fontWeight: 600,
-                    color: isActive ? '#38bdf8' : '#94a3b8',
-                    background: isActive ? 'rgba(6, 182, 212, 0.12)' : 'transparent',
-                    border: isActive ? '1px solid rgba(6, 182, 212, 0.3)' : '1px solid transparent',
+                    color: isActive ? '#ffffff' : '#94a3b8',
+                    background: isActive
+                      ? 'linear-gradient(90deg, rgba(168,85,247,0.22), rgba(236,72,153,0.12))'
+                      : 'transparent',
+                    borderLeft: isActive ? '3px solid #ec4899' : '3px solid transparent',
+                    boxShadow: isActive ? '0 0 16px rgba(236,72,153,0.15)' : 'none',
                     transition: 'all 0.15s ease'
                   })}
                 >
@@ -100,8 +107,14 @@ export default function CompanyAdminLayout() {
           </nav>
 
           {/* Public Verification Link */}
-          <div style={{ marginTop: 'auto', padding: '12px', background: '#0f172a', borderRadius: '10px', border: '1px solid #1e293b' }}>
-            <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '6px' }}>Public Verification:</div>
+          <div style={{
+            marginTop: 'auto',
+            padding: '12px',
+            background: 'rgba(255,255,255,0.03)',
+            borderRadius: '12px',
+            border: '1px solid rgba(148,163,184,0.1)'
+          }}>
+            <div style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600, letterSpacing: '0.03em', marginBottom: '6px' }}>PUBLIC VERIFICATION</div>
             <a
               href="/verify/CA-2026-000001"
               target="_blank"
@@ -110,7 +123,7 @@ export default function CompanyAdminLayout() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '6px',
-                color: '#38bdf8',
+                color: '#e879f9',
                 fontSize: '0.78rem',
                 fontWeight: 600,
                 textDecoration: 'none'
@@ -126,13 +139,23 @@ export default function CompanyAdminLayout() {
             alignItems: 'center',
             justifyContent: 'space-between',
             paddingTop: '16px',
-            borderTop: '1px solid #1e293b'
+            borderTop: '1px solid rgba(148,163,184,0.1)'
           }}>
-            <div style={{ overflow: 'hidden' }}>
-              <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#f1f5f9', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
-                {user?.name || 'Administrator'}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', overflow: 'hidden' }}>
+              <div style={{
+                width: '34px', height: '34px', borderRadius: '50%', flexShrink: 0,
+                background: 'linear-gradient(135deg, #a855f7, #ec4899)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '0.72rem', fontWeight: 700, color: '#ffffff'
+              }}>
+                {initials}
               </div>
-              <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{user?.jobTitle || 'SecOps Lead'}</div>
+              <div style={{ overflow: 'hidden' }}>
+                <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#f1f5f9', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
+                  {user?.name || 'Administrator'}
+                </div>
+                <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{user?.jobTitle || 'SecOps Lead'}</div>
+              </div>
             </div>
             <button
               onClick={logout}
@@ -143,7 +166,8 @@ export default function CompanyAdminLayout() {
                 color: '#64748b',
                 cursor: 'pointer',
                 padding: '6px',
-                borderRadius: '6px'
+                borderRadius: '6px',
+                flexShrink: 0
               }}
             >
               <LogOut size={18} />

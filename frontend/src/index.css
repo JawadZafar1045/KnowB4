@@ -1,34 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* Bright Minimalist Theme — navy sidebar / bright white content / restrained orange accent */
+  /* Bright theme, purple-pink accent (matches sidebar) */
   --bg-canvas: #fafafa;
   --bg-surface: #ffffff;
   --bg-surface-hover: #f4f4f5;
   --bg-card: #ffffff;
   --bg-glass: #ffffff;
 
-  /* Sidebar keeps deep navy — carries the "security/trust" identity, gives contrast against the bright content area */
-  --bg-sidebar: #0f172a;
-  --bg-sidebar-hover: #1a2540;
-  --sidebar-text: #cbd5e1;
-  --sidebar-text-active: #ffffff;
-  --sidebar-border: #1e293b;
-
   --border-subtle: #e4e4e7;
-  --border-glow: rgba(242, 103, 34, 0.2);
+  --border-glow: rgba(168, 85, 247, 0.25);
 
-  /* Orange is used sparingly — primary actions, active states, key numbers. Not every badge/border. */
-  --accent-cyan: #ea580c;
-  --accent-cyan-glow: rgba(234, 88, 12, 0.12);
-  --accent-blue: #1d4ed8;
-  --accent-indigo: #4338ca;
-  --accent-emerald: #15803d;
-  --accent-amber: #b45309;
-  --accent-rose: #b91c1c;
+  --accent-cyan: #a855f7;
+  --accent-cyan-glow: rgba(168, 85, 247, 0.15);
+  --accent-blue: #6366f1;
+  --accent-indigo: #7c3aed;
+  --accent-emerald: #059669;
+  --accent-amber: #d97706;
+  --accent-rose: #dc2626;
 
   --text-main: #18181b;
   --text-muted: #52525b;
@@ -50,23 +42,11 @@ body {
   line-height: 1.5;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #f4f4f5;
-}
-::-webkit-scrollbar-thumb {
-  background: #d4d4d8;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #a1a1aa;
-}
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #f4f4f5; }
+::-webkit-scrollbar-thumb { background: #d4d4d8; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #a1a1aa; }
 
-/* Cards — flat, quiet, one consistent shadow weight so nothing fights for attention */
 .glass-card {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
@@ -74,7 +54,6 @@ body {
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
-
 .glass-card:hover {
   border-color: #d4d4d8;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
@@ -86,22 +65,13 @@ body {
   border-radius: 10px;
 }
 
-/* Big stat numbers (dashboard cards) — set these via a helper class in markup if possible;
-   in the meantime this keeps any element carrying big bold numeric text feeling like a
-   system readout rather than generic marketing type. Safe to leave unused if not wired up. */
-.stat-number {
-  font-family: var(--font-mono);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-
 /* Buttons */
 .btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: #ea580c;
+  background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
   color: #ffffff;
   font-weight: 600;
   font-size: 0.875rem;
@@ -109,10 +79,13 @@ body {
   border-radius: 8px;
   border: none;
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(168, 85, 247, 0.3);
 }
 .btn-primary:hover {
-  background: #c2410c;
+  filter: brightness(1.08);
+  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
+  transform: translateY(-1px);
 }
 
 .btn-secondary {
@@ -141,18 +114,18 @@ body {
   justify-content: center;
   gap: 8px;
   background: transparent;
-  color: #ea580c;
-  border: 1px solid rgba(234, 88, 12, 0.35);
+  color: #a855f7;
+  border: 1px solid rgba(168, 85, 247, 0.4);
   font-weight: 600;
   font-size: 0.875rem;
   padding: 8px 16px;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
 }
 .btn-outline:hover {
-  background: rgba(234, 88, 12, 0.06);
-  border-color: #ea580c;
+  background: rgba(168, 85, 247, 0.08);
+  border-color: #a855f7;
 }
 
 .btn-danger {
@@ -161,21 +134,21 @@ body {
   justify-content: center;
   gap: 8px;
   background: #ffffff;
-  color: #b91c1c;
-  border: 1px solid rgba(185, 28, 28, 0.3);
+  color: #dc2626;
+  border: 1px solid rgba(220, 38, 38, 0.3);
   font-weight: 600;
   font-size: 0.875rem;
   padding: 8px 16px;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
 }
 .btn-danger:hover {
-  background: rgba(185, 28, 28, 0.06);
-  border-color: #b91c1c;
+  background: rgba(220, 38, 38, 0.06);
+  border-color: #dc2626;
 }
 
-/* Badges — muted, text-forward, not filled with color everywhere */
+/* Badges */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -185,7 +158,7 @@ body {
   font-size: 0.75rem;
   font-weight: 600;
 }
-.badge-cyan { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+.badge-cyan { background: #faf5ff; color: #9333ea; border: 1px solid #e9d5ff; }
 .badge-green { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
 .badge-amber { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
 .badge-rose { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
@@ -201,11 +174,11 @@ body {
   color: #18181b;
   font-size: 0.875rem;
   outline: none;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.2s ease;
 }
 .form-input:focus {
-  border-color: #ea580c;
-  box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.12);
+  border-color: #a855f7;
+  box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.15);
 }
 
 .form-label {
@@ -241,7 +214,6 @@ body {
   background: #fafafa;
 }
 
-/* Animations */
 @keyframes pulseGlow {
   0%, 100% { opacity: 0.4; }
   50% { opacity: 0.8; }
