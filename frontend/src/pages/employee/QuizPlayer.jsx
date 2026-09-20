@@ -70,17 +70,17 @@ export default function QuizPlayer() {
     return `${m}:${s.toString().padStart(2, '0')}`;
   };
 
-  if (loading) return <div style={{ color: '#94a3b8', padding: '60px', textAlign: 'center' }}>Loading assessment...</div>;
-  if (!quiz) return <div style={{ color: '#f43f5e', padding: '40px' }}>No quiz found for this course.</div>;
+  if (loading) return <div style={{ color: '#71717a', padding: '60px', textAlign: 'center' }}>Loading assessment...</div>;
+  if (!quiz) return <div style={{ color: '#dc2626', padding: '40px' }}>No quiz found for this course.</div>;
 
   // Already passed state
   if (quiz.hasPassed && !submitted) {
     return (
       <div style={{ maxWidth: '600px', margin: '60px auto', textAlign: 'center' }}>
         <div className="glass-card" style={{ padding: '48px' }}>
-          <CheckCircle2 size={64} color="#10b981" />
+          <CheckCircle2 size={64} color="#15803d" />
           <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#18181b', marginTop: '16px' }}>Assessment Passed!</h2>
-          <p style={{ color: '#94a3b8', marginTop: '8px' }}>You already achieved a passing score of <strong style={{ color: '#10b981' }}>{quiz.bestScore}%</strong></p>
+          <p style={{ color: '#71717a', marginTop: '8px' }}>You already achieved a passing score of <strong style={{ color: '#15803d' }}>{quiz.bestScore}%</strong></p>
           <Link to="/employee" className="btn-primary" style={{ marginTop: '20px' }}>
             <ArrowRight size={16} /> Return to Dashboard
           </Link>
@@ -94,9 +94,9 @@ export default function QuizPlayer() {
     return (
       <div style={{ maxWidth: '600px', margin: '60px auto', textAlign: 'center' }}>
         <div className="glass-card" style={{ padding: '48px' }}>
-          <XCircle size={64} color="#f43f5e" />
+          <XCircle size={64} color="#dc2626" />
           <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#18181b', marginTop: '16px' }}>All Attempts Exhausted</h2>
-          <p style={{ color: '#94a3b8', marginTop: '8px' }}>You've used all {quiz.attemptsAllowed} attempts. Best score: {quiz.bestScore}%. Contact your administrator.</p>
+          <p style={{ color: '#71717a', marginTop: '8px' }}>You've used all {quiz.attemptsAllowed} attempts. Best score: {quiz.bestScore}%. Contact your administrator.</p>
           <Link to="/employee" className="btn-secondary" style={{ marginTop: '20px' }}>Return to Dashboard</Link>
         </div>
       </div>
@@ -109,23 +109,23 @@ export default function QuizPlayer() {
       <div style={{ maxWidth: '700px', margin: '40px auto' }}>
         <div className="glass-card" style={{
           padding: '40px', textAlign: 'center',
-          border: result.passed ? '1px solid rgba(16,185,129,0.4)' : '1px solid rgba(244,63,94,0.4)'
+          border: result.passed ? '1px solid rgba(21,128,61,0.4)' : '1px solid rgba(220,38,38,0.4)'
         }}>
-          {result.passed ? <CheckCircle2 size={64} color="#10b981" /> : <XCircle size={64} color="#f43f5e" />}
+          {result.passed ? <CheckCircle2 size={64} color="#15803d" /> : <XCircle size={64} color="#dc2626" />}
           <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#18181b', marginTop: '16px' }}>
             {result.passed ? '🎉 Assessment Passed!' : 'Assessment Not Passed'}
           </h2>
-          <div style={{ fontSize: '3rem', fontWeight: 900, color: result.passed ? '#10b981' : '#f43f5e', marginTop: '12px' }}>
+          <div style={{ fontSize: '3rem', fontWeight: 900, color: result.passed ? '#15803d' : '#dc2626', marginTop: '12px' }}>
             {result.score}%
           </div>
-          <p style={{ color: '#94a3b8', marginTop: '8px' }}>
+          <p style={{ color: '#71717a', marginTop: '8px' }}>
             {result.correctCount}/{result.totalQuestions} correct &bull; Passing: {result.passingScore}% &bull; Attempt {result.attemptNumber}
           </p>
           {result.certificate && (
-            <div style={{ marginTop: '20px', padding: '16px', borderRadius: '10px', background: 'rgba(6,182,212,0.1)', border: '1px solid rgba(6,182,212,0.3)' }}>
-              <Award size={28} color="#f59e0b" />
+            <div style={{ marginTop: '20px', padding: '16px', borderRadius: '10px', background: 'rgba(53,108,137,0.08)', border: '1px solid rgba(53,108,137,0.25)' }}>
+              <Award size={28} color="#356c89" />
               <div style={{ fontWeight: 700, color: '#18181b', marginTop: '8px' }}>Certificate Issued!</div>
-              <div style={{ fontFamily: 'var(--font-mono)', color: '#06b6d4', fontSize: '0.9rem' }}>{result.certificate.certificateId}</div>
+              <div style={{ fontFamily: 'var(--font-mono)', color: '#356c89', fontSize: '0.9rem' }}>{result.certificate.certificateId}</div>
             </div>
           )}
 
@@ -135,14 +135,14 @@ export default function QuizPlayer() {
             {(result.feedback || []).map((fb, i) => (
               <div key={i} style={{
                 padding: '16px', borderRadius: '10px', marginBottom: '12px',
-                background: fb.isCorrect ? 'rgba(16,185,129,0.08)' : 'rgba(244,63,94,0.08)',
-                border: `1px solid ${fb.isCorrect ? 'rgba(16,185,129,0.25)' : 'rgba(244,63,94,0.25)'}`
+                background: fb.isCorrect ? 'rgba(21,128,61,0.08)' : 'rgba(220,38,38,0.08)',
+                border: `1px solid ${fb.isCorrect ? 'rgba(21,128,61,0.25)' : 'rgba(220,38,38,0.25)'}`
               }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '8px' }}>
-                  {fb.isCorrect ? <CheckCircle2 size={16} color="#10b981" style={{ marginTop: '2px' }} /> : <XCircle size={16} color="#f43f5e" style={{ marginTop: '2px' }} />}
-                  <span style={{ fontWeight: 600, color: '#e2e8f0', fontSize: '0.9rem' }}>Q{i + 1}: {fb.questionText}</span>
+                  {fb.isCorrect ? <CheckCircle2 size={16} color="#15803d" style={{ marginTop: '2px' }} /> : <XCircle size={16} color="#dc2626" style={{ marginTop: '2px' }} />}
+                  <span style={{ fontWeight: 600, color: '#18181b', fontSize: '0.9rem' }}>Q{i + 1}: {fb.questionText}</span>
                 </div>
-                <div style={{ fontSize: '0.82rem', color: '#94a3b8', marginLeft: '24px' }}>
+                <div style={{ fontSize: '0.82rem', color: '#71717a', marginLeft: '24px' }}>
                   {fb.explanation}
                 </div>
               </div>
@@ -166,7 +166,7 @@ export default function QuizPlayer() {
 
   return (
     <div style={{ maxWidth: '750px', margin: '0 auto' }}>
-      <Link to={`/employee/course/${courseId}`} style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#64748b', fontSize: '0.8rem', textDecoration: 'none', marginBottom: '16px' }}>
+      <Link to={`/employee/course/${courseId}`} style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#71717a', fontSize: '0.8rem', textDecoration: 'none', marginBottom: '16px' }}>
         <ChevronLeft size={14} /> Back to Course
       </Link>
 
@@ -174,7 +174,7 @@ export default function QuizPlayer() {
       <div className="glass-card" style={{ padding: '20px', marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#18181b' }}>{quiz.title}</h2>
-          <div style={{ fontSize: '0.78rem', color: '#64748b' }}>
+          <div style={{ fontSize: '0.78rem', color: '#71717a' }}>
             Pass: {quiz.passingScore}% &bull; Attempt {quiz.attemptsCount + 1} of {quiz.attemptsAllowed}
           </div>
         </div>
@@ -183,14 +183,14 @@ export default function QuizPlayer() {
             <div style={{
               display: 'flex', alignItems: 'center', gap: '6px',
               padding: '6px 14px', borderRadius: '8px',
-              background: timeLeft < 60 ? 'rgba(244,63,94,0.2)' : 'rgba(6,182,212,0.12)',
-              color: timeLeft < 60 ? '#fb7185' : '#22d3ee',
+              background: timeLeft < 60 ? 'rgba(220,38,38,0.12)' : 'rgba(53,108,137,0.1)',
+              color: timeLeft < 60 ? '#dc2626' : '#356c89',
               fontWeight: 700, fontFamily: 'var(--font-mono)', fontSize: '1rem'
             }}>
               <Clock size={16} /> {formatTime(timeLeft)}
             </div>
           )}
-          <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#e2e8f0' }}>
+          <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#18181b' }}>
             {currentQ + 1} / {totalQ}
           </div>
         </div>
@@ -198,21 +198,25 @@ export default function QuizPlayer() {
 
       {/* Question Progress Dots */}
       <div style={{ display: 'flex', gap: '6px', marginBottom: '20px', justifyContent: 'center' }}>
-        {quiz.questions.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setCurrentQ(i)}
-            style={{
-              width: '28px', height: '28px', borderRadius: '6px',
-              background: i === currentQ ? '#06b6d4' : answers[quiz.questions[i]._id] !== undefined ? '#1e3a5f' : '#1e293b',
-              border: i === currentQ ? '2px solid #22d3ee' : '1px solid #334155',
-              color: i === currentQ ? '#ffffff' : '#94a3b8',
-              cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700
-            }}
-          >
-            {i + 1}
-          </button>
-        ))}
+        {quiz.questions.map((_, i) => {
+          const isCurrent = i === currentQ;
+          const isAnswered = answers[quiz.questions[i]._id] !== undefined;
+          return (
+            <button
+              key={i}
+              onClick={() => setCurrentQ(i)}
+              style={{
+                width: '28px', height: '28px', borderRadius: '6px',
+                background: isCurrent ? '#356c89' : isAnswered ? 'rgba(53,108,137,0.12)' : '#f4f4f5',
+                border: isCurrent ? '2px solid #4e86a0' : isAnswered ? '1px solid rgba(53,108,137,0.3)' : '1px solid #e4e4e7',
+                color: isCurrent ? '#ffffff' : isAnswered ? '#356c89' : '#71717a',
+                cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700
+              }}
+            >
+              {i + 1}
+            </button>
+          );
+        })}
       </div>
 
       {/* Question Card */}
@@ -220,7 +224,7 @@ export default function QuizPlayer() {
         <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#18181b', marginBottom: '6px' }}>
           Question {currentQ + 1}
         </h3>
-        <p style={{ fontSize: '0.95rem', color: '#e2e8f0', marginBottom: '24px', lineHeight: '1.6' }}>
+        <p style={{ fontSize: '0.95rem', color: '#27272a', marginBottom: '24px', lineHeight: '1.6' }}>
           {question.questionText}
         </p>
 
@@ -235,9 +239,9 @@ export default function QuizPlayer() {
                 style={{
                   display: 'flex', alignItems: 'center', gap: '14px',
                   padding: '14px 18px', borderRadius: '10px',
-                  background: selected ? 'rgba(6,182,212,0.15)' : '#0e1526',
-                  border: selected ? '2px solid #06b6d4' : '1px solid #1e293b',
-                  color: selected ? '#22d3ee' : '#cbd5e1',
+                  background: selected ? 'rgba(53,108,137,0.1)' : '#ffffff',
+                  border: selected ? '2px solid #356c89' : '1px solid #e4e4e7',
+                  color: selected ? '#356c89' : '#27272a',
                   cursor: 'pointer', textAlign: 'left',
                   fontSize: '0.9rem', fontWeight: selected ? 600 : 400,
                   transition: 'all 0.15s ease'
@@ -245,10 +249,10 @@ export default function QuizPlayer() {
               >
                 <div style={{
                   width: '28px', height: '28px', borderRadius: '50%',
-                  border: selected ? '2px solid #06b6d4' : '2px solid #334155',
-                  background: selected ? '#06b6d4' : 'transparent',
+                  border: selected ? '2px solid #356c89' : '2px solid #d4d4d8',
+                  background: selected ? '#356c89' : 'transparent',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '0.75rem', fontWeight: 700, color: selected ? '#ffffff' : '#64748b',
+                  fontSize: '0.75rem', fontWeight: 700, color: selected ? '#ffffff' : '#71717a',
                   flexShrink: 0
                 }}>
                   {String.fromCharCode(65 + i)}
@@ -279,7 +283,7 @@ export default function QuizPlayer() {
           <button
             className="btn-primary"
             onClick={handleSubmit}
-            style={{ background: 'linear-gradient(135deg, #10b981 0%, #06b6d4 100%)' }}
+            style={{ background: 'linear-gradient(135deg, #15803d 0%, #356c89 100%)' }}
           >
             Submit Assessment <CheckCircle2 size={14} />
           </button>

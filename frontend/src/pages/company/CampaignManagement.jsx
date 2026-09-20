@@ -42,14 +42,14 @@ export default function CampaignManagement() {
     setForm(prev => ({ ...prev, courses: prev.courses.includes(id) ? prev.courses.filter(c => c !== id) : [...prev.courses, id] }));
   };
 
-  if (loading) return <div style={{ color: '#94a3b8', padding: '40px' }}>Loading campaigns...</div>;
+  if (loading) return <div style={{ color: '#71717a', padding: '40px' }}>Loading campaigns...</div>;
 
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#18181b' }}>Training Campaigns</h1>
-          <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Deploy awareness programs and track audience coverage</p>
+          <p style={{ color: '#71717a', fontSize: '0.85rem' }}>Deploy awareness programs and track audience coverage</p>
         </div>
         <button className="btn-primary" onClick={() => setShowCreate(true)}><Plus size={14} /> Launch Campaign</button>
       </div>
@@ -61,7 +61,7 @@ export default function CampaignManagement() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <div>
                 <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#18181b', marginBottom: '6px' }}>{c.name}</h3>
-                <p style={{ fontSize: '0.82rem', color: '#94a3b8', marginBottom: '10px' }}>{c.description?.substring(0, 100)}</p>
+                <p style={{ fontSize: '0.82rem', color: '#71717a', marginBottom: '10px' }}>{c.description?.substring(0, 100)}</p>
                 <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                   {c.courses?.map(course => (
                     <span key={course._id} className="badge badge-cyan" style={{ fontSize: '0.72rem' }}>{course.title}</span>
@@ -70,19 +70,19 @@ export default function CampaignManagement() {
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexShrink: 0, marginLeft: '20px' }}>
                 <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#38bdf8' }}>{c.enrollmentCount || 0}</div>
-                  <div style={{ fontSize: '0.68rem', color: '#64748b' }}>Enrolled</div>
+                  <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#356c89' }}>{c.enrollmentCount || 0}</div>
+                  <div style={{ fontSize: '0.68rem', color: '#71717a' }}>Enrolled</div>
                 </div>
                 <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#10b981' }}>{c.completionRate || 0}%</div>
-                  <div style={{ fontSize: '0.68rem', color: '#64748b' }}>Complete</div>
+                  <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#15803d' }}>{c.completionRate || 0}%</div>
+                  <div style={{ fontSize: '0.68rem', color: '#71717a' }}>Complete</div>
                 </div>
                 <span className={`badge ${c.status === 'ACTIVE' ? 'badge-green' : c.status === 'COMPLETED' ? 'badge-cyan' : 'badge-slate'}`}>
                   {c.status}
                 </span>
               </div>
             </div>
-            <div style={{ marginTop: '12px', fontSize: '0.78rem', color: '#64748b', display: 'flex', gap: '16px' }}>
+            <div style={{ marginTop: '12px', fontSize: '0.78rem', color: '#71717a', display: 'flex', gap: '16px' }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><CalendarDays size={12} /> Due: {new Date(c.dueDate).toLocaleDateString()}</span>
               <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Target size={12} /> {c.targetType?.replace('_', ' ')}</span>
             </div>
@@ -92,11 +92,11 @@ export default function CampaignManagement() {
 
       {/* Create Campaign Modal */}
       {showCreate && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, overflowY: 'auto', padding: '40px 0' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, overflowY: 'auto', padding: '40px 0' }}>
           <div className="glass-card" style={{ padding: '32px', width: '560px', maxHeight: '90vh', overflowY: 'auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
               <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#18181b' }}>Launch New Campaign</h2>
-              <button onClick={() => setShowCreate(false)} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}><X size={18}/></button>
+              <button onClick={() => setShowCreate(false)} style={{ background: 'none', border: 'none', color: '#71717a', cursor: 'pointer' }}><X size={18}/></button>
             </div>
             <form onSubmit={handleLaunch} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div><label className="form-label">Campaign Name</label><input className="form-input" value={form.name} onChange={e => setForm({...form, name: e.target.value})} required placeholder="e.g. Annual Security Awareness 2026" /></div>
@@ -107,8 +107,8 @@ export default function CampaignManagement() {
                 <label className="form-label">Select Courses</label>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   {courses.map(course => (
-                    <label key={course._id} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 12px', borderRadius: '8px', background: form.courses.includes(course._id) ? 'rgba(6,182,212,0.15)' : '#0e1526', border: `1px solid ${form.courses.includes(course._id) ? 'rgba(6,182,212,0.4)' : '#1e293b'}`, cursor: 'pointer', fontSize: '0.85rem', color: '#e2e8f0' }}>
-                      <input type="checkbox" checked={form.courses.includes(course._id)} onChange={() => toggleCourse(course._id)} style={{ accentColor: '#06b6d4' }} />
+                    <label key={course._id} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 12px', borderRadius: '8px', background: form.courses.includes(course._id) ? 'rgba(53,108,137,0.1)' : '#ffffff', border: `1px solid ${form.courses.includes(course._id) ? 'rgba(53,108,137,0.4)' : '#e4e4e7'}`, cursor: 'pointer', fontSize: '0.85rem', color: '#27272a' }}>
+                      <input type="checkbox" checked={form.courses.includes(course._id)} onChange={() => toggleCourse(course._id)} style={{ accentColor: '#356c89' }} />
                       {course.title}
                     </label>
                   ))}
@@ -128,10 +128,10 @@ export default function CampaignManagement() {
                 <div>
                   <label className="form-label">Select Departments</label>
                   {departments.map(d => (
-                    <label key={d._id} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#e2e8f0', marginBottom: '6px' }}>
+                    <label key={d._id} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#27272a', marginBottom: '6px' }}>
                       <input type="checkbox" checked={form.targetDepartments.includes(d._id)} onChange={() => {
                         setForm(prev => ({ ...prev, targetDepartments: prev.targetDepartments.includes(d._id) ? prev.targetDepartments.filter(x => x !== d._id) : [...prev.targetDepartments, d._id] }));
-                      }} style={{ accentColor: '#06b6d4' }} />
+                      }} style={{ accentColor: '#356c89' }} />
                       {d.name} ({d.employeeCount} employees)
                     </label>
                   ))}
