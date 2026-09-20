@@ -65,7 +65,7 @@ export default function EmployeeManagement() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#18181b' }}>Employee Roster</h1>
-          <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Manage your organization's learner workforce</p>
+          <p style={{ color: '#71717a', fontSize: '0.85rem' }}>Manage your organization's learner workforce</p>
         </div>
         <div style={{ display: 'flex', gap: '10px' }}>
           <button className="btn-secondary" onClick={() => setShowCSVModal(true)}>
@@ -80,7 +80,7 @@ export default function EmployeeManagement() {
       {/* Filters */}
       <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
         <div style={{ position: 'relative', flex: 1 }}>
-          <Search size={16} color="#64748b" style={{ position: 'absolute', left: '12px', top: '11px' }} />
+          <Search size={16} color="#71717a" style={{ position: 'absolute', left: '12px', top: '11px' }} />
           <input className="form-input" style={{ paddingLeft: '36px' }} placeholder="Search by name or email..."
             value={search} onChange={e => setSearch(e.target.value)} />
         </div>
@@ -98,9 +98,9 @@ export default function EmployeeManagement() {
               <th>Employee</th>
               <th>Department</th>
               <th>Status</th>
-              <th>Enrollments</th>
-              <th>Completed</th>
-              <th>Certificates</th>
+              <th style={{ textAlign: 'center' }}>Enrollments</th>
+              <th style={{ textAlign: 'center' }}>Completed</th>
+              <th style={{ textAlign: 'center' }}>Certificates</th>
             </tr>
           </thead>
           <tbody>
@@ -109,24 +109,24 @@ export default function EmployeeManagement() {
                 <td>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <div style={{
-                      width: '36px', height: '36px', borderRadius: '8px',
-                      background: 'linear-gradient(135deg, #1e293b, #0f172a)',
+                      width: '36px', height: '36px', borderRadius: '50%', flexShrink: 0,
+                      background: 'linear-gradient(135deg, #356c89, #4e86a0)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: '0.85rem', fontWeight: 700, color: '#06b6d4'
+                      fontSize: '0.85rem', fontWeight: 700, color: '#ffffff'
                     }}>
                       {emp.name?.charAt(0)}
                     </div>
                     <div>
-                      <div style={{ fontWeight: 600, color: '#f1f5f9' }}>{emp.name}</div>
-                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{emp.email}</div>
+                      <div style={{ fontWeight: 600, color: '#18181b' }}>{emp.name}</div>
+                      <div style={{ fontSize: '0.75rem', color: '#71717a' }}>{emp.email}</div>
                     </div>
                   </div>
                 </td>
-                <td style={{ color: '#94a3b8' }}>{emp.departmentId?.name || '—'}</td>
+                <td style={{ color: '#52525b' }}>{emp.departmentId?.name || '—'}</td>
                 <td><span className={`badge ${statusColors[emp.status] || 'badge-slate'}`}>{emp.status}</span></td>
-                <td style={{ fontWeight: 700, color: '#38bdf8' }}>{emp.enrollmentCount || 0}</td>
-                <td style={{ fontWeight: 700, color: '#10b981' }}>{emp.completedCount || 0}</td>
-                <td style={{ fontWeight: 700, color: '#f59e0b' }}>{emp.certificatesCount || 0}</td>
+                <td style={{ fontWeight: 700, color: '#356c89', textAlign: 'center' }}>{emp.enrollmentCount || 0}</td>
+                <td style={{ fontWeight: 700, color: '#15803d', textAlign: 'center' }}>{emp.completedCount || 0}</td>
+                <td style={{ fontWeight: 700, color: '#356c89', textAlign: 'center' }}>{emp.certificatesCount || 0}</td>
               </tr>
             ))}
           </tbody>
@@ -135,11 +135,11 @@ export default function EmployeeManagement() {
 
       {/* Add Employee Modal */}
       {showAddModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
           <div className="glass-card" style={{ padding: '32px', width: '460px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
               <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#18181b' }}>Add New Employee</h2>
-              <button onClick={() => setShowAddModal(false)} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}><X size={18}/></button>
+              <button onClick={() => setShowAddModal(false)} style={{ background: 'none', border: 'none', color: '#71717a', cursor: 'pointer' }}><X size={18}/></button>
             </div>
             <form onSubmit={handleAddEmployee} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div><label className="form-label">Full Name</label><input className="form-input" value={newEmp.name} onChange={e => setNewEmp({...newEmp, name: e.target.value})} required /></div>
@@ -159,11 +159,11 @@ export default function EmployeeManagement() {
 
       {/* CSV Import Modal */}
       {showCSVModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
           <div className="glass-card" style={{ padding: '32px', width: '560px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
               <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#18181b' }}>Bulk CSV Import</h2>
-              <button onClick={() => { setShowCSVModal(false); setCsvResult(null); }} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}><X size={18}/></button>
+              <button onClick={() => { setShowCSVModal(false); setCsvResult(null); }} style={{ background: 'none', border: 'none', color: '#71717a', cursor: 'pointer' }}><X size={18}/></button>
             </div>
             <label className="form-label">Paste CSV (Required: name, email | Optional: department)</label>
             <textarea className="form-input" rows={6} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem' }}
@@ -172,9 +172,9 @@ export default function EmployeeManagement() {
               <Upload size={14} /> Import Employees
             </button>
             {csvResult && (
-              <div style={{ marginTop: '16px', padding: '14px', borderRadius: '8px', background: '#0e1526', border: '1px solid #1e293b', fontSize: '0.82rem' }}>
-                <div style={{ color: '#10b981', fontWeight: 700 }}>✓ Imported: {csvResult.importedCount}</div>
-                {csvResult.skippedCount > 0 && <div style={{ color: '#f59e0b', marginTop: '4px' }}>⚠ Skipped: {csvResult.skippedCount}</div>}
+              <div style={{ marginTop: '16px', padding: '14px', borderRadius: '8px', background: '#F6F7F9', border: '1px solid #e4e4e7', fontSize: '0.82rem' }}>
+                <div style={{ color: '#15803d', fontWeight: 700 }}>✓ Imported: {csvResult.importedCount}</div>
+                {csvResult.skippedCount > 0 && <div style={{ color: '#b45309', marginTop: '4px' }}>⚠ Skipped: {csvResult.skippedCount}</div>}
               </div>
             )}
           </div>

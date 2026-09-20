@@ -57,7 +57,33 @@ export default function CampaignManagement() {
       {/* Campaign List */}
       <div style={{ display: 'grid', gap: '16px' }}>
         {campaigns.map(c => (
-          <div key={c._id} className="glass-card" style={{ padding: '22px' }}>
+          <div
+            key={c._id}
+            className="glass-card"
+            style={{ padding: '22px', position: 'relative', overflow: 'hidden', transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)', cursor: 'pointer' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-4px)';
+              e.currentTarget.style.boxShadow = '0 14px 24px -6px rgba(53, 108, 137, 0.18), 0 4px 8px -2px rgba(53, 108, 137, 0.08)';
+              e.currentTarget.style.borderColor = '#356c89';
+              const bar = e.currentTarget.querySelector('.campaign-accent-bar');
+              if (bar) bar.style.transform = 'scaleX(1)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '';
+              e.currentTarget.style.borderColor = '#e4e4e7';
+              const bar = e.currentTarget.querySelector('.campaign-accent-bar');
+              if (bar) bar.style.transform = 'scaleX(0)';
+            }}
+          >
+            <div
+              className="campaign-accent-bar"
+              style={{
+                position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
+                background: 'linear-gradient(90deg, #356c89, #4e86a0)',
+                transform: 'scaleX(0)', transformOrigin: 'left', transition: 'transform 0.3s ease'
+              }}
+            />
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <div>
                 <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#18181b', marginBottom: '6px' }}>{c.name}</h3>
