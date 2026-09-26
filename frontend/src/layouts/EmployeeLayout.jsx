@@ -1,8 +1,9 @@
 import React from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Shield, BookOpen, Award, Compass, LogOut, ExternalLink } from 'lucide-react';
+import { BookOpen, Award, Compass, LogOut, ExternalLink } from 'lucide-react';
 import DemoRoleBar from '../components/DemoRoleBar';
+import logoImg from '../assets/logo.png';
 
 export default function EmployeeLayout() {
   const { user, logout } = useAuth();
@@ -29,21 +30,18 @@ export default function EmployeeLayout() {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
           {/* Logo */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{
-              width: '32px',
-              height: '32px',
-              borderRadius: '8px',
-              background: 'linear-gradient(135deg, #356c89 0%, #4e86a0 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 0 0 3px rgba(255,255,255,0.12), 0 4px 12px rgba(0,0,0,0.2)'
-            }}>
-              <Shield size={18} color="#ffffff" />
-            </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <img
+              src={logoImg}
+              alt="Logo"
+              style={{
+                width: '34px',
+                height: '34px',
+                objectFit: 'contain'
+              }}
+            />
             <div style={{ fontWeight: 800, fontSize: '1rem', color: '#ffffff' }}>
-              Cyber<span style={{ color: '#a5c8d7' }}>Aware</span>
+              THINKB4<span style={{ color: '#0d3741' }}>ACT</span>
             </div>
             <span style={{
               fontSize: '0.72rem',

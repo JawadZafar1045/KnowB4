@@ -140,9 +140,9 @@ export default function CoursePlayer() {
                 {activeLesson.description}
               </p>
               <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
-                <span className="badge badge-cyan">{activeLesson.contentType}</span>
-                <span className="badge badge-slate">{activeLesson.duration}min</span>
-                {activeLesson.isRequired && <span className="badge badge-amber">Required</span>}
+                <span style={{ background: '#356c89', color: '#ffffff', fontSize: '0.75rem', fontWeight: 700, padding: '3px 10px', borderRadius: '9999px' }}>{activeLesson.contentType}</span>
+                <span style={{ background: '#52525b', color: '#ffffff', fontSize: '0.75rem', fontWeight: 700, padding: '3px 10px', borderRadius: '9999px' }}>{activeLesson.duration}min</span>
+                {activeLesson.isRequired && <span style={{ background: '#b45309', color: '#ffffff', fontSize: '0.75rem', fontWeight: 700, padding: '3px 10px', borderRadius: '9999px' }}>Required</span>}
               </div>
             </div>
 
@@ -183,7 +183,7 @@ export default function CoursePlayer() {
                   <CheckCircle2 size={16} /> Mark Complete & Next Lesson
                 </button>
               ) : (
-                <span className="badge badge-green" style={{ fontSize: '0.85rem', padding: '8px 16px' }}>
+                <span style={{ background: '#15803d', color: '#ffffff', fontSize: '0.85rem', fontWeight: 700, padding: '8px 16px', borderRadius: '9999px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
                   <CheckCircle2 size={14} /> Lesson Completed
                 </span>
               )}

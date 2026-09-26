@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Shield, Lock, Mail, ArrowRight, AlertCircle } from 'lucide-react';
+import { Lock, Mail, ArrowRight, AlertCircle } from 'lucide-react';
 import loginBg from '../../assets/login-bg.jpg';
+import logoImg from '../../assets/logo.png';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('admin@acmefinance.com');
   const [password, setPassword] = useState('Password123!');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isButtonHovered, setIsButtonHovered] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -52,30 +54,27 @@ export default function LoginPage() {
       padding: '24px'
     }}>
       <div style={{ width: '100%', maxWidth: '440px' }}>
-        {/* Brand */}
+        {/* Brand Logo */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-          <div style={{
-            width: '56px',
-            height: '56px',
-            borderRadius: '16px',
-            background: 'linear-gradient(135deg, #0E7C86 0%, #0B5FA5 100%)',
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 8px 24px rgba(14, 124, 134, 0.45)',
-            marginBottom: '16px'
-          }}>
-            <Shield size={32} color="#ffffff" />
-          </div>
+          <img
+            src={logoImg}
+            alt="Logo"
+            style={{
+              width: '72px',
+              height: '72px',
+              objectFit: 'contain',
+              marginBottom: '16px'
+            }}
+          />
           <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.03em' }}>
-            Cyber<span style={{ color: '#5EEAD4' }}>Aware</span>
+            THINKB4<span style={{ color: '#01201bb4' }}>ACT</span>
           </h1>
           <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.9rem', marginTop: '6px' }}>
             Multi-Tenant Security Awareness & Training Platform
           </p>
         </div>
 
-        {/* Glass Card (transparent over the background image) */}
+        {/* Glass Card */}
         <div style={{
           background: 'rgba(255,255,255,0.05)',
           backdropFilter: 'blur(10px)',
@@ -171,12 +170,16 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
+              onMouseEnter={() => setIsButtonHovered(true)}
+              onMouseLeave={() => setIsButtonHovered(false)}
               style={{
                 width: '100%',
                 padding: '12px',
                 marginTop: '8px',
-                background: 'linear-gradient(135deg, #0E7C86 0%, #0B5FA5 100%)',
-                border: 'none',
+                background: isButtonHovered
+                  ? 'linear-gradient(135deg, #228296 0%, #123f4c 100%)'
+                  : 'linear-gradient(135deg, #196478 0%, #0d3741 100%)',
+                border: '1px solid rgba(255,255,255,0.1)',
                 borderRadius: '10px',
                 color: '#ffffff',
                 fontWeight: 700,
@@ -186,14 +189,17 @@ export default function LoginPage() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
-                boxShadow: '0 4px 18px rgba(14, 124, 134, 0.4)',
-                transition: 'opacity 0.2s ease',
+                boxShadow: isButtonHovered
+                  ? '0 4px 14px rgba(25, 100, 120, 0.5)'
+                  : '0 2px 8px rgba(25, 100, 120, 0.35)',
+                transform: isButtonHovered ? 'translateY(-1px)' : 'translateY(0)',
+                transition: 'all 0.2s ease',
                 opacity: loading ? 0.7 : 1
               }}
             >
               {loading ? 'Authenticating...' : (
                 <>
-                  Sign In to CyberAware <ArrowRight size={16} />
+                  Sign In to ThinkB4Act <ArrowRight size={16} />
                 </>
               )}
             </button>

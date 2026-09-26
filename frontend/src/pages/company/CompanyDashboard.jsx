@@ -107,12 +107,12 @@ export default function CompanyDashboard() {
                 <div
                   className="kpi-icon"
                   style={{
-                    width: '34px', height: '34px', borderRadius: '8px', background: 'rgba(53, 108, 137, 0.1)',
+                    width: '34px', height: '34px', borderRadius: '8px', background: '#356c89',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     transition: 'transform 0.2s ease'
                   }}
                 >
-                  <Icon size={16} color="#356c89" />
+                  <Icon size={16} color="#ffffff" />
                 </div>
               </div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.75rem', fontWeight: 800, color: '#18181b' }}>{displayValue}{kpi.suffix}</div>
@@ -215,8 +215,8 @@ export default function CompanyDashboard() {
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             {(stats?.departmentBreakdown || []).map((dept, i) => {
-              const barColor = dept.completionRate >= 75 ? '#059669' : dept.completionRate >= 40 ? '#d97706' : '#dc2626';
-              const chipBg = dept.completionRate >= 75 ? '#ecfdf5' : dept.completionRate >= 40 ? '#fffbeb' : '#fef2f2';
+              const barColor = dept.completionRate >= 75 ? '#15803d' : dept.completionRate >= 40 ? '#b45309' : '#be123c';
+              const chipBg = barColor;
               const animatedDeptRate = Math.round(dept.completionRate * animProgress);
               return (
                 <div
@@ -243,7 +243,7 @@ export default function CompanyDashboard() {
                     </div>
                     <span style={{
                       fontFamily: 'var(--font-mono)', fontSize: '0.82rem', fontWeight: 700,
-                      color: barColor, background: chipBg, padding: '2px 9px', borderRadius: '6px',
+                      color: '#ffffff', background: chipBg, padding: '2px 9px', borderRadius: '6px',
                       transition: 'transform 0.2s ease'
                     }}>
                       {animatedDeptRate}%

@@ -43,16 +43,17 @@ export default function EmployeeDashboard() {
   if (loading) return <div style={{ color: '#71717a', padding: '60px', textAlign: 'center' }}>Loading your training...</div>;
 
   const statusIcons = {
-    COMPLETED: <CheckCircle2 size={16} color="#15803d" />,
-    IN_PROGRESS: <Clock size={16} color="#b45309" />,
-    ASSIGNED: <BookOpen size={16} color="#52525b" />,
-    FAILED: <AlertTriangle size={16} color="#b91c1c" />,
+    COMPLETED: <CheckCircle2 size={16} color="#ffffff" />,
+    IN_PROGRESS: <Clock size={16} color="#ffffff" />,
+    ASSIGNED: <BookOpen size={16} color="#ffffff" />,
+    FAILED: <AlertTriangle size={16} color="#ffffff" />,
   };
-  const statusBadgeClass = {
-    COMPLETED: 'badge-green',
-    IN_PROGRESS: 'badge-amber',
-    ASSIGNED: 'badge-slate',
-    FAILED: 'badge-rose',
+  // Solid (non-translucent) colors, as requested
+  const statusSolidColor = {
+    COMPLETED: '#15803d',
+    IN_PROGRESS: '#b45309',
+    ASSIGNED: '#52525b',
+    FAILED: '#be123c',
   };
 
   const quickStats = [
@@ -116,11 +117,11 @@ export default function EmployeeDashboard() {
                 className="stat-icon"
                 style={{
                   width: '36px', height: '36px', borderRadius: '10px', marginBottom: '12px',
-                  background: 'rgba(53, 108, 137, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: '#356c89', display: 'flex', alignItems: 'center', justifyContent: 'center',
                   transition: 'transform 0.2s ease'
                 }}
               >
-                <Icon size={18} color="#356c89" />
+                <Icon size={18} color="#ffffff" />
               </div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.9rem', fontWeight: 800, color: '#18181b', letterSpacing: '-0.02em' }}>{displayValue}</div>
               <div style={{ fontSize: '0.78rem', color: '#71717a', fontWeight: 600 }}>{s.label}</div>
@@ -169,7 +170,11 @@ export default function EmployeeDashboard() {
                   <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#18181b', marginBottom: '4px' }}>{course.title}</h3>
                   <div style={{ fontSize: '0.78rem', color: '#71717a' }}>{course.category} &bull; {course.estimatedDuration}min</div>
                 </div>
-                <span className={`badge ${statusBadgeClass[en.status] || 'badge-slate'}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}>
+                <span style={{
+                  background: statusSolidColor[en.status] || '#52525b', color: '#ffffff',
+                  fontSize: '0.72rem', fontWeight: 700, padding: '3px 10px', borderRadius: '9999px',
+                  display: 'inline-flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap'
+                }}>
                   {statusIcons[en.status]}
                   {en.status}
                 </span>

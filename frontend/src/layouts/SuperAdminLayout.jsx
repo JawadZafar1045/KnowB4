@@ -3,6 +3,7 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Shield, Building, BookOpen, BarChart3, LogOut, ExternalLink } from 'lucide-react';
 import DemoRoleBar from '../components/DemoRoleBar';
+import logoImg from '../assets/logo.png';
 
 export default function SuperAdminLayout() {
   const { user, logout } = useAuth();
@@ -34,22 +35,19 @@ export default function SuperAdminLayout() {
         }}>
           {/* Brand Logo */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '13px', paddingLeft: '4px' }}>
-            <div style={{
-              width: '42px',
-              height: '42px',
-              borderRadius: '12px',
-              background: '#ffffff',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 0 0 4px rgba(255,255,255,0.12), 0 4px 14px rgba(0,0,0,0.2)',
-              flexShrink: 0
-            }}>
-              <Shield size={23} color="#356c89" />
-            </div>
+            <img
+              src={logoImg}
+              alt="Logo"
+              style={{
+                width: '44px',
+                height: '44px',
+                objectFit: 'contain',
+                flexShrink: 0
+              }}
+            />
             <div>
               <div style={{ fontWeight: 800, fontSize: '1.08rem', letterSpacing: '-0.01em', color: '#ffffff', lineHeight: 1.1 }}>
-                Cyber<span style={{ color: '#a5c8d7' }}>Aware</span>
+                THINKB4<span style={{ color: '#0d3741' }}>ACT</span>
               </div>
               <div style={{ fontSize: '0.66rem', color: '#a5c8d7', fontWeight: 700, letterSpacing: '0.08em', marginTop: '2px' }}>
                 SUPER ADMIN

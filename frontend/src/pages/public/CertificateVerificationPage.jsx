@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Shield, CheckCircle2, XCircle, Award, Calendar, Building2, User, Percent, ExternalLink } from 'lucide-react';
+import logoImg from '../../assets/logo.png';
 
 export default function CertificateVerificationPage() {
   const { certificateId } = useParams();
@@ -26,11 +27,11 @@ export default function CertificateVerificationPage() {
     return (
       <div style={{
         minHeight: '100vh',
-        background: 'radial-gradient(ellipse at top, #EAF3F2 0%, #F6F7F9 70%)',
+        background: 'radial-gradient(ellipse at top, #eef4f2 0%, #f6f7f9 70%)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         fontFamily: "'Plus Jakarta Sans', sans-serif"
       }}>
-        <div style={{ textAlign: 'center', color: '#71717a' }}>
+        <div style={{ textAlign: 'center', color: '#52525b' }}>
           <Shield size={48} color="#356c89" />
           <p style={{ marginTop: '16px', fontSize: '1rem' }}>Verifying certificate authenticity...</p>
         </div>
@@ -43,23 +44,23 @@ export default function CertificateVerificationPage() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'radial-gradient(ellipse at top, #EAF3F2 0%, #F6F7F9 70%)',
+      background: 'radial-gradient(ellipse at top, #eef4f2 0%, #f6f7f9 70%)',
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       padding: '40px 24px',
       fontFamily: "'Plus Jakarta Sans', sans-serif"
     }}>
       {/* Branding */}
       <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-        <div style={{
-          width: '52px', height: '52px', borderRadius: '14px',
-          background: 'linear-gradient(135deg, #356c89 0%, #4e86a0 100%)',
-          display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-          boxShadow: '0 8px 24px rgba(53,108,137,0.3)', marginBottom: '12px'
-        }}>
-          <Shield size={28} color="#ffffff" />
-        </div>
+        <img
+          src={logoImg}
+          alt="ThinkB4Act"
+          style={{
+            width: '56px', height: '56px', objectFit: 'contain',
+            marginBottom: '12px'
+          }}
+        />
         <h1 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#18181b', letterSpacing: '-0.02em' }}>
-          Cyber<span style={{ color: '#356c89' }}>Aware</span> Certificate Verification
+          THINKB4<span style={{ color: '#356c89' }}>ACT</span> Certificate Verification
         </h1>
         <p style={{ color: '#71717a', fontSize: '0.85rem', marginTop: '4px' }}>
           Tamper-Proof Digital Credential Validation
@@ -70,10 +71,10 @@ export default function CertificateVerificationPage() {
       <div style={{
         width: '100%', maxWidth: '520px',
         background: '#ffffff',
-        border: isValid ? '2px solid rgba(21, 128, 61, 0.35)' : error ? '2px solid rgba(220, 38, 38, 0.35)' : cert?.status === 'REVOKED' ? '2px solid rgba(220, 38, 38, 0.35)' : '1px solid #e4e4e7',
+        border: isValid ? '2px solid rgba(22, 163, 74, 0.35)' : error ? '2px solid rgba(220, 38, 38, 0.35)' : cert?.status === 'REVOKED' ? '2px solid rgba(220, 38, 38, 0.35)' : '1px solid #e4e4e7',
         borderRadius: '16px',
         padding: '36px',
-        boxShadow: isValid ? '0 8px 32px rgba(21, 128, 61, 0.12)' : '0 8px 32px rgba(220, 38, 38, 0.1)'
+        boxShadow: '0 4px 24px rgba(53, 108, 137, 0.08)'
       }}>
         {error ? (
           <div style={{ textAlign: 'center' }}>
@@ -83,7 +84,7 @@ export default function CertificateVerificationPage() {
             </h2>
             <p style={{ color: '#71717a', marginTop: '8px' }}>{error}</p>
             <p style={{ color: '#71717a', fontSize: '0.82rem', marginTop: '12px' }}>
-              Searched ID: <span style={{ fontFamily: 'monospace', color: '#27272a' }}>{certificateId}</span>
+              Searched ID: <span style={{ fontFamily: 'monospace', color: '#3f3f46' }}>{certificateId}</span>
             </p>
           </div>
         ) : cert ? (
@@ -92,13 +93,13 @@ export default function CertificateVerificationPage() {
             <div style={{
               textAlign: 'center', marginBottom: '24px',
               padding: '16px', borderRadius: '12px',
-              background: isValid ? 'rgba(21, 128, 61, 0.08)' : 'rgba(220, 38, 38, 0.08)',
-              border: `1px solid ${isValid ? 'rgba(21, 128, 61, 0.25)' : 'rgba(220, 38, 38, 0.25)'}`
+              background: isValid ? '#f0fdf4' : '#fef2f2',
+              border: `1px solid ${isValid ? '#bbf7d0' : '#fecaca'}`
             }}>
-              {isValid ? <CheckCircle2 size={40} color="#15803d" /> : <XCircle size={40} color="#dc2626" />}
+              {isValid ? <CheckCircle2 size={40} color="#16a34a" /> : <XCircle size={40} color="#dc2626" />}
               <h2 style={{
                 fontSize: '1.25rem', fontWeight: 800, marginTop: '8px',
-                color: isValid ? '#15803d' : '#dc2626'
+                color: isValid ? '#15803d' : '#b91c1c'
               }}>
                 {isValid ? 'VALID CERTIFICATE' : `CERTIFICATE ${cert.status}`}
               </h2>
@@ -146,10 +147,10 @@ export default function CertificateVerificationPage() {
 
               <div style={{ display: 'flex', gap: '32px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <Percent size={20} color="#356c89" />
+                  <Percent size={20} color="#16a34a" />
                   <div>
                     <div style={{ fontSize: '0.75rem', color: '#71717a', fontWeight: 600 }}>Assessment Score</div>
-                    <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#15803d' }}>{cert.score}%</div>
+                    <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#16a34a' }}>{cert.score}%</div>
                   </div>
                 </div>
 
@@ -183,7 +184,7 @@ export default function CertificateVerificationPage() {
                   style={{
                     display: 'inline-flex', alignItems: 'center', gap: '8px',
                     padding: '10px 20px', borderRadius: '8px',
-                    background: 'linear-gradient(135deg, #356c89 0%, #4e86a0 100%)',
+                    background: 'linear-gradient(135deg, #2f6c8b 0%, #3d7491 100%)',
                     color: '#ffffff', fontWeight: 600, fontSize: '0.85rem',
                     textDecoration: 'none', boxShadow: '0 4px 14px rgba(53,108,137,0.3)'
                   }}
@@ -198,7 +199,7 @@ export default function CertificateVerificationPage() {
 
       {/* Footer */}
       <div style={{ textAlign: 'center', marginTop: '28px', fontSize: '0.78rem', color: '#71717a' }}>
-        <p>Powered by CyberAware Security Awareness Platform</p>
+        <p>Powered by ThinkB4Act Security Awareness Platform</p>
         <p>This is a cryptographically verified digital credential. No login required.</p>
       </div>
     </div>

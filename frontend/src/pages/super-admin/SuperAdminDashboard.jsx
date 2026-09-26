@@ -50,6 +50,12 @@ export default function SuperAdminDashboard() {
   const completionRate = stats?.platformCompletionRate || 0;
   const animatedCompletion = Math.round(completionRate * animProgress);
 
+  // Solid (non-translucent) badge styles, as requested
+  const solidBadge = (bg) => ({
+    background: bg, color: '#ffffff', fontSize: '0.72rem', fontWeight: 700,
+    padding: '3px 10px', borderRadius: '9999px', display: 'inline-flex', alignItems: 'center'
+  });
+
   return (
     <div style={{ color: '#18181b' }}>
       {/* Page Header */}
@@ -116,11 +122,11 @@ export default function SuperAdminDashboard() {
                   className="kpi-icon"
                   style={{
                     width: '36px', height: '36px', borderRadius: '10px',
-                    background: 'rgba(53, 108, 137, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    background: '#356c89', display: 'flex', alignItems: 'center', justifyContent: 'center',
                     transition: 'transform 0.2s ease'
                   }}
                 >
-                  <Icon size={18} color="#356c89" />
+                  <Icon size={18} color="#ffffff" />
                 </div>
               </div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '2rem', fontWeight: 800, color: '#18181b', letterSpacing: '-0.03em' }}>
@@ -187,8 +193,8 @@ export default function SuperAdminDashboard() {
                 <strong style={{ color: '#15803d' }}>{stats?.completedEnrollments || 0}</strong> completed out of <strong style={{ color: '#18181b' }}>{stats?.totalEnrollments || 0}</strong> total enrollments
               </div>
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                <span className="badge badge-cyan">Enterprise-Grade</span>
-                <span className="badge badge-green">SOC2 Ready</span>
+                <span style={solidBadge('#356c89')}>Enterprise-Grade</span>
+                <span style={solidBadge('#15803d')}>SOC2 Ready</span>
               </div>
             </div>
           </div>
@@ -243,7 +249,7 @@ export default function SuperAdminDashboard() {
                   <Building2 size={16} color="#356c89" />
                   <span style={{ fontWeight: 600, fontSize: '0.85rem', color: '#18181b' }}>{company.name}</span>
                 </div>
-                <span className={`badge ${company.status === 'ACTIVE' ? 'badge-green' : 'badge-amber'}`}>
+                <span style={solidBadge(company.status === 'ACTIVE' ? '#15803d' : '#b45309')}>
                   {company.status}
                 </span>
               </div>
