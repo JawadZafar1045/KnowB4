@@ -14,8 +14,8 @@ router.use(protect);
 
 router.get('/', getCourses);
 router.get('/:id', getCourseById);
-router.post('/', authorize('SUPER_ADMIN'), createCourse);
-router.post('/:id/modules', authorize('SUPER_ADMIN'), addModule);
-router.post('/:id/lessons', authorize('SUPER_ADMIN'), addLesson);
+router.post('/', authorize('SUPER_ADMIN', 'COMPANY_ADMIN'), createCourse);
+router.post('/:id/modules', authorize('SUPER_ADMIN', 'COMPANY_ADMIN'), addModule);
+router.post('/:id/lessons', authorize('SUPER_ADMIN', 'COMPANY_ADMIN'), addLesson);
 
 module.exports = router;

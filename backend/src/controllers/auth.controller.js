@@ -8,7 +8,7 @@ const config = require('../config/environment');
 
 // Helper function to validate email format using Regular Expression (Regex)
 const isValidEmail = (email) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+\$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 };
 // @route   POST /api/auth/login

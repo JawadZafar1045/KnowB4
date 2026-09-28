@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Shield, CheckCircle2, XCircle, Award, Calendar, Building2, User, Percent, ExternalLink } from 'lucide-react';
 import logoImg from '../../assets/logo.png';
+import { resolveAssetUrl } from '../../services/api';
 
 export default function CertificateVerificationPage() {
   const { certificateId } = useParams();
@@ -10,7 +11,8 @@ export default function CertificateVerificationPage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/certificates/verify/${certificateId}`)
+    const apiUrl = import.meta.env.VITE_API_URL || '/api';
+    fetch(`${apiUrl}/certificates/verify/${certificateId}`)
       .then(res => res.json())
       .then(data => {
         if (data.success) {
@@ -178,7 +180,7 @@ export default function CertificateVerificationPage() {
             {cert.pdfUrl && isValid && (
               <div style={{ textAlign: 'center', marginTop: '16px' }}>
                 <a
-                  href={`http://localhost:5000${cert.pdfUrl}`}
+                  href={resolveAssetUrl(cert.pdfUrl)}
                   target="_blank"
                   rel="noreferrer"
                   style={{

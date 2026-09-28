@@ -7,6 +7,6 @@ module.exports = {
   jwtRefreshSecret: process.env.JWT_REFRESH_SECRET || 'cyberaware_jwt_refresh_super_secret_key_2026',
   jwtExpire: process.env.JWT_EXPIRE || '24h',
   jwtRefreshExpire: process.env.JWT_REFRESH_EXPIRE || '7d',
-  mongoUri: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/cyberaware',
-  appUrl: process.env.APP_URL || 'http://localhost:5173'
+  mongoUri: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/knowb4',
+  appUrl: process.env.APP_URL || ''
 };

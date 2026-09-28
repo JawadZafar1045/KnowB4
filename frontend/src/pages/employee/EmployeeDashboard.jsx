@@ -240,7 +240,7 @@ export default function EmployeeDashboard() {
                 <div style={{ fontSize: '0.82rem', color: '#52525b' }}>Score: <strong style={{ color: '#15803d' }}>{cert.score}%</strong> &bull; Issued: {new Date(cert.issuedAt).toLocaleDateString()}</div>
                 <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
                   <a href={`/verify/${cert.certificateId}`} target="_blank" rel="noreferrer" className="btn-outline" style={{ fontSize: '0.75rem', padding: '6px 12px' }}>Verify Online</a>
-                  {cert.pdfUrl && <a href={`http://localhost:5000${cert.pdfUrl}`} target="_blank" rel="noreferrer" className="btn-secondary" style={{ fontSize: '0.75rem', padding: '6px 12px' }}>Download PDF</a>}
+                  {cert.pdfUrl && <a href={new URL(cert.pdfUrl, import.meta.env.VITE_BACKEND_URL || window.location.origin).toString()} target="_blank" rel="noreferrer" className="btn-secondary" style={{ fontSize: '0.75rem', padding: '6px 12px' }}>Download PDF</a>}
                 </div>
               </div>
             ))}

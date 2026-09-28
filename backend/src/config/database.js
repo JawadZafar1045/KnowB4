@@ -5,11 +5,13 @@ let mongod = null;
 
 const connectDB = async () => {
   try {
-    // Attempt standard connection first with a short timeout
     await mongoose.connect(config.mongoUri, {
       serverSelectionTimeoutMS: 2000
     });
     console.log(`[CyberAware DB] Connected to MongoDB: ${mongoose.connection.host}`);
+
+    const { seedData } = require('../utils/seed');
+    await seedData();
   } catch (err) {
     console.warn(`[CyberAware DB] Standard MongoDB connection failed (${err.message}). Initializing embedded database fallback...`);
     try {
@@ -18,8 +20,7 @@ const connectDB = async () => {
       const uri = mongod.getUri();
       await mongoose.connect(uri);
       console.log(`[CyberAware DB] Connected to In-Memory MongoDB at: ${uri}`);
-      
-      // Auto-trigger seeding if using embedded database so test data is immediately ready
+
       const { seedData } = require('../utils/seed');
       await seedData();
     } catch (fallbackErr) {

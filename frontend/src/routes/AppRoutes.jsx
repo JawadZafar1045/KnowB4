@@ -20,6 +20,7 @@ import CompanyDashboard from '../pages/company/CompanyDashboard';
 import EmployeeManagement from '../pages/company/EmployeeManagement';
 import DepartmentManagement from '../pages/company/DepartmentManagement';
 import CampaignManagement from '../pages/company/CampaignManagement';
+import CompanyCourseManager from '../pages/company/CompanyCourseManager';
 import TrainingReports from '../pages/company/TrainingReports';
 import CompanyCertificates from '../pages/company/CompanyCertificates';
 import AuditLogs from '../pages/company/AuditLogs';
@@ -80,6 +81,7 @@ export default function AppRoutes() {
           <Route index element={<CompanyDashboard />} />
           <Route path="employees" element={<EmployeeManagement />} />
           <Route path="departments" element={<DepartmentManagement />} />
+          <Route path="courses" element={<CompanyCourseManager />} />
           <Route path="campaigns" element={<CampaignManagement />} />
           <Route path="reports" element={<TrainingReports />} />
           <Route path="certificates" element={<CompanyCertificates />} />

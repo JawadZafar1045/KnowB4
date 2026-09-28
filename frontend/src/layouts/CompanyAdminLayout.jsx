@@ -11,7 +11,8 @@ import {
   FileText,
   LogOut,
   Building2,
-  ExternalLink
+  ExternalLink,
+  BookOpen
 } from 'lucide-react';
 import DemoRoleBar from '../components/DemoRoleBar';
 
@@ -25,6 +26,7 @@ export default function CompanyAdminLayout() {
     { to: '/company', label: 'Org Dashboard', icon: LayoutDashboard, end: true },
     { to: '/company/employees', label: 'Employees & Roster', icon: Users },
     { to: '/company/departments', label: 'Departments', icon: Layers },
+    { to: '/company/courses', label: 'Course Library', icon: BookOpen },
     { to: '/company/campaigns', label: 'Training Campaigns', icon: Send },
     { to: '/company/reports', label: 'Analytics & Reports', icon: BarChart2 },
     { to: '/company/certificates', label: 'Certificates', icon: Award },

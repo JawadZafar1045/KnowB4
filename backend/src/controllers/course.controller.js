@@ -8,7 +8,19 @@ const Quiz = require('../models/Quiz');
 // @access  Private
 const getCourses = async (req, res, next) => {
   try {
-    const filter = req.user.role === 'EMPLOYEE' ? { status: 'PUBLISHED' } : {};
+    let filter = {};
+
+    if (req.user.role === 'EMPLOYEE') {
+      filter = { status: 'PUBLISHED' };
+    } else if (req.user.role === 'COMPANY_ADMIN') {
+      filter = {
+        $or: [
+          { companyId: req.user.companyId },
+          { companyId: null }
+        ]
+      };
+    }
+
     const courses = await Course.find(filter).sort({ createdAt: -1 });
 
     const enriched = await Promise.all(
@@ -39,6 +51,10 @@ const getCourseById = async (req, res, next) => {
     const course = await Course.findById(req.params.id);
     if (!course) {
       return res.status(404).json({ success: false, message: 'Course not found' });
+    }
+
+    if (req.user.role === 'COMPANY_ADMIN' && course.companyId && course.companyId.toString() !== req.user.companyId.toString()) {
+      return res.status(403).json({ success: false, message: 'You do not have access to this course' });
     }
 
     const modules = await Module.find({ courseId: course._id }).sort({ order: 1 });
@@ -81,11 +97,15 @@ const createCourse = async (req, res, next) => {
   try {
     const { title, description, category, difficulty, estimatedDuration, passingScore, thumbnail } = req.body;
 
+    if (!title || !description) {
+      return res.status(400).json({ success: false, message: 'Title and description are required' });
+    }
+
     const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
     let existing = await Course.findOne({ slug });
     const finalSlug = existing ? `${slug}-${Date.now().toString().slice(-4)}` : slug;
 
-    const course = await Course.create({
+    const coursePayload = {
       title,
       slug: finalSlug,
       description,
@@ -96,7 +116,13 @@ const createCourse = async (req, res, next) => {
       thumbnail: thumbnail || '',
       createdBy: req.user._id,
       status: 'PUBLISHED'
-    });
+    };
+
+    if (req.user.role === 'COMPANY_ADMIN') {
+      coursePayload.companyId = req.user.companyId;
+    }
+
+    const course = await Course.create(coursePayload);
 
     res.status(201).json({ success: true, course });
   } catch (err) {
@@ -111,6 +137,15 @@ const addModule = async (req, res, next) => {
   try {
     const { title, description, order } = req.body;
     const courseId = req.params.id;
+    const course = await Course.findById(courseId);
+
+    if (!course) {
+      return res.status(404).json({ success: false, message: 'Course not found' });
+    }
+
+    if (req.user.role === 'COMPANY_ADMIN' && course.companyId && course.companyId.toString() !== req.user.companyId.toString()) {
+      return res.status(403).json({ success: false, message: 'You cannot edit this course' });
+    }
 
     const module = await Module.create({
       courseId,
@@ -132,6 +167,15 @@ const addLesson = async (req, res, next) => {
   try {
     const { moduleId, title, description, contentType, contentUrl, textContent, duration, order, isRequired } = req.body;
     const courseId = req.params.id;
+    const course = await Course.findById(courseId);
+
+    if (!course) {
+      return res.status(404).json({ success: false, message: 'Course not found' });
+    }
+
+    if (req.user.role === 'COMPANY_ADMIN' && course.companyId && course.companyId.toString() !== req.user.companyId.toString()) {
+      return res.status(403).json({ success: false, message: 'You cannot edit this course' });
+    }
 
     const lesson = await Lesson.create({
       courseId,
