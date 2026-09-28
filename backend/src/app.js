@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const helmet = require('helmet');
 const { errorHandler } = require('./middleware/error.middleware');
 const { uploadsDir } = require('./config/storage');
 
@@ -19,6 +20,9 @@ const reportRoutes = require('./routes/report.routes');
 const notificationRoutes = require('./routes/notification.routes');
 
 const app = express();
+
+// 2. Secure HTTP Headers using Helmet (Sab se pehle apply kiya)
+app.use(helmet());
 
 // Enable CORS
 app.use(cors({

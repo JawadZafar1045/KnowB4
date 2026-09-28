@@ -5,6 +5,12 @@ const { generateAccessToken, generateRefreshToken } = require('../utils/generate
 const jwt = require('jsonwebtoken');
 const config = require('../config/environment');
 
+
+// Helper function to validate email format using Regular Expression (Regex)
+const isValidEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+\$/;
+  return emailRegex.test(email);
+};
 // @route   POST /api/auth/login
 // @desc    Authenticate user & get tokens
 // @access  Public
@@ -16,6 +22,14 @@ const login = async (req, res, next) => {
       return res.status(400).json({
         success: false,
         message: 'Please provide an email and password'
+      });
+    }
+
+    // Format Validation Check 
+    if (!isValidEmail(email)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a valid email address format'
       });
     }
 
@@ -107,6 +121,28 @@ const registerCompany = async (req, res, next) => {
       return res.status(400).json({
         success: false,
         message: 'Company name, admin name, email, and password are required'
+      });
+    }
+
+    // Robust Security Checks (Email format & Password Strength)
+    if (!isValidEmail(email)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a valid administrator email address'
+      });
+    }
+
+    if (password.length < 8) {
+      return res.status(400).json({
+        success: false,
+        message: 'Password must be at least 8 characters long for production security standards'
+      });
+    }
+
+    if (companyName.trim().length < 2) {
+      return res.status(400).json({
+        success: false,
+        message: 'Company name must be at least 2 characters long'
       });
     }
 
@@ -225,10 +261,29 @@ const getMe = async (req, res, next) => {
     next(err);
   }
 };
+// @route   POST /api/auth/logout
+// @desc    Logout user & clear session
+// @access  Private
+const logout = async (req, res, next) => {
+  try {
+    // 1. Cookies clear 
+    res.clearCookie('token');
+    res.clearCookie('refreshToken');
+
+    // 2. success response 
+    res.json({
+      success: true,
+      message: 'Logged out successfully. Backend session cleared.'
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 module.exports = {
   login,
   registerCompany,
   refreshToken,
-  getMe
+  getMe,
+  logout
 };
