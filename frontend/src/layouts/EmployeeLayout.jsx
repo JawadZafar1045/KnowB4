@@ -1,8 +1,9 @@
 import React from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Shield, BookOpen, Award, Compass, LogOut, ExternalLink } from 'lucide-react';
+import { BookOpen, Award, Compass, LogOut, ExternalLink } from 'lucide-react';
 import DemoRoleBar from '../components/DemoRoleBar';
+import logoImg from '../assets/logo.png';
 
 export default function EmployeeLayout() {
   const { user, logout } = useAuth();
@@ -14,13 +15,13 @@ export default function EmployeeLayout() {
   ];
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#070b14' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#F6F7F9' }}>
       <DemoRoleBar />
 
       {/* Top Navbar */}
       <header style={{
-        background: '#0a0f1d',
-        borderBottom: '1px solid #1e293b',
+        background: 'linear-gradient(100deg, #2f6c8b 0%, #356c89 55%, #3d7491 100%)',
+        borderBottom: '1px solid rgba(255,255,255,0.1)',
         padding: '0 32px',
         height: '64px',
         display: 'flex',
@@ -29,28 +30,26 @@ export default function EmployeeLayout() {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
           {/* Logo */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{
-              width: '32px',
-              height: '32px',
-              borderRadius: '8px',
-              background: 'linear-gradient(135deg, #06b6d4 0%, #2563eb 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <Shield size={18} color="#ffffff" />
-            </div>
-            <div style={{ fontWeight: 800, fontSize: '1rem', color: '#f8fafc' }}>
-              Cyber<span style={{ color: '#06b6d4' }}>Aware</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <img
+              src={logoImg}
+              alt="Logo"
+              style={{
+                width: '34px',
+                height: '34px',
+                objectFit: 'contain'
+              }}
+            />
+            <div style={{ fontWeight: 800, fontSize: '1rem', color: '#ffffff' }}>
+              THINKB4<span style={{ color: '#0d3741' }}>ACT</span>
             </div>
             <span style={{
               fontSize: '0.72rem',
-              color: '#94a3b8',
-              background: '#111a2e',
+              color: '#ffffff',
+              background: 'rgba(255,255,255,0.12)',
               padding: '2px 8px',
               borderRadius: '6px',
-              border: '1px solid #1e293b'
+              border: '1px solid rgba(255,255,255,0.2)'
             }}>
               {user?.company?.name || 'Acme Financial'}
             </span>
@@ -70,13 +69,15 @@ export default function EmployeeLayout() {
                     alignItems: 'center',
                     gap: '8px',
                     padding: '8px 16px',
-                    borderRadius: '8px',
+                    borderRadius: '10px',
                     fontSize: '0.85rem',
                     fontWeight: 600,
                     textDecoration: 'none',
-                    color: isActive ? '#38bdf8' : '#94a3b8',
-                    background: isActive ? 'rgba(6, 182, 212, 0.12)' : 'transparent',
-                    border: isActive ? '1px solid rgba(6, 182, 212, 0.3)' : '1px solid transparent',
+                    color: isActive ? '#ffffff' : 'rgba(255,255,255,0.7)',
+                    background: isActive
+                      ? 'rgba(255,255,255,0.16)'
+                      : 'transparent',
+                    border: isActive ? '1px solid rgba(255,255,255,0.3)' : '1px solid transparent',
                     transition: 'all 0.15s ease'
                   })}
                 >
@@ -98,23 +99,33 @@ export default function EmployeeLayout() {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '6px',
-              color: '#64748b',
+              color: '#a5c8d7',
               fontSize: '0.75rem',
               textDecoration: 'none',
               padding: '4px 10px',
               borderRadius: '6px',
-              border: '1px solid #1e293b'
+              border: '1px solid rgba(255,255,255,0.2)'
             }}
           >
             Verify Certificate <ExternalLink size={10} />
           </a>
 
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#f8fafc' }}>
-              {user?.name || 'Ahmed Khan'}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{
+              width: '32px', height: '32px', borderRadius: '50%', flexShrink: 0,
+              background: '#ffffff',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: '0.7rem', fontWeight: 700, color: '#356c89'
+            }}>
+              {(user?.name || 'Ahmed Khan').split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase()}
             </div>
-            <div style={{ fontSize: '0.72rem', color: '#64748b' }}>
-              {user?.jobTitle || 'Senior Financial Analyst'}
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#ffffff' }}>
+                {user?.name || 'Ahmed Khan'}
+              </div>
+              <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.7)' }}>
+                {user?.jobTitle || 'Senior Financial Analyst'}
+              </div>
             </div>
           </div>
 
@@ -122,9 +133,9 @@ export default function EmployeeLayout() {
             onClick={logout}
             title="Logout"
             style={{
-              background: '#111a2e',
-              border: '1px solid #1e293b',
-              color: '#94a3b8',
+              background: 'rgba(255,255,255,0.1)',
+              border: '1px solid rgba(255,255,255,0.2)',
+              color: '#ffffff',
               cursor: 'pointer',
               padding: '8px',
               borderRadius: '8px',

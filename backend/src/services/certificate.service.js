@@ -64,7 +64,7 @@ const renderCertificatePDF = async ({ certificateId, recipientName, courseName, 
     doc.moveTo(250, 105).lineTo(592, 105).lineWidth(1).stroke('#334155');
 
     // Main Heading
-    doc.fillColor('#f8fafc')
+    doc.fillColor('#18181b')
        .fontSize(28)
        .font('Helvetica-Bold')
        .text('CERTIFICATE OF ACHIEVEMENT', 50, 125, { align: 'center' });

@@ -15,7 +15,7 @@ export default function MyCertificates() {
   return (
     <div>
       <div style={{ marginBottom: '28px' }}>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#f8fafc' }}>My Certificates</h1>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#18181b' }}>My Certificates</h1>
         <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Verified digital security credentials you've earned</p>
       </div>
 
@@ -49,7 +49,7 @@ export default function MyCertificates() {
                   <Award size={26} color="#f59e0b" />
                 </div>
                 <div style={{ flex: 1 }}>
-                  <h3 style={{ fontWeight: 700, color: '#f8fafc', fontSize: '1.05rem' }}>{cert.courseName}</h3>
+                  <h3 style={{ fontWeight: 700, color: '#18181b', fontSize: '1.05rem' }}>{cert.courseName}</h3>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: '#06b6d4' }}>{cert.certificateId}</div>
                 </div>
                 <span className={`badge ${cert.status === 'VALID' ? 'badge-green' : 'badge-rose'}`}>{cert.status}</span>
