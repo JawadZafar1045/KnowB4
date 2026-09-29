@@ -14,7 +14,7 @@ const EnrollmentSchema = new mongoose.Schema({
   campaignId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Campaign',
-    required: true
+    default: null
   },
   courseId: {
     type: mongoose.Schema.Types.ObjectId,
