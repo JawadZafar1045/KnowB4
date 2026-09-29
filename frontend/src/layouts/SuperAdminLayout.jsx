@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Shield, Building, BookOpen, BarChart3, LogOut, ExternalLink } from 'lucide-react';
+import { Shield, Building, BookOpen, ClipboardList, BarChart3, LogOut, ExternalLink } from 'lucide-react';
 import DemoRoleBar from '../components/DemoRoleBar';
 import logoImg from '../assets/logo.png';
 
@@ -13,6 +13,7 @@ export default function SuperAdminLayout() {
     { to: '/super-admin', label: 'Platform Overview', icon: Shield, end: true },
     { to: '/super-admin/companies', label: 'Organizations', icon: Building },
     { to: '/super-admin/courses', label: 'Course Catalog', icon: BookOpen },
+    { to: '/super-admin/quizzes', label: 'Quizzes', icon: ClipboardList },
     { to: '/super-admin/reports', label: 'Global Analytics', icon: BarChart3 },
   ];
 

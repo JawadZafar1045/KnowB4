@@ -14,6 +14,8 @@ import LoginPage from '../pages/auth/LoginPage';
 import SuperAdminDashboard from '../pages/super-admin/SuperAdminDashboard';
 import CompaniesManagement from '../pages/super-admin/CompaniesManagement';
 import GlobalCourseManager from '../pages/super-admin/GlobalCourseManager';
+import QuizManager from '../pages/super-admin/QuizManager';
+
 
 // Company Admin
 import CompanyDashboard from '../pages/company/CompanyDashboard';
@@ -69,6 +71,7 @@ export default function AppRoutes() {
           <Route index element={<SuperAdminDashboard />} />
           <Route path="companies" element={<CompaniesManagement />} />
           <Route path="courses" element={<GlobalCourseManager />} />
+          <Route path="quizzes" element={<QuizManager />} />
           <Route path="reports" element={<SuperAdminDashboard />} />
         </Route>
 
