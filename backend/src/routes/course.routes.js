@@ -8,7 +8,11 @@ const {
   updateCourse,
   deleteCourse,
   addModule,
-  addLesson
+  updateModule,
+  deleteModule,
+  addLesson,
+  updateLesson,
+  deleteLesson
 } = require('../controllers/course.controller');
 
 const { protect } = require('../middleware/auth.middleware');
@@ -37,16 +41,42 @@ router.delete(
   deleteCourse
 );
 
+// Module routes
 router.post(
   '/:id/modules',
   authorize('SUPER_ADMIN', 'COMPANY_ADMIN'),
   addModule
 );
 
+router.put(
+  '/:id/modules/:moduleId',
+  authorize('SUPER_ADMIN', 'COMPANY_ADMIN'),
+  updateModule
+);
+
+router.delete(
+  '/:id/modules/:moduleId',
+  authorize('SUPER_ADMIN', 'COMPANY_ADMIN'),
+  deleteModule
+);
+
+// Lesson routes
 router.post(
   '/:id/lessons',
   authorize('SUPER_ADMIN', 'COMPANY_ADMIN'),
   addLesson
+);
+
+router.put(
+  '/:id/lessons/:lessonId',
+  authorize('SUPER_ADMIN', 'COMPANY_ADMIN'),
+  updateLesson
+);
+
+router.delete(
+  '/:id/lessons/:lessonId',
+  authorize('SUPER_ADMIN', 'COMPANY_ADMIN'),
+  deleteLesson
 );
 
 module.exports = router;

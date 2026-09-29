@@ -20,9 +20,11 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  const login = async (email, password) => {
+  const login = async (email, password, tenantId) => {
     try {
-      const res = await api.post('/auth/login', { email, password });
+      const payload = { email, password };
+      if (tenantId) payload.tenantId = tenantId;
+      const res = await api.post('/auth/login', payload);
       if (res.data.success) {
         const { accessToken, user: userData } = res.data;
         localStorage.setItem('cyberaware_token', accessToken);

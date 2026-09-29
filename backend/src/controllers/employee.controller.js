@@ -82,14 +82,20 @@ const createEmployee = async (req, res, next) => {
       companyId,
       departmentId: departmentId || null,
       jobTitle: jobTitle || 'Team Member',
-      status: 'ACTIVE'
+      status: 'ACTIVE',
+      requiresPasswordReset: true
     });
+
+    // Populate company to get name and tenantId for email
+    const companyInfo = await User.findById(employee._id).populate('companyId', 'name tenantId');
 
     await sendInvitationEmail({
       to: employee.email,
       name: employee.name,
-      companyName: req.user.company?.name || 'Your Company',
-      inviteLink: `${req.protocol}://${req.get('host')}/login`
+      companyName: companyInfo?.companyId?.name || 'Your Company',
+      tenantId: companyInfo?.companyId?.tenantId || '',
+      tempPassword: initialPassword,
+      inviteLink: `${process.env.APP_URL || 'http://localhost:5173'}/login`
     });
 
     await AuditLog.create({

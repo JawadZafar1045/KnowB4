@@ -164,14 +164,88 @@ export default function CoursePlayer() {
                   })}
                 </div>
               ) : activeLesson.contentType === 'VIDEO' ? (
-                <div style={{ textAlign: 'center', padding: '60px' }}>
-                  <Play size={48} color="#356c89" />
-                  <p style={{ color: '#71717a', marginTop: '12px' }}>Video content: {activeLesson.contentUrl || 'No URL configured'}</p>
+                <div>
+                  {(() => {
+                    const url = activeLesson.contentUrl || '';
+                    const ytMatch = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+                    const vimeoMatch = url.match(/vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|)(\d+)/);
+
+                    if (ytMatch) {
+                      return (
+                        <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', borderRadius: '10px', marginBottom: '20px' }}>
+                          <iframe
+                            src={`https://www.youtube.com/embed/${ytMatch[1]}`}
+                            title={activeLesson.title}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none', borderRadius: '10px' }}
+                          />
+                        </div>
+                      );
+                    }
+                    if (vimeoMatch) {
+                      return (
+                        <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', borderRadius: '10px', marginBottom: '20px' }}>
+                          <iframe
+                            src={`https://player.vimeo.com/video/${vimeoMatch[3]}`}
+                            title={activeLesson.title}
+                            allow="autoplay; fullscreen; picture-in-picture"
+                            allowFullScreen
+                            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none', borderRadius: '10px' }}
+                          />
+                        </div>
+                      );
+                    }
+                    if (/\.(mp4|webm|ogg)($|\?)/i.test(url)) {
+                      return (
+                        <video controls style={{ width: '100%', maxHeight: '460px', borderRadius: '10px', marginBottom: '20px', backgroundColor: '#000' }}>
+                          <source src={url} />
+                          Your browser does not support the video tag.
+                        </video>
+                      );
+                    }
+                    return (
+                      <div style={{ textAlign: 'center', padding: '48px 24px', backgroundColor: '#f8fafc', borderRadius: '10px', marginBottom: '20px' }}>
+                        <Play size={44} color="#356c89" style={{ margin: '0 auto 12px' }} />
+                        <h4 style={{ fontSize: '1rem', fontWeight: 700, color: '#18181b', marginBottom: '6px' }}>Video Training Resource</h4>
+                        {url ? (
+                          <a href={url} target="_blank" rel="noopener noreferrer" className="btn-outline" style={{ display: 'inline-flex', marginTop: '8px' }}>
+                            Launch External Video ↗
+                          </a>
+                        ) : (
+                          <p style={{ color: '#71717a', fontSize: '0.85rem' }}>No video link provided for this lesson.</p>
+                        )}
+                      </div>
+                    );
+                  })()}
+
+                  {activeLesson.textContent && (
+                    <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #e4e4e7', fontSize: '0.92rem', color: '#27272a', lineHeight: '1.7', whiteSpace: 'pre-wrap' }}>
+                      <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#18181b', marginBottom: '10px' }}>Lesson Notes & Guidelines:</h4>
+                      {activeLesson.textContent}
+                    </div>
+                  )}
                 </div>
               ) : (
-                <div style={{ textAlign: 'center', padding: '60px', color: '#71717a' }}>
-                  <BookOpen size={48} color="#a1a1aa" />
-                  <p style={{ marginTop: '12px' }}>Content type: {activeLesson.contentType}</p>
+                <div>
+                  <div style={{ textAlign: 'center', padding: '40px 24px', backgroundColor: '#f8fafc', borderRadius: '10px', marginBottom: '20px' }}>
+                    <BookOpen size={44} color="#356c89" style={{ margin: '0 auto 12px' }} />
+                    <h4 style={{ fontSize: '1rem', fontWeight: 700, color: '#18181b', marginBottom: '6px' }}>
+                      {activeLesson.contentType === 'PDF' ? 'PDF Document / Policy Guide' : 'External Security Resource'}
+                    </h4>
+                    {activeLesson.contentUrl ? (
+                      <a href={activeLesson.contentUrl} target="_blank" rel="noopener noreferrer" className="btn-outline" style={{ display: 'inline-flex', marginTop: '8px' }}>
+                        Open Document ↗
+                      </a>
+                    ) : (
+                      <p style={{ color: '#71717a', fontSize: '0.85rem' }}>No document link provided.</p>
+                    )}
+                  </div>
+                  {activeLesson.textContent && (
+                    <div style={{ fontSize: '0.92rem', color: '#27272a', lineHeight: '1.7', whiteSpace: 'pre-wrap' }}>
+                      {activeLesson.textContent}
+                    </div>
+                  )}
                 </div>
               )}
             </div>

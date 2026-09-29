@@ -41,6 +41,7 @@ const seedData = async () => {
     const acmeCompany = await Company.create({
       name: 'Acme Financial Group',
       slug: 'acme-financial',
+      tenantId: 'TB4-ACME01',
       email: 'contact@acmefinance.com',
       phone: '+1 (555) 234-5678',
       industry: 'Financial Services & Banking',
@@ -55,6 +56,7 @@ const seedData = async () => {
     const apexCompany = await Company.create({
       name: 'Apex Health Network',
       slug: 'apex-health',
+      tenantId: 'TB4-APEX01',
       email: 'security@apexhealth.com',
       phone: '+1 (555) 876-5432',
       industry: 'Healthcare & Hospital Systems',
@@ -663,6 +665,11 @@ const seedData = async () => {
     console.log('2. Company Admin: admin@acmefinance.com   / Password123!');
     console.log('3. Employee:      ahmed@acmefinance.com   / Password123!');
     console.log('4. Certificate:   ' + ahmedCert.certificateId);
+    console.log('------------------------------------------------------');
+    console.log('🏢 Tenant IDs:');
+    console.log('   Acme Financial: ' + acmeCompany.tenantId);
+    console.log('   Apex Health:    ' + apexCompany.tenantId);
+    console.log('🔑 Platform Registration Key: THINKB4ACT-2026-SECURE-REGISTER');
     console.log('======================================================');
   } catch (err) {
     console.error('[Seed Error]:', err);

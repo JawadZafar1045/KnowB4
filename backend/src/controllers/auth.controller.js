@@ -11,12 +11,13 @@ const isValidEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 };
+
 // @route   POST /api/auth/login
-// @desc    Authenticate user & get tokens
+// @desc    Authenticate user & get tokens (supports optional tenantId for scoped login)
 // @access  Public
 const login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, tenantId } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({
@@ -33,18 +34,41 @@ const login = async (req, res, next) => {
       });
     }
 
-    const user = await User.findOne({ email: email.toLowerCase() })
-      .populate('companyId', 'name slug logo status subscriptionPlan subscriptionStatus branding')
+    // Build query — if tenantId is provided, scope the user lookup to that company
+    let query = { email: email.toLowerCase() };
+
+    if (tenantId) {
+      const company = await Company.findOne({ tenantId: tenantId.toUpperCase().trim() });
+      if (!company) {
+        return res.status(401).json({
+          success: false,
+          message: 'Invalid Tenant ID. Please check your organization identifier.'
+        });
+      }
+
+      // Check if company is pending approval
+      if (company.status === 'PENDING_APPROVAL') {
+        return res.status(403).json({
+          success: false,
+          message: 'Your organization is pending approval by the platform administrator. Please wait for activation.'
+        });
+      }
+
+      query.companyId = company._id;
+    }
+
+    const user = await User.findOne(query)
+      .populate('companyId', 'name slug tenantId logo status subscriptionPlan subscriptionStatus branding')
       .populate('departmentId', 'name');
 
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid email or password'
+        message: tenantId ? 'Invalid credentials for this organization' : 'Invalid email or password'
       });
     }
 
-        // Check if account is locked due to repeated failed attempts
+    // Check if account is locked due to repeated failed attempts
     if (user.isLocked && user.isLocked()) {
       const unlockAt = user.lockUntil;
       return res.status(423).json({
@@ -82,6 +106,14 @@ const login = async (req, res, next) => {
       });
     }
 
+    // Block login for non-super-admins if org is PENDING_APPROVAL
+    if (user.companyId && user.companyId.status === 'PENDING_APPROVAL' && user.role !== 'SUPER_ADMIN') {
+      return res.status(403).json({
+        success: false,
+        message: 'Your organization is pending approval. Please wait for platform administrator activation.'
+      });
+    }
+
     // Update lastLoginAt
     user.lastLoginAt = new Date();
     await user.save({ validateBeforeSave: false });
@@ -101,6 +133,7 @@ const login = async (req, res, next) => {
         company: user.companyId,
         department: user.departmentId,
         status: user.status,
+        requiresPasswordReset: !!user.requiresPasswordReset,
         avatar: user.avatar,
         jobTitle: user.jobTitle
       }
@@ -110,12 +143,60 @@ const login = async (req, res, next) => {
   }
 };
 
+// @route   POST /api/auth/change-password
+// @desc    Change employee password (used during first login reset flow)
+// @access  Private
+const changePassword = async (req, res, next) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    if (!newPassword || newPassword.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: 'New password must be at least 6 characters long'
+      });
+    }
+
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    // Verify current password if provided
+    if (currentPassword) {
+      const isMatch = await user.matchPassword(currentPassword);
+      if (!isMatch) {
+        return res.status(400).json({ success: false, message: 'Current password is incorrect' });
+      }
+    }
+
+    user.passwordHash = await User.hashPassword(newPassword);
+    user.requiresPasswordReset = false;
+    await user.save({ validateBeforeSave: false });
+
+    res.json({
+      success: true,
+      message: 'Password updated successfully'
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // @route   POST /api/auth/register-company
-// @desc    Register a new customer organization + company admin
+// @desc    Register a new customer organization + company admin (requires platform secret key)
 // @access  Public
 const registerCompany = async (req, res, next) => {
   try {
-    const { companyName, email, password, adminName, industry, phone } = req.body;
+    const { companyName, email, password, adminName, industry, phone, secretKey } = req.body;
+
+    // Validate secret key first
+    if (!secretKey || secretKey.trim() !== config.platformSecretKey) {
+      return res.status(403).json({
+        success: false,
+        message: 'Invalid platform registration key. Please contact the platform administrator to obtain a valid key.'
+      });
+    }
 
     if (!companyName || !email || !password || !adminName) {
       return res.status(400).json({
@@ -158,13 +239,14 @@ const registerCompany = async (req, res, next) => {
     let existingCompany = await Company.findOne({ slug });
     const finalSlug = existingCompany ? `${slug}-${Math.floor(100 + Math.random() * 900)}` : slug;
 
+    // Company starts in PENDING_APPROVAL status — Super Admin must activate it
     const company = await Company.create({
       name: companyName,
       slug: finalSlug,
       email: email.toLowerCase(),
       phone: phone || '',
       industry: industry || 'Technology',
-      status: 'ACTIVE',
+      status: 'PENDING_APPROVAL',
       subscriptionPlan: 'PROFESSIONAL',
       subscriptionStatus: 'TRIAL'
     });
@@ -191,22 +273,15 @@ const registerCompany = async (req, res, next) => {
       jobTitle: 'Company Administrator'
     });
 
-    const accessToken = generateAccessToken(user);
-    const refreshToken = generateRefreshToken(user);
-
+    // Don't auto-login — return success with pending info
     res.status(201).json({
       success: true,
-      message: 'Organization registered successfully',
-      accessToken,
-      refreshToken,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        company,
-        department: deptDocs[0],
-        status: user.status
+      message: 'Organization registered successfully! Your account is pending approval by the platform administrator. You will be able to login once your organization is activated.',
+      tenantId: company.tenantId,
+      company: {
+        name: company.name,
+        tenantId: company.tenantId,
+        status: company.status
       }
     });
   } catch (err) {
@@ -226,7 +301,7 @@ const refreshToken = async (req, res, next) => {
 
     const decoded = jwt.verify(token, config.jwtRefreshSecret);
     const user = await User.findById(decoded.id)
-      .populate('companyId', 'name slug logo status branding')
+      .populate('companyId', 'name slug tenantId logo status branding')
       .populate('departmentId', 'name');
 
     if (!user || user.status === 'SUSPENDED') {
@@ -285,5 +360,6 @@ module.exports = {
   registerCompany,
   refreshToken,
   getMe,
-  logout
+  logout,
+  changePassword
 };

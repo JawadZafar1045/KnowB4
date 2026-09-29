@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Lock, Mail, ArrowRight, AlertCircle } from 'lucide-react';
+import { Lock, Mail, ArrowRight, AlertCircle, Building2, ChevronDown, ChevronUp } from 'lucide-react';
 import loginBg from '../../assets/login-bg.jpg';
 import logoImg from '../../assets/logo.png';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('admin@acmefinance.com');
-  const [password, setPassword] = useState('Password123!');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [tenantId, setTenantId] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [isButtonHovered, setIsButtonHovered] = useState(false);
+  const [showTenantField, setShowTenantField] = useState(false);
+  const [showDemoSection, setShowDemoSection] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -19,7 +22,7 @@ export default function LoginPage() {
     setError('');
     setLoading(true);
 
-    const res = await login(email, password);
+    const res = await login(email, password, tenantId || undefined);
     setLoading(false);
 
     if (res.success) {
@@ -35,9 +38,11 @@ export default function LoginPage() {
     }
   };
 
-  const fillCredentials = (roleEmail) => {
+  const fillCredentials = (roleEmail, roleTenantId) => {
     setEmail(roleEmail);
     setPassword('Password123!');
+    setTenantId(roleTenantId || '');
+    if (roleTenantId) setShowTenantField(true);
   };
 
   return (
@@ -107,6 +112,64 @@ export default function LoginPage() {
           )}
 
           <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {/* Tenant ID Toggle */}
+            <div>
+              <button
+                type="button"
+                onClick={() => setShowTenantField(!showTenantField)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#67e8f9',
+                  fontSize: '0.78rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  padding: '0',
+                  marginBottom: showTenantField ? '8px' : '0',
+                  transition: 'color 0.2s'
+                }}
+              >
+                <Building2 size={14} />
+                {showTenantField ? 'Hide' : 'Login with'} Organization Tenant ID
+                {showTenantField ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+              </button>
+
+              {showTenantField && (
+                <div style={{ position: 'relative' }}>
+                  <Building2 size={16} color="#67e8f9" style={{ position: 'absolute', left: '12px', top: '14px' }} />
+                  <input
+                    type="text"
+                    value={tenantId}
+                    onChange={(e) => setTenantId(e.target.value.toUpperCase())}
+                    placeholder="e.g. TB4-A3K9MN"
+                    style={{
+                      width: '100%',
+                      padding: '12px 14px 12px 38px',
+                      background: 'rgba(6,182,212,0.08)',
+                      border: '1px solid rgba(6,182,212,0.3)',
+                      borderRadius: '10px',
+                      color: '#5EEAD4',
+                      fontSize: '0.9rem',
+                      fontFamily: 'monospace',
+                      fontWeight: 700,
+                      letterSpacing: '0.05em',
+                      outline: 'none',
+                      boxSizing: 'border-box',
+                      transition: 'border-color 0.2s ease'
+                    }}
+                    onFocus={(e) => e.target.style.borderColor = '#5EEAD4'}
+                    onBlur={(e) => e.target.style.borderColor = 'rgba(6,182,212,0.3)'}
+                  />
+                  <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.4)', marginTop: '4px' }}>
+                    Your organization's unique Tenant ID (provided during registration)
+                  </p>
+                </div>
+              )}
+            </div>
+
             <div>
               <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'rgba(255,255,255,0.75)', marginBottom: '8px' }}>
                 Corporate Email
@@ -207,47 +270,77 @@ export default function LoginPage() {
 
           {/* 1-Click Demo Fill */}
           <div style={{ marginTop: '24px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.2)' }}>
-            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'rgba(255,255,255,0.65)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px' }}>
-              Quick Demo Logins (Click to autofill)
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-              {[
-                { label: '🛡️ Super Admin', email: 'superadmin@cyberaware.io' },
-                { label: '🏢 Acme Admin', email: 'admin@acmefinance.com' },
-                { label: '👤 Ahmed (Learner)', email: 'ahmed@acmefinance.com' },
-                { label: '👤 Sara (Learner)', email: 'sara@acmefinance.com' }
-              ].map((item, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => fillCredentials(item.email)}
-                  style={{
-                    fontSize: '0.75rem',
-                    padding: '8px',
-                    background: 'rgba(255,255,255,0.08)',
-                    border: '1px solid rgba(255,255,255,0.25)',
-                    borderRadius: '8px',
-                    color: '#5EEAD4',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease'
-                  }}
-                  onMouseEnter={(e) => e.currentTarget.style.borderColor = '#5EEAD4'}
-                  onMouseLeave={(e) => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)'}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
+            <button
+              type="button"
+              onClick={() => setShowDemoSection(!showDemoSection)}
+              style={{
+                background: 'none',
+                border: 'none',
+                width: '100%',
+                fontSize: '0.75rem',
+                fontWeight: 700,
+                color: 'rgba(255,255,255,0.65)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                marginBottom: showDemoSection ? '10px' : '0',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px'
+              }}
+            >
+              Quick Demo Logins
+              {showDemoSection ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+            </button>
+            {showDemoSection && (
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                {[
+                  { label: '🛡️ Super Admin', email: 'superadmin@cyberaware.io', tenantId: '' },
+                  { label: '🏢 Acme Admin', email: 'admin@acmefinance.com', tenantId: '' },
+                  { label: '👤 Ahmed (Learner)', email: 'ahmed@acmefinance.com', tenantId: '' },
+                  { label: '👤 Sara (Learner)', email: 'sara@acmefinance.com', tenantId: '' }
+                ].map((item, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => fillCredentials(item.email, item.tenantId)}
+                    style={{
+                      fontSize: '0.75rem',
+                      padding: '8px',
+                      background: 'rgba(255,255,255,0.08)',
+                      border: '1px solid rgba(255,255,255,0.25)',
+                      borderRadius: '8px',
+                      color: '#5EEAD4',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.borderColor = '#5EEAD4'}
+                    onMouseLeave={(e) => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)'}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Public Certificate Link & Register */}
-        <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)' }}>
-          Have a certificate to verify?{' '}
-          <Link to="/verify/CA-2026-000001" style={{ color: '#5EEAD4', textDecoration: 'none', fontWeight: 600 }}>
-            Public Verification Portal
-          </Link>
+        {/* Register & Verify Links */}
+        <div style={{ textAlign: 'center', marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)' }}>
+            New organization?{' '}
+            <Link to="/register" style={{ color: '#5EEAD4', textDecoration: 'none', fontWeight: 600 }}>
+              Register Your Organization
+            </Link>
+          </div>
+          <div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)' }}>
+            Have a certificate to verify?{' '}
+            <Link to="/verify/CA-2026-000001" style={{ color: '#5EEAD4', textDecoration: 'none', fontWeight: 600 }}>
+              Public Verification Portal
+            </Link>
+          </div>
         </div>
       </div>
     </div>

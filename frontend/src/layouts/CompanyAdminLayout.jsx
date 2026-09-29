@@ -15,9 +15,11 @@ import {
   BookOpen
 } from 'lucide-react';
 import DemoRoleBar from '../components/DemoRoleBar';
+import SetPasswordModal from '../components/auth/SetPasswordModal';
 
 export default function CompanyAdminLayout() {
   const { user, logout } = useAuth();
+
 
   const companyName = user?.company?.name || 'Customer Organization';
   const initials = (user?.name || 'Admin').split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
@@ -36,6 +38,9 @@ export default function CompanyAdminLayout() {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#F6F7F9' }}>
       <DemoRoleBar />
+
+      {/* Force Set Permanent Password Modal on first login */}
+      {user?.requiresPasswordReset && <SetPasswordModal />}
 
       <div style={{ display: 'flex', flex: 1 }}>
         {/* Sidebar */}

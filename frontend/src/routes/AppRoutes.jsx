@@ -9,6 +9,7 @@ import EmployeeLayout from '../layouts/EmployeeLayout';
 
 // Auth
 import LoginPage from '../pages/auth/LoginPage';
+import RegisterPage from '../pages/auth/RegisterPage';
 
 // Super Admin
 import SuperAdminDashboard from '../pages/super-admin/SuperAdminDashboard';
@@ -60,6 +61,7 @@ export default function AppRoutes() {
       <Routes>
         {/* Public Routes */}
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route path="/verify/:certificateId" element={<CertificateVerificationPage />} />
 
         {/* Super Admin Routes */}

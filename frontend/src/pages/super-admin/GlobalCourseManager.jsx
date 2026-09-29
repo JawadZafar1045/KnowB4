@@ -11,16 +11,22 @@ import {
   Pencil,
   Trash2,
   CheckCircle2,
-  AlertTriangle
+  AlertTriangle,
+  Sparkles
 } from 'lucide-react';
+import CourseCurriculumModal from '../../components/course/CourseCurriculumModal';
 
 export default function GlobalCourseManager() {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [showAddModal, setShowAddModal] = useState(false);
+  const [modalTab, setModalTab] = useState('basic'); // 'basic' | 'content'
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+
+  // Course curriculum content manager state
+  const [curriculumCourseId, setCurriculumCourseId] = useState(null);
 
   // Edit mode
   const [editingId, setEditingId] = useState(null);
@@ -40,7 +46,15 @@ export default function GlobalCourseManager() {
     difficulty: 'BEGINNER',
     estimatedDuration: 20,
     passingScore: 80,
-    thumbnail: ''
+    thumbnail: '',
+    includeInitialContent: false,
+    moduleTitle: 'Module 1: Core Security Protocols',
+    lessonTitle: '',
+    lessonContentType: 'TEXT',
+    lessonContentUrl: '',
+    lessonTextContent: '',
+    lessonDuration: 5,
+    openCurriculumAfterCreate: true
   };
 
   const [form, setForm] = useState(emptyForm);
@@ -83,6 +97,7 @@ export default function GlobalCourseManager() {
   // Open Add modal
   const openAddModal = () => {
     setEditingId(null);
+    setModalTab('basic');
     setForm(emptyForm);
     setError('');
     setShowAddModal(true);
@@ -91,15 +106,18 @@ export default function GlobalCourseManager() {
   // Open Edit modal
   const openEditModal = (course) => {
     setEditingId(course._id);
+    setModalTab('basic');
 
     setForm({
+      ...emptyForm,
       title: course.title || '',
       description: course.description || '',
       category: course.category || 'General Security',
       difficulty: course.difficulty || 'BEGINNER',
       estimatedDuration: course.estimatedDuration ?? 20,
       passingScore: course.passingScore ?? 80,
-      thumbnail: course.thumbnail || ''
+      thumbnail: course.thumbnail || '',
+      includeInitialContent: false
     });
 
     setError('');
@@ -110,6 +128,7 @@ export default function GlobalCourseManager() {
   const closeModal = () => {
     setShowAddModal(false);
     setEditingId(null);
+    setModalTab('basic');
     setError('');
     setForm(emptyForm);
   };
@@ -124,24 +143,53 @@ export default function GlobalCourseManager() {
     }
 
     const payload = {
-      ...form,
+      title: form.title.trim(),
+      description: form.description.trim(),
+      category: form.category || 'General Security',
+      difficulty: form.difficulty || 'BEGINNER',
       estimatedDuration: Number(form.estimatedDuration),
-      passingScore: Number(form.passingScore)
+      passingScore: Number(form.passingScore),
+      thumbnail: form.thumbnail || ''
     };
+
+    if (!editingId && form.includeInitialContent && form.moduleTitle.trim()) {
+      const initialMod = {
+        title: form.moduleTitle.trim(),
+        description: 'Foundational global course module',
+        lessons: []
+      };
+      if (form.lessonTitle.trim()) {
+        initialMod.lessons.push({
+          title: form.lessonTitle.trim(),
+          contentType: form.lessonContentType || 'TEXT',
+          contentUrl: form.lessonContentUrl?.trim() || '',
+          textContent: form.lessonTextContent || `### ${form.lessonTitle}\n\nCore instructions and compliance guidelines for employees.`,
+          duration: Number(form.lessonDuration) || 5,
+          isRequired: true
+        });
+      }
+      payload.modules = [initialMod];
+    }
 
     setSaving(true);
 
     try {
+      let createdCourseId = null;
       if (editingId) {
         await api.put(`/courses/${editingId}`, payload);
         setSuccessMsg('Course updated successfully.');
       } else {
-        await api.post('/courses', payload);
+        const res = await api.post('/courses', payload);
+        createdCourseId = res.data?.course?._id;
         setSuccessMsg('Course created successfully.');
       }
 
       closeModal();
       await loadCourses(true);
+
+      if (createdCourseId && form.openCurriculumAfterCreate) {
+        setCurriculumCourseId(createdCourseId);
+      }
     } catch (err) {
       setError(
         err.response?.data?.message ||
@@ -423,6 +471,32 @@ export default function GlobalCourseManager() {
                     {course.difficulty}
                   </span>
 
+                  {/* Manage Curriculum & Content */}
+                  <button
+                    type="button"
+                    onClick={() => setCurriculumCourseId(course._id)}
+                    title="Manage course curriculum and lesson content"
+                    aria-label={`Manage content for ${course.title}`}
+                    style={{
+                      ...iconButtonStyle('#356c89'),
+                      width: 'auto',
+                      padding: '0 10px',
+                      gap: '6px',
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      background: 'rgba(53, 108, 137, 0.06)',
+                      borderColor: 'rgba(53, 108, 137, 0.4)'
+                    }}
+                    onMouseEnter={hoverOn('#356c89', 'rgba(53, 108, 137, 0.12)')}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'rgba(53, 108, 137, 0.06)';
+                      e.currentTarget.style.color = '#356c89';
+                      e.currentTarget.style.borderColor = 'rgba(53, 108, 137, 0.4)';
+                    }}
+                  >
+                    <Layers size={13} /> Curriculum
+                  </button>
+
                   {/* Edit */}
                   <button
                     type="button"
@@ -474,27 +548,43 @@ export default function GlobalCourseManager() {
                   flexWrap: 'wrap'
                 }}
               >
-                <span
+                <button
+                  type="button"
+                  onClick={() => setCurriculumCourseId(course._id)}
                   style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: '#356c89',
+                    fontWeight: 600,
+                    cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '4px'
+                    gap: '4px',
+                    padding: 0
                   }}
                 >
                   <Layers size={13} />
                   {course.moduleCount || 0} Modules
-                </span>
+                </button>
 
-                <span
+                <button
+                  type="button"
+                  onClick={() => setCurriculumCourseId(course._id)}
                   style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: '#356c89',
+                    fontWeight: 600,
+                    cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '4px'
+                    gap: '4px',
+                    padding: 0
                   }}
                 >
                   <FileText size={13} />
                   {course.lessonCount || 0} Lessons
-                </span>
+                </button>
 
                 <span
                   style={{
@@ -539,7 +629,7 @@ export default function GlobalCourseManager() {
         >
           <div
             style={{
-              width: '520px',
+              width: modalTab === 'content' ? '680px' : '560px',
               maxWidth: '100%',
               padding: '28px',
               maxHeight: '90vh',
@@ -547,7 +637,8 @@ export default function GlobalCourseManager() {
               backgroundColor: '#ffffff',
               border: '1px solid #e4e4e7',
               borderRadius: '16px',
-              boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)'
+              boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+              transition: 'width 0.2s ease'
             }}
           >
             <div
@@ -555,18 +646,23 @@ export default function GlobalCourseManager() {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                marginBottom: '20px'
+                marginBottom: '16px'
               }}
             >
-              <h2
-                style={{
-                  fontSize: '1.15rem',
-                  fontWeight: 700,
-                  color: '#18181b'
-                }}
-              >
-                {isEditing ? 'Edit Course' : 'Add New Course'}
-              </h2>
+              <div>
+                <h2
+                  style={{
+                    fontSize: '1.2rem',
+                    fontWeight: 700,
+                    color: '#18181b'
+                  }}
+                >
+                  {isEditing ? 'Edit Course' : 'Create Global Course & Content'}
+                </h2>
+                <p style={{ fontSize: '0.78rem', color: '#71717a' }}>
+                  {isEditing ? 'Update course information or open curriculum builder' : 'Configure course details and learning materials for all tenants'}
+                </p>
+              </div>
 
               <button
                 onClick={closeModal}
@@ -580,6 +676,70 @@ export default function GlobalCourseManager() {
                 <X size={20} color="#71717a" />
               </button>
             </div>
+
+            {/* Quick jump to curriculum for editing */}
+            {isEditing && (
+              <div style={{ marginBottom: '18px', padding: '12px 16px', background: '#f0f9ff', border: '1px solid #bae6fd', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <div style={{ fontSize: '0.84rem', fontWeight: 700, color: '#0369a1' }}>Course Curriculum & Lessons</div>
+                  <div style={{ fontSize: '0.74rem', color: '#0284c7' }}>Create, preview, or edit learning modules and lesson content</div>
+                </div>
+                <button
+                  type="button"
+                  className="btn-primary"
+                  style={{ fontSize: '0.78rem', padding: '6px 14px' }}
+                  onClick={() => {
+                    const id = editingId;
+                    closeModal();
+                    setCurriculumCourseId(id);
+                  }}
+                >
+                  <Layers size={14} /> Open Curriculum
+                </button>
+              </div>
+            )}
+
+            {/* Mode Tabs for Create Course */}
+            {!isEditing && (
+              <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid #e4e4e7', paddingBottom: '12px', marginBottom: '18px' }}>
+                <button
+                  type="button"
+                  onClick={() => setModalTab('basic')}
+                  style={{
+                    padding: '6px 14px',
+                    borderRadius: '6px',
+                    border: 'none',
+                    fontSize: '0.82rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    background: modalTab === 'basic' ? '#356c89' : '#f4f4f5',
+                    color: modalTab === 'basic' ? '#ffffff' : '#52525b'
+                  }}
+                >
+                  1. Course Info
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setModalTab('content')}
+                  style={{
+                    padding: '6px 14px',
+                    borderRadius: '6px',
+                    border: 'none',
+                    fontSize: '0.82rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    background: modalTab === 'content' ? '#356c89' : '#f4f4f5',
+                    color: modalTab === 'content' ? '#ffffff' : '#52525b',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px'
+                  }}
+                >
+                  2. Initial Lesson (Optional)
+                  {form.includeInitialContent && <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e' }} />}
+                </button>
+              </div>
+            )}
 
             {error && (
               <div
@@ -598,146 +758,247 @@ export default function GlobalCourseManager() {
             )}
 
             <form onSubmit={handleSubmit}>
-              {/* Title */}
-              <div style={{ marginBottom: '14px' }}>
-                <label className="form-label">
-                  Course Title *
-                </label>
+              {modalTab === 'basic' ? (
+                <>
+                  {/* Title */}
+                  <div style={{ marginBottom: '14px' }}>
+                    <label className="form-label">
+                      Course Title *
+                    </label>
 
-                <input
-                  className="form-input"
-                  value={form.title}
-                  onChange={(e) =>
-                    handleChange('title', e.target.value)
-                  }
-                  placeholder="e.g. Insider Threat Awareness"
-                />
-              </div>
+                    <input
+                      className="form-input"
+                      value={form.title}
+                      required
+                      onChange={(e) =>
+                        handleChange('title', e.target.value)
+                      }
+                      placeholder="e.g. Advanced Phishing Defense & Incident Response"
+                    />
+                  </div>
 
-              {/* Description */}
-              <div style={{ marginBottom: '14px' }}>
-                <label className="form-label">
-                  Description *
-                </label>
+                  {/* Description */}
+                  <div style={{ marginBottom: '14px' }}>
+                    <label className="form-label">
+                      Description *
+                    </label>
 
-                <textarea
-                  className="form-input"
-                  rows={3}
-                  value={form.description}
-                  onChange={(e) =>
-                    handleChange('description', e.target.value)
-                  }
-                  placeholder="What will learners understand after this course?"
-                  style={{ resize: 'vertical' }}
-                />
-              </div>
+                    <textarea
+                      className="form-input"
+                      rows={3}
+                      required
+                      value={form.description}
+                      onChange={(e) =>
+                        handleChange('description', e.target.value)
+                      }
+                      placeholder="What will learners understand after completing this course?"
+                      style={{ resize: 'vertical' }}
+                    />
+                  </div>
 
-              {/* Category + Difficulty */}
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
-                  gap: '14px',
-                  marginBottom: '14px'
-                }}
-              >
-                <div>
-                  <label className="form-label">
-                    Category
-                  </label>
-
-                  <input
-                    className="form-input"
-                    value={form.category}
-                    onChange={(e) =>
-                      handleChange('category', e.target.value)
-                    }
-                    placeholder="e.g. Email Security"
-                  />
-                </div>
-
-                <div>
-                  <label className="form-label">
-                    Difficulty
-                  </label>
-
-                  <select
-                    className="form-input"
-                    value={form.difficulty}
-                    onChange={(e) =>
-                      handleChange('difficulty', e.target.value)
-                    }
+                  {/* Category + Difficulty */}
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 1fr',
+                      gap: '14px',
+                      marginBottom: '14px'
+                    }}
                   >
-                    <option value="BEGINNER">
-                      Beginner
-                    </option>
+                    <div>
+                      <label className="form-label">
+                        Category
+                      </label>
 
-                    <option value="INTERMEDIATE">
-                      Intermediate
-                    </option>
+                      <input
+                        className="form-input"
+                        value={form.category}
+                        onChange={(e) =>
+                          handleChange('category', e.target.value)
+                        }
+                        placeholder="e.g. Email Security"
+                      />
+                    </div>
 
-                    <option value="ADVANCED">
-                      Advanced
-                    </option>
-                  </select>
-                </div>
-              </div>
+                    <div>
+                      <label className="form-label">
+                        Difficulty
+                      </label>
 
-              {/* Duration + Passing Score */}
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
-                  gap: '14px',
-                  marginBottom: '20px'
-                }}
-              >
-                <div>
-                  <label className="form-label">
-                    Estimated Duration (minutes)
+                      <select
+                        className="form-input"
+                        value={form.difficulty}
+                        onChange={(e) =>
+                          handleChange('difficulty', e.target.value)
+                        }
+                      >
+                        <option value="BEGINNER">
+                          Beginner
+                        </option>
+
+                        <option value="INTERMEDIATE">
+                          Intermediate
+                        </option>
+
+                        <option value="ADVANCED">
+                          Advanced
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Duration + Passing Score */}
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 1fr',
+                      gap: '14px',
+                      marginBottom: '20px'
+                    }}
+                  >
+                    <div>
+                      <label className="form-label">
+                        Estimated Duration (minutes)
+                      </label>
+
+                      <input
+                        type="number"
+                        className="form-input"
+                        value={form.estimatedDuration}
+                        onChange={(e) =>
+                          handleChange(
+                            'estimatedDuration',
+                            e.target.value
+                          )
+                        }
+                        min={1}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="form-label">
+                        Passing Score (%)
+                      </label>
+
+                      <input
+                        type="number"
+                        className="form-input"
+                        value={form.passingScore}
+                        onChange={(e) =>
+                          handleChange(
+                            'passingScore',
+                            e.target.value
+                          )
+                        }
+                        min={1}
+                        max={100}
+                      />
+                    </div>
+                  </div>
+
+                  {!isEditing && (
+                    <div style={{ marginBottom: '18px', padding: '12px 14px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px' }}>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem', color: '#1e293b', fontWeight: 600, cursor: 'pointer' }}>
+                        <input
+                          type="checkbox"
+                          checked={form.openCurriculumAfterCreate}
+                          onChange={(e) => handleChange('openCurriculumAfterCreate', e.target.checked)}
+                        />
+                        Open Curriculum & Lesson Builder immediately after creating
+                      </label>
+                      <p style={{ fontSize: '0.74rem', color: '#64748b', marginTop: '4px', marginLeft: '24px' }}>
+                        Recommended: easily add multiple modules, interactive reading materials, and video links.
+                      </p>
+                    </div>
+                  )}
+                </>
+              ) : (
+                /* Tab 2: Initial content during creation */
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginBottom: '18px' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#1e293b', fontWeight: 700, cursor: 'pointer' }}>
+                    <input
+                      type="checkbox"
+                      checked={form.includeInitialContent}
+                      onChange={(e) => handleChange('includeInitialContent', e.target.checked)}
+                    />
+                    Add an initial module & lesson right now
                   </label>
 
-                  <input
-                    type="number"
-                    className="form-input"
-                    value={form.estimatedDuration}
-                    onChange={(e) =>
-                      handleChange(
-                        'estimatedDuration',
-                        e.target.value
-                      )
-                    }
-                    min={1}
-                  />
-                </div>
+                  {form.includeInitialContent && (
+                    <div style={{ padding: '16px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px' }}>
+                      <div style={{ marginBottom: '12px' }}>
+                        <label className="form-label">Initial Module Title *</label>
+                        <input
+                          className="form-input"
+                          value={form.moduleTitle}
+                          onChange={(e) => handleChange('moduleTitle', e.target.value)}
+                          placeholder="e.g. Module 1: Foundational Security Principles"
+                        />
+                      </div>
 
-                <div>
-                  <label className="form-label">
-                    Passing Score (%)
-                  </label>
+                      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '12px', marginBottom: '12px' }}>
+                        <div>
+                          <label className="form-label">Initial Lesson Title *</label>
+                          <input
+                            className="form-input"
+                            value={form.lessonTitle}
+                            onChange={(e) => handleChange('lessonTitle', e.target.value)}
+                            placeholder="e.g. Identifying Spear-Phishing Indicators"
+                          />
+                        </div>
+                        <div>
+                          <label className="form-label">Content Type</label>
+                          <select
+                            className="form-input"
+                            value={form.lessonContentType}
+                            onChange={(e) => handleChange('lessonContentType', e.target.value)}
+                          >
+                            <option value="TEXT">Reading (Markdown)</option>
+                            <option value="VIDEO">Video URL</option>
+                            <option value="PDF">PDF Guide</option>
+                          </select>
+                        </div>
+                      </div>
 
-                  <input
-                    type="number"
-                    className="form-input"
-                    value={form.passingScore}
-                    onChange={(e) =>
-                      handleChange(
-                        'passingScore',
-                        e.target.value
-                      )
-                    }
-                    min={1}
-                    max={100}
-                  />
+                      {form.lessonContentType !== 'TEXT' ? (
+                        <div style={{ marginBottom: '12px' }}>
+                          <label className="form-label">Resource / Video URL</label>
+                          <input
+                            className="form-input"
+                            value={form.lessonContentUrl}
+                            onChange={(e) => handleChange('lessonContentUrl', e.target.value)}
+                            placeholder="https://..."
+                          />
+                        </div>
+                      ) : (
+                        <div style={{ marginBottom: '12px' }}>
+                          <label className="form-label">Lesson Reading Content (Markdown)</label>
+                          <textarea
+                            className="form-input"
+                            rows={5}
+                            value={form.lessonTextContent}
+                            onChange={(e) => handleChange('lessonTextContent', e.target.value)}
+                            placeholder="### Key Takeaways&#10;&#10;- Always verify suspicious emails out of band.&#10;- Report incidents to security."
+                            style={{ fontFamily: 'monospace', fontSize: '0.82rem' }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  <div style={{ padding: '12px 14px', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px', fontSize: '0.8rem', color: '#166534' }}>
+                    💡 You can always add, edit, or remove modules and lessons later using the <strong>Curriculum</strong> button on any course card.
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Buttons */}
               <div
                 style={{
                   display: 'flex',
                   gap: '10px',
-                  justifyContent: 'flex-end'
+                  justifyContent: 'flex-end',
+                  marginTop: '16px'
                 }}
               >
                 <button
@@ -911,6 +1172,15 @@ export default function GlobalCourseManager() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Course Curriculum & Content Builder Modal */}
+      {curriculumCourseId && (
+        <CourseCurriculumModal
+          courseId={curriculumCourseId}
+          onClose={() => setCurriculumCourseId(null)}
+          onCourseUpdated={() => loadCourses(true)}
+        />
       )}
     </div>
   );
