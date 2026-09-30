@@ -47,12 +47,12 @@ const login = async (req, res, next) => {
       }
 
       // Check if company is pending approval
-      if (company.status === 'PENDING_APPROVAL') {
-        return res.status(403).json({
-          success: false,
-          message: 'Your organization is pending approval by the platform administrator. Please wait for activation.'
-        });
-      }
+      // if (company.status === 'PENDING_APPROVAL') {
+      //   return res.status(403).json({
+      //     success: false,
+      //     message: 'Your organization is pending approval by the platform administrator. Please wait for activation.'
+      //   });
+      // }
 
       query.companyId = company._id;
     }
