@@ -37,6 +37,7 @@ import CourseCatalog from '../pages/employee/CourseCatalog';
 
 // Public
 import CertificateVerificationPage from '../pages/public/CertificateVerificationPage';
+import HomePage from '../pages/public/HomePage';
 
 function ProtectedRoute({ children, roles }) {
   const { user, loading } = useAuth();
@@ -60,6 +61,7 @@ export default function AppRoutes() {
     <BrowserRouter>
       <Routes>
         {/* Public Routes */}
+        <Route path="/home" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/verify/:certificateId" element={<CertificateVerificationPage />} />
@@ -107,7 +109,7 @@ export default function AppRoutes() {
         </Route>
 
         {/* Default Redirect */}
-        <Route path="/" element={<Navigate to={getDefaultRoute()} replace />} />
+        <Route path="/" element={user ? <Navigate to={getDefaultRoute()} replace /> : <HomePage />} />
         <Route path="*" element={<Navigate to={getDefaultRoute()} replace />} />
       </Routes>
     </BrowserRouter>
