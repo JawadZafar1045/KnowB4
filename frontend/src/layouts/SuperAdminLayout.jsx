@@ -20,7 +20,7 @@ export default function SuperAdminLayout() {
   const initials = (user?.name || 'Admin').split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#F6F7F9' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#EEF4F7' }}>
       <DemoRoleBar />
 
       <div style={{ display: 'flex', flex: 1 }}>
