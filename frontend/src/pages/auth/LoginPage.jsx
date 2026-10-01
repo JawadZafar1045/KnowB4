@@ -13,7 +13,6 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   const [showTenantField, setShowTenantField] = useState(false);
-  const [showDemoSection, setShowDemoSection] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -36,13 +35,6 @@ export default function LoginPage() {
     } else {
       setError(res.message);
     }
-  };
-
-  const fillCredentials = (roleEmail, roleTenantId) => {
-    setEmail(roleEmail);
-    setPassword('Password123!');
-    setTenantId(roleTenantId || '');
-    if (roleTenantId) setShowTenantField(true);
   };
 
   return (
@@ -268,63 +260,6 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* 1-Click Demo Fill */}
-          <div style={{ marginTop: '24px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.2)' }}>
-            <button
-              type="button"
-              onClick={() => setShowDemoSection(!showDemoSection)}
-              style={{
-                background: 'none',
-                border: 'none',
-                width: '100%',
-                fontSize: '0.75rem',
-                fontWeight: 700,
-                color: 'rgba(255,255,255,0.65)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-                marginBottom: showDemoSection ? '10px' : '0',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '6px'
-              }}
-            >
-              Quick Demo Logins
-              {showDemoSection ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-            </button>
-            {showDemoSection && (
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                {[
-                  { label: '🛡️ Super Admin', email: 'superadmin@cyberaware.io', tenantId: '' },
-                  { label: '🏢 Acme Admin', email: 'admin@acmefinance.com', tenantId: '' },
-                  { label: '👤 Ahmed (Learner)', email: 'ahmed@acmefinance.com', tenantId: '' },
-                  { label: '👤 Sara (Learner)', email: 'sara@acmefinance.com', tenantId: '' }
-                ].map((item, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => fillCredentials(item.email, item.tenantId)}
-                    style={{
-                      fontSize: '0.75rem',
-                      padding: '8px',
-                      background: 'rgba(255,255,255,0.08)',
-                      border: '1px solid rgba(255,255,255,0.25)',
-                      borderRadius: '8px',
-                      color: '#5EEAD4',
-                      fontWeight: 600,
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease'
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.borderColor = '#5EEAD4'}
-                    onMouseLeave={(e) => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)'}
-                  >
-                    {item.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
         </div>
 
         {/* Register & Verify Links */}
