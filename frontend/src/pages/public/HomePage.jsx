@@ -42,9 +42,9 @@ const ABOUT = {
 const CONTACT = {
   heading: 'Get in Touch',
   intro: 'Have a question about the platform, or want to onboard your organization? Send us a message and our team will get back to you.',
-  email: 'contact@thinkb4act.example',
-  phone: '+00 000 0000000',
-  address: 'Your Street, City, Country',
+  email: 'info@thinkb4act.com',
+  phone: '+92 (370) 7041413',
+  address: 'Head office\nIslamabad\nM1, Crown Vista Plaza, Phase 3, Ghauri Town\n\nSub-Office\nBahawalpur\nCB 1135, Faiz Colony, Model Town A',
   hours: 'Monday to Friday, 9:00 AM to 5:00 PM'
 };
 /* ------------------------------------------------------------------ */

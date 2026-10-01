@@ -31,3 +31,6 @@ Thumbs.db
 # Temporary database files
 mongodb-binaries/
 .mongodb/
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat

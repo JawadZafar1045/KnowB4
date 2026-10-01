@@ -23,100 +23,28 @@ const seedData = async () => {
       return;
     }
 
-    console.log('[Seed] Seeding fresh CyberAware platform dataset...');
+    const superAdminEmail = process.env.SUPER_ADMIN_EMAIL || 'admin@thinkb4act.com';
+    const superAdminPassword = process.env.SUPER_ADMIN_PASSWORD || 'ChangeThisPassword!2026';
+    const defaultPasswordHash = await User.hashPassword(superAdminPassword);
 
-    // 1. Create Super Admin
-    const defaultPasswordHash = await User.hashPassword('Password123!');
+    console.log('[Seed] Creating platform Super Admin account...');
     const superAdmin = await User.create({
-      name: 'Global Platform Administrator',
-      email: 'superadmin@cyberaware.io',
+      name: 'Platform Administrator',
+      email: superAdminEmail.toLowerCase(),
       passwordHash: defaultPasswordHash,
       role: 'SUPER_ADMIN',
       status: 'ACTIVE',
-      jobTitle: 'Chief Security Officer'
+      jobTitle: 'Platform Administrator'
     });
+
     console.log(`[Seed] Created Super Admin: ${superAdmin.email}`);
+    console.log('[Seed] Demo data disabled. Only the platform Super Admin account has been created.');
+    return;
 
-    // 2. Create Organizations
-    const acmeCompany = await Company.create({
-      name: 'Acme Financial Group',
-      slug: 'acme-financial',
-      tenantId: 'TB4-ACME01',
-      email: 'contact@acmefinance.com',
-      phone: '+1 (555) 234-5678',
-      industry: 'Financial Services & Banking',
-      address: '100 Wall Street, New York, NY 10005',
-      website: 'https://acmefinance.example.com',
-      status: 'ACTIVE',
-      subscriptionPlan: 'ENTERPRISE',
-      subscriptionStatus: 'ACTIVE',
-      branding: { primaryColor: '#06b6d4', secondaryColor: '#3b82f6' }
-    });
-
-    const apexCompany = await Company.create({
-      name: 'Apex Health Network',
-      slug: 'apex-health',
-      tenantId: 'TB4-APEX01',
-      email: 'security@apexhealth.com',
-      phone: '+1 (555) 876-5432',
-      industry: 'Healthcare & Hospital Systems',
-      address: '450 Health Sciences Blvd, Boston, MA 02115',
-      website: 'https://apexhealth.example.com',
-      status: 'ACTIVE',
-      subscriptionPlan: 'PROFESSIONAL',
-      subscriptionStatus: 'ACTIVE',
-      branding: { primaryColor: '#10b981', secondaryColor: '#06b6d4' }
-    });
-
-    // 3. Create Departments for Acme
-    const acmeDepts = await Department.insertMany([
-      { companyId: acmeCompany._id, name: 'Information Security & IT', description: 'Core IT and cyber infrastructure' },
-      { companyId: acmeCompany._id, name: 'Financial Trading & Analysis', description: 'Equities and assets trading desks' },
-      { companyId: acmeCompany._id, name: 'Compliance, Legal & Audit', description: 'Regulatory and SOC2 compliance' },
-      { companyId: acmeCompany._id, name: 'Human Resources & People', description: 'HR and talent management' }
-    ]);
-
-    // Departments for Apex
-    const apexDepts = await Department.insertMany([
-      { companyId: apexCompany._id, name: 'Healthcare IT & Clinical Systems', description: 'EHR and medical devices security' },
-      { companyId: apexCompany._id, name: 'Clinical Operations & Nursing', description: 'Hospital floor and patient care' },
-      { companyId: apexCompany._id, name: 'HIPAA & Patient Privacy', description: 'Regulatory privacy and records' }
-    ]);
-
-    // 4. Create Company Admins
-    const acmeAdmin = await User.create({
-      name: 'Victoria Vance',
-      email: 'admin@acmefinance.com',
-      passwordHash: defaultPasswordHash,
-      role: 'COMPANY_ADMIN',
-      companyId: acmeCompany._id,
-      departmentId: acmeDepts[0]._id,
-      status: 'ACTIVE',
-      jobTitle: 'VP of Information Security'
-    });
-
-    const apexAdmin = await User.create({
-      name: 'Marcus Sterling',
-      email: 'admin@apexhealth.com',
-      passwordHash: defaultPasswordHash,
-      role: 'COMPANY_ADMIN',
-      companyId: apexCompany._id,
-      departmentId: apexDepts[0]._id,
-      status: 'ACTIVE',
-      jobTitle: 'Chief Information Security Officer'
-    });
-
-    // 5. Create Employees for Acme
-    const ahmed = await User.create({
-      name: 'Ahmed Khan',
-      email: 'ahmed@acmefinance.com',
-      passwordHash: defaultPasswordHash,
-      role: 'EMPLOYEE',
-      companyId: acmeCompany._id,
-      departmentId: acmeDepts[1]._id,
-      status: 'ACTIVE',
-      jobTitle: 'Senior Financial Analyst'
-    });
+  } catch (err) {
+    console.error('[Seed Error]:', err);
+  }
+};
 
     const sara = await User.create({
       name: 'Sara Ali',
