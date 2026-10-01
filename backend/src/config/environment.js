@@ -10,8 +10,12 @@ module.exports = {
   mongoUri: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/knowb4',
   appUrl: process.env.APP_URL || 'http://localhost:5173',
   platformSecretKey: process.env.PLATFORM_SECRET_KEY || 'THINKB4ACT-2026-SECURE-REGISTER',
+  superAdmin: {
+    email: process.env.SUPER_ADMIN_EMAIL || 'admin@thinkb4act.com',
+    password: process.env.SUPER_ADMIN_PASSWORD || 'ChangeThisPassword!2026'
+  },
   smtp: {
-    host: process.env.SMTP_HOST || 'mail.privateemail.com', // standard Namecheap PrivateEmail / cPanel server host
+    host: process.env.SMTP_HOST || 'mail.privateemail.com',
     port: parseInt(process.env.SMTP_PORT || '465', 10),
     secure: process.env.SMTP_SECURE === 'true' || process.env.SMTP_PORT === '465' || true,
     user: process.env.SMTP_USER || '',
