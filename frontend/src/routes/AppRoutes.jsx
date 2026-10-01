@@ -9,17 +9,21 @@ import EmployeeLayout from '../layouts/EmployeeLayout';
 
 // Auth
 import LoginPage from '../pages/auth/LoginPage';
+import RegisterPage from '../pages/auth/RegisterPage';
 
 // Super Admin
 import SuperAdminDashboard from '../pages/super-admin/SuperAdminDashboard';
 import CompaniesManagement from '../pages/super-admin/CompaniesManagement';
 import GlobalCourseManager from '../pages/super-admin/GlobalCourseManager';
+import QuizManager from '../pages/super-admin/QuizManager';
+
 
 // Company Admin
 import CompanyDashboard from '../pages/company/CompanyDashboard';
 import EmployeeManagement from '../pages/company/EmployeeManagement';
 import DepartmentManagement from '../pages/company/DepartmentManagement';
 import CampaignManagement from '../pages/company/CampaignManagement';
+import CompanyCourseManager from '../pages/company/CompanyCourseManager';
 import TrainingReports from '../pages/company/TrainingReports';
 import CompanyCertificates from '../pages/company/CompanyCertificates';
 import AuditLogs from '../pages/company/AuditLogs';
@@ -33,6 +37,7 @@ import CourseCatalog from '../pages/employee/CourseCatalog';
 
 // Public
 import CertificateVerificationPage from '../pages/public/CertificateVerificationPage';
+import HomePage from '../pages/public/HomePage';
 
 function ProtectedRoute({ children, roles }) {
   const { user, loading } = useAuth();
@@ -56,7 +61,9 @@ export default function AppRoutes() {
     <BrowserRouter>
       <Routes>
         {/* Public Routes */}
+        <Route path="/home" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route path="/verify/:certificateId" element={<CertificateVerificationPage />} />
 
         {/* Super Admin Routes */}
@@ -68,6 +75,7 @@ export default function AppRoutes() {
           <Route index element={<SuperAdminDashboard />} />
           <Route path="companies" element={<CompaniesManagement />} />
           <Route path="courses" element={<GlobalCourseManager />} />
+          <Route path="quizzes" element={<QuizManager />} />
           <Route path="reports" element={<SuperAdminDashboard />} />
         </Route>
 
@@ -80,6 +88,7 @@ export default function AppRoutes() {
           <Route index element={<CompanyDashboard />} />
           <Route path="employees" element={<EmployeeManagement />} />
           <Route path="departments" element={<DepartmentManagement />} />
+          <Route path="courses" element={<CompanyCourseManager />} />
           <Route path="campaigns" element={<CampaignManagement />} />
           <Route path="reports" element={<TrainingReports />} />
           <Route path="certificates" element={<CompanyCertificates />} />
@@ -100,7 +109,7 @@ export default function AppRoutes() {
         </Route>
 
         {/* Default Redirect */}
-        <Route path="/" element={<Navigate to={getDefaultRoute()} replace />} />
+        <Route path="/" element={user ? <Navigate to={getDefaultRoute()} replace /> : <HomePage />} />
         <Route path="*" element={<Navigate to={getDefaultRoute()} replace />} />
       </Routes>
     </BrowserRouter>

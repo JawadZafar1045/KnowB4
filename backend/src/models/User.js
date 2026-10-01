@@ -38,6 +38,10 @@ const UserSchema = new mongoose.Schema({
     enum: ['ACTIVE', 'INVITED', 'SUSPENDED', 'DEACTIVATED'],
     default: 'ACTIVE'
   },
+  requiresPasswordReset: {
+    type: Boolean,
+    default: false
+  },
   avatar: {
     type: String,
     default: ''

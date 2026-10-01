@@ -3,6 +3,7 @@ import { Outlet, NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { BookOpen, Award, Compass, LogOut, ExternalLink } from 'lucide-react';
 import DemoRoleBar from '../components/DemoRoleBar';
+import SetPasswordModal from '../components/auth/SetPasswordModal';
 import logoImg from '../assets/logo.png';
 
 export default function EmployeeLayout() {
@@ -17,6 +18,9 @@ export default function EmployeeLayout() {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#F6F7F9' }}>
       <DemoRoleBar />
+
+      {/* Force Set Permanent Password Modal on first login */}
+      {user?.requiresPasswordReset && <SetPasswordModal />}
 
       {/* Top Navbar */}
       <header style={{

@@ -1,11 +1,20 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  baseURL: import.meta.env.VITE_API_URL || '/api',
   headers: {
     'Content-Type': 'application/json'
   }
 });
+
+export const backendBaseUrl = (import.meta.env.VITE_BACKEND_URL || '').replace(/\/$/, '');
+
+export const resolveAssetUrl = (path) => {
+  if (!path) return '';
+  if (/^https?:\/\//i.test(path)) return path;
+  if (!backendBaseUrl) return path;
+  return `${backendBaseUrl}${path.startsWith('/') ? path : `/${path}`}`;
+};
 
 // Attach JWT token to every outgoing request
 api.interceptors.request.use(

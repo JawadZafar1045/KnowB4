@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../services/api';
+import api, { resolveAssetUrl } from '../../services/api';
 import { Award, ExternalLink, Download } from 'lucide-react';
 
 export default function MyCertificates() {
@@ -67,7 +67,7 @@ export default function MyCertificates() {
                   <ExternalLink size={12} /> Verify Online
                 </a>
                 {cert.pdfUrl && (
-                  <a href={`http://localhost:5000${cert.pdfUrl}`} target="_blank" rel="noreferrer" className="btn-secondary" style={{ fontSize: '0.78rem' }}>
+                  <a href={resolveAssetUrl(cert.pdfUrl)} target="_blank" rel="noreferrer" className="btn-secondary" style={{ fontSize: '0.78rem' }}>
                     <Download size={12} /> Download PDF
                   </a>
                 )}

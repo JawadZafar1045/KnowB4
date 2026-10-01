@@ -155,7 +155,84 @@ const createCampaign = async (req, res, next) => {
   }
 };
 
+// @route   PUT /api/campaigns/:id
+// @desc    Update an existing campaign's details/status
+// @access  Private (Company Admin, Super Admin)
+const updateCampaign = async (req, res, next) => {
+  try {
+    const companyId = req.tenantCompanyId || req.user.companyId;
+    const { name, description, dueDate, status } = req.body;
+
+    const campaign = await Campaign.findOne({ _id: req.params.id, companyId });
+    if (!campaign) {
+      return res.status(404).json({ success: false, message: 'Campaign not found' });
+    }
+
+    if (name) campaign.name = name;
+    if (description !== undefined) campaign.description = description;
+    if (dueDate) campaign.dueDate = dueDate;
+    if (status) campaign.status = status;
+
+    await campaign.save();
+
+    // If due date updated, sync associated enrollments
+    if (dueDate) {
+      await Enrollment.updateMany(
+        { campaignId: campaign._id },
+        { dueDate: campaign.dueDate }
+      );
+    }
+
+    await AuditLog.create({
+      companyId,
+      userId: req.user._id,
+      action: 'CAMPAIGN_UPDATED',
+      resource: 'Campaign',
+      details: { campaignId: campaign._id, name: campaign.name }
+    });
+
+    res.json({ success: true, campaign });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// @route   DELETE /api/campaigns/:id
+// @desc    Delete a campaign and its active enrollments
+// @access  Private (Company Admin, Super Admin)
+const deleteCampaign = async (req, res, next) => {
+  try {
+    const companyId = req.tenantCompanyId || req.user.companyId;
+
+    const campaign = await Campaign.findOne({ _id: req.params.id, companyId });
+    if (!campaign) {
+      return res.status(404).json({ success: false, message: 'Campaign not found' });
+    }
+
+    // Delete associated enrollments for this campaign
+    await Enrollment.deleteMany({ campaignId: campaign._id });
+
+    // Delete campaign
+    await Campaign.deleteOne({ _id: campaign._id });
+
+    await AuditLog.create({
+      companyId,
+      userId: req.user._id,
+      action: 'CAMPAIGN_DELETED',
+      resource: 'Campaign',
+      details: { campaignId: req.params.id, name: campaign.name }
+    });
+
+    res.json({ success: true, message: 'Campaign deleted successfully' });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getCampaigns,
-  createCampaign
+  createCampaign,
+  updateCampaign,
+  deleteCampaign
 };
+
