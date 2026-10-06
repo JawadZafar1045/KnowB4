@@ -61,6 +61,17 @@ app.use('/api/certificates', certificateRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/notifications', notificationRoutes);
 
+// ─── Serve React frontend (production) ───
+const frontendDist = path.join(__dirname, '..', 'frontend', 'dist');
+
+app.use(express.static(frontendDist));
+
+// SPA fallback — any non-API, non-upload route serves index.html
+app.get(/^\/(?!api\/|uploads\/).*/, (req, res, next) => {
+  res.sendFile(path.join(frontendDist, 'index.html'), (err) => {
+    if (err) next();
+  });
+});
 // Centralized error handler
 app.use(errorHandler);
 
