@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { Building2, Users, BookOpen, Send, Award, Activity } from 'lucide-react';
+import { formatOrganizationName, formatStatus } from '../../utils/displayFormatters';
 
 export default function SuperAdminDashboard() {
   const [stats, setStats] = useState(null);
@@ -34,7 +35,7 @@ export default function SuperAdminDashboard() {
   }, [loading, stats]);
 
   if (loading) {
-    return <div style={{ color: '#71717a', padding: '60px', textAlign: 'center', fontWeight: 600 }}>Loading platform analytics...</div>;
+    return <div style={{ color: 'var(--text-muted)', padding: '60px', textAlign: 'center', fontWeight: 600 }}>Loading platform analytics...</div>;
   }
 
   // Single consistent accent (steel-blue) for every KPI icon and hover state
@@ -50,20 +51,14 @@ export default function SuperAdminDashboard() {
   const completionRate = stats?.platformCompletionRate || 0;
   const animatedCompletion = Math.round(completionRate * animProgress);
 
-  // Solid (non-translucent) badge styles, as requested
-  const solidBadge = (bg) => ({
-    background: bg, color: '#ffffff', fontSize: '0.72rem', fontWeight: 700,
-    padding: '3px 10px', borderRadius: '9999px', display: 'inline-flex', alignItems: 'center'
-  });
-
   return (
-    <div style={{ color: '#18181b' }}>
+    <div style={{ color: 'var(--text)' }}>
       {/* Page Header */}
       <div style={{ marginBottom: '28px' }}>
-        <h1 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#18181b', letterSpacing: '-0.02em' }}>
+        <h1 style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.02em' }}>
           Platform Command Center
         </h1>
-        <p style={{ color: '#71717a', fontSize: '0.9rem', marginTop: '4px' }}>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '4px' }}>
           Global multi-tenant analytics across all customer organizations
         </p>
       </div>
@@ -76,22 +71,22 @@ export default function SuperAdminDashboard() {
           return (
             <div
               key={i}
-              className="glass-card"
+              className="surface-card"
               style={{
                 padding: '22px',
-                background: '#ffffff',
-                border: '1px solid #e4e4e7',
-                borderRadius: '14px',
+                background: 'var(--card)',
+                border: '1px solid var(--border)',
+                borderRadius: '12px',
                 position: 'relative',
                 overflow: 'hidden',
                 transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
                 cursor: 'pointer',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+                boxShadow: 'var(--shadow-card)'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-4px)';
-                e.currentTarget.style.boxShadow = '0 14px 24px -6px rgba(53, 108, 137, 0.18), 0 4px 8px -2px rgba(53, 108, 137, 0.08)';
-                e.currentTarget.style.borderColor = '#356c89';
+                e.currentTarget.style.boxShadow = 'var(--shadow-card)';
+                e.currentTarget.style.borderColor = 'var(--navy)';
                 const iconBox = e.currentTarget.querySelector('.kpi-icon');
                 if (iconBox) iconBox.style.transform = 'scale(1.1)';
                 const bar = e.currentTarget.querySelector('.kpi-accent-bar');
@@ -99,8 +94,8 @@ export default function SuperAdminDashboard() {
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.05)';
-                e.currentTarget.style.borderColor = '#e4e4e7';
+                e.currentTarget.style.boxShadow = 'var(--shadow-card)';
+                e.currentTarget.style.borderColor = 'var(--border)';
                 const iconBox = e.currentTarget.querySelector('.kpi-icon');
                 if (iconBox) iconBox.style.transform = 'scale(1)';
                 const bar = e.currentTarget.querySelector('.kpi-accent-bar');
@@ -112,24 +107,24 @@ export default function SuperAdminDashboard() {
                 className="kpi-accent-bar"
                 style={{
                   position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
-                  background: 'linear-gradient(90deg, #356c89, #4e86a0)',
+                  background: 'var(--navy)',
                   transform: 'scaleX(0)', transformOrigin: 'left', transition: 'transform 0.3s ease'
                 }}
               />
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#52525b' }}>{kpi.label}</span>
+                <span className="kpi-label" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)' }}>{kpi.label}</span>
                 <div
                   className="kpi-icon"
                   style={{
                     width: '36px', height: '36px', borderRadius: '10px',
-                    background: '#356c89', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    background: 'var(--icon-tile)', display: 'flex', alignItems: 'center', justifyContent: 'center',
                     transition: 'transform 0.2s ease'
                   }}
                 >
-                  <Icon size={18} color="#ffffff" />
+                  <Icon size={18} color="var(--orange)" />
                 </div>
               </div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '2rem', fontWeight: 800, color: '#18181b', letterSpacing: '-0.03em' }}>
+              <div className="kpi-value" style={{ fontFamily: 'var(--font-mono)', fontSize: '2rem', fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.03em' }}>
                 {displayValue}
               </div>
             </div>
@@ -141,60 +136,74 @@ export default function SuperAdminDashboard() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
         {/* Completion Rate Card */}
         <div
-          className="glass-card"
+          className="surface-card"
           style={{
             padding: '28px',
-            background: '#ffffff',
-            border: '1px solid #e4e4e7',
-            borderRadius: '14px',
+            background: 'var(--card)',
+            border: '1px solid var(--border)',
+            borderRadius: '12px',
             transition: 'all 0.25s ease',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+            boxShadow: 'var(--shadow-card)'
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = '0 12px 28px -6px rgba(53, 108, 137, 0.16)';
-            e.currentTarget.style.borderColor = '#356c89';
+            e.currentTarget.style.boxShadow = 'var(--shadow-card)';
+            e.currentTarget.style.borderColor = 'var(--navy)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.05)';
-            e.currentTarget.style.borderColor = '#e4e4e7';
+            e.currentTarget.style.boxShadow = 'var(--shadow-card)';
+            e.currentTarget.style.borderColor = 'var(--border)';
           }}
         >
-          <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#18181b', marginBottom: '20px' }}>
+          <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text)', marginBottom: '20px' }}>
             Platform Completion Rate
           </h3>
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-            <div style={{
-              width: '130px', height: '130px', borderRadius: '50%',
-              background: `conic-gradient(from 0deg, #2f6c8b 0%, #356c89 ${animatedCompletion * 0.7}%, #4e86a0 ${animatedCompletion}%, #e4e4e7 ${animatedCompletion}%)`,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: '0 8px 24px rgba(53, 108, 137, 0.22), 0 2px 8px rgba(0,0,0,0.06)',
-              padding: '9px',
-              transition: 'transform 0.3s ease'
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-            onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+            <div
+              style={{
+                width: '130px', height: '130px', position: 'relative',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                transition: 'transform 0.3s ease'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+              onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
             >
+              <svg width="130" height="130" viewBox="0 0 130 130" aria-hidden="true">
+                <circle cx="65" cy="65" r="60.5" fill="none" stroke="#E3E8EF" strokeWidth="9" />
+                <circle
+                  cx="65"
+                  cy="65"
+                  r="60.5"
+                  fill="none"
+                  stroke="#F26A1B"
+                  strokeWidth="9"
+                  strokeLinecap="round"
+                  strokeDasharray={2 * Math.PI * 60.5}
+                  strokeDashoffset={2 * Math.PI * 60.5 * (1 - animatedCompletion / 100)}
+                  transform="rotate(-90 65 65)"
+                />
+              </svg>
               <div style={{
-                width: '100%', height: '100%', borderRadius: '50%',
-                background: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                flexDirection: 'column',
-                boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.06)'
+                position: 'absolute',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column'
               }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.75rem', fontWeight: 800, color: '#356c89', letterSpacing: '-0.02em' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.75rem', fontWeight: 800, color: 'var(--navy)', letterSpacing: '-0.02em' }}>
                   {animatedCompletion}%
                 </div>
-                <div style={{ fontSize: '0.62rem', fontWeight: 600, color: '#71717a', textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: '2px' }}>
+                <div style={{ fontSize: '0.62rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: '2px' }}>
                   Complete
                 </div>
               </div>
             </div>
             <div>
-              <div style={{ fontSize: '0.85rem', color: '#3f3f46', marginBottom: '10px' }}>
-                <strong style={{ color: '#15803d' }}>{stats?.completedEnrollments || 0}</strong> completed out of <strong style={{ color: '#18181b' }}>{stats?.totalEnrollments || 0}</strong> total enrollments
+              <div style={{ fontSize: '0.85rem', color: 'var(--text)', marginBottom: '10px' }}>
+                <strong style={{ color: 'var(--success-text)' }}>{stats?.completedEnrollments || 0}</strong> completed out of <strong style={{ color: 'var(--text)' }}>{stats?.totalEnrollments || 0}</strong> total enrollments
               </div>
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                <span style={solidBadge('#356c89')}>Enterprise-Grade</span>
-                <span style={solidBadge('#15803d')}>SOC2 Ready</span>
+                <span className="badge badge-slate">Enterprise-Grade</span>
+                <span className="badge badge-green">SOC2 Ready</span>
               </div>
             </div>
           </div>
@@ -202,25 +211,25 @@ export default function SuperAdminDashboard() {
 
         {/* Customer Organizations Card */}
         <div
-          className="glass-card"
+          className="surface-card"
           style={{
             padding: '24px',
-            background: '#ffffff',
-            border: '1px solid #e4e4e7',
-            borderRadius: '14px',
+            background: 'var(--card)',
+            border: '1px solid var(--border)',
+            borderRadius: '12px',
             transition: 'all 0.25s ease',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+            boxShadow: 'var(--shadow-card)'
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = '0 12px 28px -6px rgba(53, 108, 137, 0.16)';
-            e.currentTarget.style.borderColor = '#356c89';
+            e.currentTarget.style.boxShadow = 'var(--shadow-card)';
+            e.currentTarget.style.borderColor = 'var(--navy)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.05)';
-            e.currentTarget.style.borderColor = '#e4e4e7';
+            e.currentTarget.style.boxShadow = 'var(--shadow-card)';
+            e.currentTarget.style.borderColor = 'var(--border)';
           }}
         >
-          <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#18181b', marginBottom: '16px' }}>
+          <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text)', marginBottom: '16px' }}>
             Customer Organizations
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -229,28 +238,28 @@ export default function SuperAdminDashboard() {
                 key={i}
                 style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  padding: '10px 14px', borderRadius: '10px', background: '#fafafa',
-                  border: '1px solid #e4e4e7',
+                  padding: '10px 14px', borderRadius: '10px', background: 'var(--surface-subtle)',
+                  border: '1px solid var(--border)',
                   transition: 'all 0.2s ease',
                   cursor: 'pointer'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(53, 108, 137, 0.05)';
-                  e.currentTarget.style.borderColor = '#356c89';
+                  e.currentTarget.style.background = 'var(--surface-subtle)';
+                  e.currentTarget.style.borderColor = 'var(--navy)';
                   e.currentTarget.style.transform = 'translateX(4px)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = '#fafafa';
-                  e.currentTarget.style.borderColor = '#e4e4e7';
+                  e.currentTarget.style.background = 'var(--surface-subtle)';
+                  e.currentTarget.style.borderColor = 'var(--border)';
                   e.currentTarget.style.transform = 'translateX(0)';
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <Building2 size={16} color="#356c89" />
-                  <span style={{ fontWeight: 600, fontSize: '0.85rem', color: '#18181b' }}>{company.name}</span>
+                  <Building2 size={16} color="var(--navy)" />
+                  <span style={{ fontWeight: 600, fontSize: '0.85rem', color: 'var(--text)' }}>{formatOrganizationName(company.name)}</span>
                 </div>
-                <span style={solidBadge(company.status === 'ACTIVE' ? '#15803d' : '#b45309')}>
-                  {company.status}
+                <span className={`badge ${company.status === 'ACTIVE' ? 'badge-green' : 'badge-amber'}`}>
+                  {formatStatus(company.status)}
                 </span>
               </div>
             ))}

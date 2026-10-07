@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import api from '../../services/api';
+import { formatStatus } from '../../utils/displayFormatters';
 import {
   ClipboardList, Download, Upload, FileSpreadsheet, X, Trash2,
   CheckCircle2, AlertTriangle, AlertCircle, Loader2, Clock, Award,
@@ -30,8 +31,8 @@ const downloadTemplate = () => {
   URL.revokeObjectURL(url);
 };
 
-const card = { backgroundColor: '#ffffff', border: '1px solid #e4e4e7', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' };
-const label = { display: 'block', fontSize: '0.78rem', fontWeight: 600, color: '#3f3f46', marginBottom: '6px' };
+const card = { backgroundColor: 'var(--card)', border: '1px solid var(--border)', borderRadius: '12px', boxShadow: 'var(--shadow-card)' };
+const label = { display: 'block', fontSize: '0.78rem', fontWeight: 600, color: 'var(--text)', marginBottom: '6px' };
 
 export default function QuizManager() {
   // ---- reference data ----
@@ -232,9 +233,9 @@ export default function QuizManager() {
     }
   };
 
-  const iconButtonStyle = (color = '#52525b') => ({
+  const iconButtonStyle = (color = 'var(--text-muted)') => ({
     width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-    background: '#ffffff', border: '1px solid #e4e4e7', borderRadius: '8px', cursor: 'pointer', color,
+    background: 'var(--card)', border: '1px solid var(--border)', borderRadius: '8px', cursor: 'pointer', color,
     transition: 'background 0.15s, color 0.15s, border-color 0.15s'
   });
   const hoverOn = (accent, bg) => (e) => {
@@ -243,9 +244,9 @@ export default function QuizManager() {
     e.currentTarget.style.borderColor = accent;
   };
   const hoverOff = (e) => {
-    e.currentTarget.style.background = '#ffffff';
-    e.currentTarget.style.color = '#52525b';
-    e.currentTarget.style.borderColor = '#e4e4e7';
+    e.currentTarget.style.background = 'var(--card)';
+    e.currentTarget.style.color = 'var(--text-muted)';
+    e.currentTarget.style.borderColor = 'var(--border)';
   };
 
   const errorCount = preview?.errors?.length || 0;
@@ -255,8 +256,8 @@ export default function QuizManager() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', gap: '16px' }}>
         <div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#18181b' }}>Quizzes</h1>
-          <p style={{ color: '#71717a', fontSize: '0.85rem' }}>Import a course quiz from a CSV file. Each course can have one quiz.</p>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text)' }}>Quizzes</h1>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Import a course quiz from a CSV file. Each course can have one quiz.</p>
         </div>
         <button className="btn-secondary" onClick={downloadTemplate} style={{ display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}>
           <Download size={15} /> Download template
@@ -264,14 +265,14 @@ export default function QuizManager() {
       </div>
 
       {successMsg && (
-        <div role="status" style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#f0fdf4', border: '1px solid #bbf7d0', color: '#15803d', padding: '10px 14px', borderRadius: '8px', fontSize: '0.85rem', marginBottom: '16px' }}>
+        <div role="status" style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'var(--success-bg)', border: '1px solid var(--success-border)', color: 'var(--success-text)', padding: '10px 14px', borderRadius: '8px', fontSize: '0.85rem', marginBottom: '16px' }}>
           <CheckCircle2 size={16} /> {successMsg}
         </div>
       )}
 
       {/*  Import quiz  */}
       <div style={{ ...card, padding: '24px', marginBottom: '20px' }}>
-        <h2 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#18181b', marginBottom: '18px' }}>Import quiz</h2>
+        <h2 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text)', marginBottom: '18px' }}>Import quiz</h2>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '16px' }}>
           <div>
@@ -291,21 +292,21 @@ export default function QuizManager() {
                 htmlFor="quiz-csv-input"
                 style={{
                   display: 'flex', alignItems: 'center', gap: '8px', height: '38px', padding: '0 12px',
-                  border: '1px dashed #d4d4d8', borderRadius: '8px', cursor: 'pointer', color: '#71717a',
-                  fontSize: '0.85rem', background: '#fafafa', transition: 'border-color 0.15s, color 0.15s'
+                  border: '1px dashed var(--border)', borderRadius: '8px', cursor: 'pointer', color: 'var(--text-muted)',
+                  fontSize: '0.85rem', background: 'var(--bg)', transition: 'border-color 0.15s, color 0.15s'
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#356c89'; e.currentTarget.style.color = '#356c89'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#d4d4d8'; e.currentTarget.style.color = '#71717a'; }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--navy)'; e.currentTarget.style.color = 'var(--navy)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-muted)'; }}
               >
                 <Upload size={15} /> Choose CSV file
               </label>
             ) : (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', height: '38px', padding: '0 10px', border: '1px solid #e4e4e7', borderRadius: '8px', background: '#ffffff' }}>
-                <FileSpreadsheet size={15} color="#356c89" style={{ flexShrink: 0 }} />
-                <span style={{ fontSize: '0.82rem', color: '#18181b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }} title={csvFile.name}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', height: '38px', padding: '0 10px', border: '1px solid var(--border)', borderRadius: '8px', background: 'var(--card)' }}>
+                <FileSpreadsheet size={15} color="var(--navy)" style={{ flexShrink: 0 }} />
+                <span style={{ fontSize: '0.82rem', color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }} title={csvFile.name}>
                   {csvFile.name}
                 </span>
-                <button type="button" onClick={clearFile} title="Remove file" style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#a1a1aa', flexShrink: 0, display: 'flex' }}>
+                <button type="button" onClick={clearFile} title="Remove file" style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', flexShrink: 0, display: 'flex' }}>
                   <X size={15} />
                 </button>
               </div>
@@ -336,43 +337,43 @@ export default function QuizManager() {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '24px', marginBottom: '20px' }}>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '7px', fontSize: '0.85rem', color: '#3f3f46', cursor: 'pointer' }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '7px', fontSize: '0.85rem', color: 'var(--text)', cursor: 'pointer' }}>
             <input type="checkbox" checked={form.randomizeQuestions} onChange={(e) => setField('randomizeQuestions', e.target.checked)} />
             <Shuffle size={13} /> Shuffle questions
           </label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '7px', fontSize: '0.85rem', color: '#3f3f46', cursor: 'pointer' }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '7px', fontSize: '0.85rem', color: 'var(--text)', cursor: 'pointer' }}>
             <input type="checkbox" checked={form.randomizeOptions} onChange={(e) => setField('randomizeOptions', e.target.checked)} />
             <Shuffle size={13} /> Shuffle options
           </label>
         </div>
 
         {previewFailed && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#fef2f2', border: '1px solid #fecaca', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'var(--danger-bg)', border: '1px solid var(--danger-border)', color: 'var(--danger-text)', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', marginBottom: '16px' }}>
             <AlertCircle size={15} /> {previewFailed}
           </div>
         )}
 
         {previewing && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#71717a', fontSize: '0.85rem', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '16px' }}>
             <Loader2 size={15} className="spin" style={{ animation: 'spin 0.8s linear infinite' }} /> Checking your file...
           </div>
         )}
 
         {/* ---- Preview result ---- */}
         {preview && !previewing && (
-          <div style={{ border: '1px solid #e4e4e7', borderRadius: '10px', padding: '18px', marginBottom: '20px', background: '#fafafa' }}>
+          <div style={{ border: '1px solid var(--border)', borderRadius: '10px', padding: '18px', marginBottom: '20px', background: 'var(--bg)' }}>
             <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '16px', marginBottom: errorCount || preview.existingQuiz ? '14px' : '0' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', color: preview.valid ? '#15803d' : '#b91c1c', fontWeight: 600 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', color: preview.valid ? 'var(--success-text)' : 'var(--danger-text)', fontWeight: 600 }}>
                 {preview.valid ? <CheckCircle2 size={16} /> : <AlertTriangle size={16} />}
                 {preview.validCount} of {preview.totalRows} question(s) ready
               </div>
               {errorCount > 0 && (
-                <div style={{ fontSize: '0.82rem', color: '#b91c1c' }}>{errorCount} row(s) need fixing</div>
+                <div style={{ fontSize: '0.82rem', color: 'var(--danger-text)' }}>{errorCount} row(s) need fixing</div>
               )}
             </div>
 
             {preview.existingQuiz && (
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', marginBottom: '14px' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', background: 'var(--warning-bg)', border: '1px solid var(--warning-bg)', color: 'var(--warning-text)', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', marginBottom: '14px' }}>
                 <AlertTriangle size={15} style={{ flexShrink: 0, marginTop: '1px' }} />
                 <div>
                   <strong>{preview.existingQuiz.title}</strong> already exists for this course ({preview.existingQuiz.questionCount} questions).
@@ -387,7 +388,7 @@ export default function QuizManager() {
             {errorCount > 0 && (
               <div style={{ maxHeight: '160px', overflowY: 'auto', marginBottom: preview.preview?.length ? '14px' : 0 }}>
                 {preview.errors.map((er, i) => (
-                  <div key={i} style={{ fontSize: '0.78rem', color: '#b91c1c', padding: '4px 0', borderBottom: i < preview.errors.length - 1 ? '1px solid #fecaca' : 'none' }}>
+                  <div key={i} style={{ fontSize: '0.78rem', color: 'var(--danger-text)', padding: '4px 0', borderBottom: i < preview.errors.length - 1 ? '1px solid var(--danger-border)' : 'none' }}>
                     {er.row > 0 ? `Row ${er.row}: ` : ''}{er.message}
                   </div>
                 ))}
@@ -398,7 +399,7 @@ export default function QuizManager() {
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.78rem' }}>
                   <thead>
-                    <tr style={{ textAlign: 'left', color: '#71717a' }}>
+                    <tr style={{ textAlign: 'left', color: 'var(--text-muted)' }}>
                       <th style={{ padding: '6px 8px' }}>Row</th>
                       <th style={{ padding: '6px 8px' }}>Question</th>
                       <th style={{ padding: '6px 8px' }}>Type</th>
@@ -408,18 +409,18 @@ export default function QuizManager() {
                   </thead>
                   <tbody>
                     {preview.preview.slice(0, 8).map((q) => (
-                      <tr key={q.row} style={{ borderTop: '1px solid #e4e4e7' }}>
-                        <td style={{ padding: '6px 8px', color: '#a1a1aa' }}>{q.row}</td>
-                        <td style={{ padding: '6px 8px', color: '#18181b', maxWidth: '320px' }}>{q.questionText}</td>
-                        <td style={{ padding: '6px 8px', color: '#71717a' }}>{q.type}</td>
-                        <td style={{ padding: '6px 8px', color: '#15803d', fontWeight: 600 }}>{q.options[q.correctIndex]}</td>
-                        <td style={{ padding: '6px 8px', color: '#71717a' }}>{q.points}</td>
+                      <tr key={q.row} style={{ borderTop: '1px solid var(--border)' }}>
+                        <td style={{ padding: '6px 8px', color: 'var(--text-muted)' }}>{q.row}</td>
+                        <td style={{ padding: '6px 8px', color: 'var(--text)', maxWidth: '320px' }}>{q.questionText}</td>
+                        <td style={{ padding: '6px 8px', color: 'var(--text-muted)' }}>{q.type}</td>
+                        <td style={{ padding: '6px 8px', color: 'var(--success-text)', fontWeight: 600 }}>{q.options[q.correctIndex]}</td>
+                        <td style={{ padding: '6px 8px', color: 'var(--text-muted)' }}>{q.points}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
                 {preview.preview.length > 8 && (
-                  <div style={{ fontSize: '0.78rem', color: '#a1a1aa', marginTop: '8px' }}>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '8px' }}>
                     + {preview.preview.length - 8} more question(s)
                   </div>
                 )}
@@ -429,7 +430,7 @@ export default function QuizManager() {
         )}
 
         {importError && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#fef2f2', border: '1px solid #fecaca', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'var(--danger-bg)', border: '1px solid var(--danger-border)', color: 'var(--danger-text)', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', marginBottom: '16px' }}>
             <AlertCircle size={15} /> {importError}
           </div>
         )}
@@ -448,35 +449,35 @@ export default function QuizManager() {
 
       {/* ---------------- Quiz library ---------------- */}
       <div style={{ ...card, padding: '24px' }}>
-        <h2 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#18181b', marginBottom: '18px' }}>Quiz library</h2>
+        <h2 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text)', marginBottom: '18px' }}>Quiz library</h2>
 
         {loadingQuizzes ? (
-          <div style={{ color: '#71717a', fontSize: '0.85rem' }}>Loading quizzes...</div>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Loading quizzes...</div>
         ) : quizzes.length === 0 ? (
           <div style={{ padding: '40px 0', textAlign: 'center' }}>
-            <ClipboardList size={34} color="#a1a1aa" />
-            <p style={{ color: '#71717a', marginTop: '12px', fontSize: '0.88rem' }}>No quizzes yet. Pick a course and upload a CSV above to create the first one.</p>
+            <ClipboardList size={34} color="var(--text-muted)" />
+            <p style={{ color: 'var(--text-muted)', marginTop: '12px', fontSize: '0.88rem' }}>No quizzes yet. Pick a course and upload a CSV above to create the first one.</p>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {quizzes.map((q) => (
-              <div key={q._id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', padding: '14px 16px', border: '1px solid #e4e4e7', borderRadius: '10px', flexWrap: 'wrap' }}>
+              <div key={q._id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', padding: '14px 16px', border: '1px solid var(--border)', borderRadius: '10px', flexWrap: 'wrap' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: '240px' }}>
-                  <div style={{ width: '36px', height: '36px', borderRadius: '9px', backgroundColor: '#356c89', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <ClipboardList size={17} color="#ffffff" />
+                  <div style={{ width: '36px', height: '36px', borderRadius: '9px', backgroundColor: 'var(--navy)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <ClipboardList size={17} color="var(--card)" />
                   </div>
                   <div>
-                    <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#18181b' }}>{q.title}</div>
-                    <div style={{ fontSize: '0.76rem', color: '#71717a' }}>{q.course?.title || 'Course removed'}</div>
+                    <div style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text)' }}>{q.title}</div>
+                    <div style={{ fontSize: '0.76rem', color: 'var(--text-muted)' }}>{q.course?.title || 'Course removed'}</div>
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '0.78rem', color: '#71717a', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '0.78rem', color: 'var(--text-muted)', flexWrap: 'wrap' }}>
                   <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Layers size={13} /> {q.questionCount} Questions</span>
                   <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Award size={13} /> Pass: {q.passingScore}%</span>
                   <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={13} /> {q.timeLimit === 0 ? 'No limit' : `${q.timeLimit}m`}</span>
                   <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><RotateCcw size={13} /> {q.attemptsAllowed} attempts</span>
-                  <span style={{ padding: '3px 10px', borderRadius: '9999px', fontWeight: 700, fontSize: '0.72rem', background: q.status === 'ACTIVE' ? '#15803d' : '#71717a', color: '#ffffff' }}>{q.status}</span>
+                  <span className={`badge ${q.status === 'ACTIVE' ? 'badge-green' : 'badge-slate'}`}>{formatStatus(q.status)}</span>
                 </div>
 
                 <button
@@ -485,7 +486,7 @@ export default function QuizManager() {
                   title="Delete quiz"
                   aria-label={`Delete ${q.title}`}
                   style={iconButtonStyle()}
-                  onMouseEnter={hoverOn('#b91c1c', '#fef2f2')}
+                  onMouseEnter={hoverOn('var(--danger-text)', 'var(--danger-bg)')}
                   onMouseLeave={hoverOff}
                 >
                   <Trash2 size={14} />
@@ -499,22 +500,22 @@ export default function QuizManager() {
       {/*  Delete confirmation  */}
       {deleteTarget && (
         <div role="alertdialog" aria-modal="true" aria-labelledby="delete-quiz-title"
-          style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0, 0, 0, 0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 110, padding: '20px' }}>
-          <div style={{ width: '440px', maxWidth: '100%', padding: '28px', backgroundColor: '#ffffff', border: '1px solid #e4e4e7', borderRadius: '16px', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' }}>
+          style={{ position: 'fixed', inset: 0, backgroundColor: 'var(--navy)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 110, padding: '20px' }}>
+          <div style={{ width: '440px', maxWidth: '100%', padding: '28px', backgroundColor: 'var(--card)', border: '1px solid var(--border)', borderRadius: '12px', boxShadow: 'var(--shadow-card)' }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', marginBottom: '18px' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: '#fef2f2', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <AlertTriangle size={20} color="#b91c1c" />
+              <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: 'var(--danger-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <AlertTriangle size={20} color="var(--danger-text)" />
               </div>
               <div>
-                <h2 id="delete-quiz-title" style={{ fontSize: '1.1rem', fontWeight: 700, color: '#18181b', marginBottom: '6px' }}>Delete this quiz?</h2>
-                <p style={{ fontSize: '0.85rem', color: '#52525b', lineHeight: '1.5' }}>
+                <h2 id="delete-quiz-title" style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>Delete this quiz?</h2>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
                   <strong>{deleteTarget.title}</strong> will be permanently removed. This cannot be undone.
                 </p>
               </div>
             </div>
 
             {deleteError && (
-              <div style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', marginBottom: '16px' }}>
+              <div style={{ background: 'var(--danger-bg)', border: '1px solid var(--danger-border)', color: 'var(--danger-text)', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', marginBottom: '16px' }}>
                 {deleteError}
               </div>
             )}
@@ -526,8 +527,8 @@ export default function QuizManager() {
                 onClick={handleDelete}
                 disabled={deleting}
                 style={{
-                  background: '#b91c1c', color: '#ffffff', border: 'none', borderRadius: '8px', padding: '9px 16px',
-                  fontSize: '0.85rem', fontWeight: 600, cursor: deleting ? 'not-allowed' : 'pointer', opacity: deleting ? 0.7 : 1,
+                  background: 'var(--danger-text)', color: 'var(--card)', border: 'none', borderRadius: '8px', padding: '9px 16px',
+                  fontSize: '0.85rem', fontWeight: 600, cursor: deleting ? 'not-allowed' : 'pointer',
                   display: 'flex', alignItems: 'center', gap: '6px'
                 }}
               >

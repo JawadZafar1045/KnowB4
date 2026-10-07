@@ -207,9 +207,9 @@ export default function CompanyCourseManager() {
   };
 
   const difficultyStyles = {
-    BEGINNER: { background: '#15803d', color: '#ffffff' },
-    INTERMEDIATE: { background: '#b45309', color: '#ffffff' },
-    ADVANCED: { background: '#be123c', color: '#ffffff' }
+    BEGINNER: { background: 'var(--success-bg)', color: 'var(--success-text)' },
+    INTERMEDIATE: { background: 'var(--warning-bg)', color: 'var(--warning-text)' },
+    ADVANCED: { background: 'var(--danger-bg)', color: 'var(--danger-text)' }
   };
 
   const isEditing = Boolean(editingId);
@@ -221,12 +221,11 @@ export default function CompanyCourseManager() {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    background: '#ffffff',
-    border: '1px solid #e4e4e7',
+    background: 'var(--card)',
+    border: '1px solid var(--border)',
     borderRadius: '8px',
     cursor: disabled ? 'not-allowed' : 'pointer',
-    color: disabled ? '#d4d4d8' : '#52525b',
-    opacity: disabled ? 0.7 : 1,
+    color: disabled ? 'var(--border)' : 'var(--text-muted)',
     transition: 'background 0.15s, color 0.15s, border-color 0.15s'
   });
 
@@ -236,19 +235,19 @@ export default function CompanyCourseManager() {
     e.currentTarget.style.borderColor = accent;
   };
   const hoverOff = (e) => {
-    e.currentTarget.style.background = '#ffffff';
-    e.currentTarget.style.color = '#52525b';
-    e.currentTarget.style.borderColor = '#e4e4e7';
+    e.currentTarget.style.background = 'var(--card)';
+    e.currentTarget.style.color = 'var(--text-muted)';
+    e.currentTarget.style.borderColor = 'var(--border)';
   };
 
-  if (loading) return <div style={{ color: '#71717a', padding: '40px' }}>Loading course library...</div>;
+  if (loading) return <div style={{ color: 'var(--text-muted)', padding: '40px' }}>Loading course library...</div>;
 
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#18181b' }}>Course Library</h1>
-          <p style={{ color: '#71717a', fontSize: '0.85rem' }}>Create and manage training content for your organization</p>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text)' }}>Course Library</h1>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Create and manage training content for your organization</p>
         </div>
         <button className="btn-primary" onClick={openAddModal}>
           <Plus size={16} /> Add Course
@@ -262,9 +261,9 @@ export default function CompanyCourseManager() {
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            background: '#f0fdf4',
-            border: '1px solid #bbf7d0',
-            color: '#15803d',
+            background: 'var(--success-bg)',
+            border: '1px solid var(--success-border)',
+            color: 'var(--success-text)',
             padding: '10px 14px',
             borderRadius: '8px',
             fontSize: '0.85rem',
@@ -276,9 +275,9 @@ export default function CompanyCourseManager() {
       )}
 
       {courses.length === 0 ? (
-        <div style={{ padding: '60px', textAlign: 'center', backgroundColor: '#ffffff', border: '1px solid #e4e4e7', borderRadius: '12px' }}>
-          <BookOpen size={40} color="#a1a1aa" />
-          <p style={{ color: '#71717a', marginTop: '14px' }}>No courses yet. Create your first learning module from this panel.</p>
+        <div style={{ padding: '60px', textAlign: 'center', backgroundColor: 'var(--card)', border: '1px solid var(--border)', borderRadius: '12px' }}>
+          <BookOpen size={40} color="var(--text-muted)" />
+          <p style={{ color: 'var(--text-muted)', marginTop: '14px' }}>No courses yet. Create your first learning module from this panel.</p>
         </div>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '16px' }}>
@@ -287,15 +286,15 @@ export default function CompanyCourseManager() {
             const lockedTip = 'Shared platform course. Only the platform admin can change it.';
 
             return (
-              <div key={course._id} style={{ padding: '24px', backgroundColor: '#ffffff', border: '1px solid #e4e4e7', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+              <div key={course._id} style={{ padding: '24px', backgroundColor: 'var(--card)', border: '1px solid var(--border)', borderRadius: '12px', boxShadow: 'var(--shadow-card)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px', gap: '10px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: '#356c89', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <BookOpen size={20} color="#ffffff" />
+                    <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: 'var(--navy)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <BookOpen size={20} color="var(--card)" />
                     </div>
                     <div>
-                      <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#18181b' }}>{course.title}</h3>
-                      <div style={{ fontSize: '0.75rem', color: '#71717a' }}>{course.category}</div>
+                      <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text)' }}>{course.title}</h3>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{course.category}</div>
                     </div>
                   </div>
 
@@ -318,15 +317,15 @@ export default function CompanyCourseManager() {
                         gap: '6px',
                         fontSize: '0.75rem',
                         fontWeight: 600,
-                        color: manageable ? '#356c89' : '#a1a1aa',
-                        borderColor: manageable ? 'rgba(53, 108, 137, 0.4)' : '#e4e4e7',
-                        background: manageable ? 'rgba(53, 108, 137, 0.06)' : '#ffffff'
+                        color: manageable ? 'var(--navy)' : 'var(--text-muted)',
+                        borderColor: manageable ? 'var(--orange-border)' : 'var(--border)',
+                        background: manageable ? 'var(--surface-subtle)' : 'var(--card)'
                       }}
-                      onMouseEnter={manageable ? hoverOn('#356c89', 'rgba(53, 108, 137, 0.12)') : undefined}
+                      onMouseEnter={manageable ? hoverOn('var(--navy)', 'var(--surface-subtle)') : undefined}
                       onMouseLeave={manageable ? (e) => {
-                        e.currentTarget.style.background = 'rgba(53, 108, 137, 0.06)';
-                        e.currentTarget.style.color = '#356c89';
-                        e.currentTarget.style.borderColor = 'rgba(53, 108, 137, 0.4)';
+                        e.currentTarget.style.background = 'var(--surface-subtle)';
+                        e.currentTarget.style.color = 'var(--navy)';
+                        e.currentTarget.style.borderColor = 'var(--orange-border)';
                       } : undefined}
                     >
                       <Layers size={13} /> Curriculum
@@ -340,7 +339,7 @@ export default function CompanyCourseManager() {
                       title={manageable ? 'Edit course' : lockedTip}
                       aria-label={`Edit ${course.title}`}
                       style={iconButtonStyle(!manageable)}
-                      onMouseEnter={manageable ? hoverOn('#356c89', '#f4f4f5') : undefined}
+                      onMouseEnter={manageable ? hoverOn('var(--navy)', 'var(--bg)') : undefined}
                       onMouseLeave={manageable ? hoverOff : undefined}
                     >
                       <Pencil size={14} />
@@ -354,7 +353,7 @@ export default function CompanyCourseManager() {
                       title={manageable ? 'Delete course' : lockedTip}
                       aria-label={`Delete ${course.title}`}
                       style={iconButtonStyle(!manageable)}
-                      onMouseEnter={manageable ? hoverOn('#b91c1c', '#fef2f2') : undefined}
+                      onMouseEnter={manageable ? hoverOn('var(--danger-text)', 'var(--danger-bg)') : undefined}
                       onMouseLeave={manageable ? hoverOff : undefined}
                     >
                       <Trash2 size={14} />
@@ -362,18 +361,18 @@ export default function CompanyCourseManager() {
                   </div>
                 </div>
 
-                <p style={{ fontSize: '0.82rem', color: '#52525b', marginBottom: '14px', lineHeight: '1.5' }}>
+                <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '14px', lineHeight: '1.5' }}>
                   {course.description?.substring(0, 120)}...
                 </p>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '0.78rem', color: '#71717a', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '0.78rem', color: 'var(--text-muted)', flexWrap: 'wrap' }}>
                   <button
                     type="button"
                     onClick={() => manageable && setCurriculumCourseId(course._id)}
                     style={{
                       background: 'transparent',
                       border: 'none',
-                      color: '#356c89',
+                      color: 'var(--navy)',
                       fontWeight: 600,
                       cursor: manageable ? 'pointer' : 'default',
                       display: 'flex',
@@ -390,7 +389,7 @@ export default function CompanyCourseManager() {
                     style={{
                       background: 'transparent',
                       border: 'none',
-                      color: '#356c89',
+                      color: 'var(--navy)',
                       fontWeight: 600,
                       cursor: manageable ? 'pointer' : 'default',
                       display: 'flex',
@@ -412,28 +411,28 @@ export default function CompanyCourseManager() {
 
       {/* Add / Edit modal */}
       {showModal && (
-        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0, 0, 0, 0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: '20px' }}>
-          <div style={{ width: modalTab === 'content' ? '680px' : '560px', maxWidth: '100%', padding: '28px', maxHeight: '90vh', overflowY: 'auto', backgroundColor: '#ffffff', border: '1px solid #e4e4e7', borderRadius: '16px', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)', transition: 'width 0.2s ease' }}>
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'var(--navy)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: '20px' }}>
+          <div style={{ width: modalTab === 'content' ? '680px' : '560px', maxWidth: '100%', padding: '28px', maxHeight: '90vh', overflowY: 'auto', backgroundColor: 'var(--card)', border: '1px solid var(--border)', borderRadius: '12px', boxShadow: 'var(--shadow-card)', transition: 'width 0.2s ease' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
               <div>
-                <h2 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#18181b' }}>
+                <h2 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text)' }}>
                   {isEditing ? 'Edit Course' : 'Create Course & Content'}
                 </h2>
-                <p style={{ fontSize: '0.78rem', color: '#71717a' }}>
+                <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                   {isEditing ? 'Update course information or open curriculum builder' : 'Configure course details and learning materials'}
                 </p>
               </div>
               <button onClick={closeModal} aria-label="Close" style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}>
-                <X size={20} color="#71717a" />
+                <X size={20} color="var(--text-muted)" />
               </button>
             </div>
 
             {/* Quick jump to curriculum for editing */}
             {isEditing && (
-              <div style={{ marginBottom: '18px', padding: '12px 16px', background: '#f0f9ff', border: '1px solid #bae6fd', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ marginBottom: '18px', padding: '12px 16px', background: 'var(--surface-muted)', border: '1px solid var(--border)', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                  <div style={{ fontSize: '0.84rem', fontWeight: 700, color: '#0369a1' }}>Course Curriculum & Lessons</div>
-                  <div style={{ fontSize: '0.74rem', color: '#0284c7' }}>Create, preview, or edit learning modules and lesson content</div>
+                  <div style={{ fontSize: '0.84rem', fontWeight: 700, color: 'var(--navy)' }}>Course Curriculum & Lessons</div>
+                  <div style={{ fontSize: '0.74rem', color: 'var(--navy)' }}>Create, preview, or edit learning modules and lesson content</div>
                 </div>
                 <button
                   type="button"
@@ -452,19 +451,20 @@ export default function CompanyCourseManager() {
 
             {/* Mode Tabs for Create Course */}
             {!isEditing && (
-              <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid #e4e4e7', paddingBottom: '12px', marginBottom: '18px' }}>
+              <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid var(--border)', paddingBottom: '12px', marginBottom: '18px' }}>
                 <button
                   type="button"
                   onClick={() => setModalTab('basic')}
                   style={{
                     padding: '6px 14px',
                     borderRadius: '6px',
-                    border: 'none',
+                    border: '1px solid var(--border)',
+                    borderBottom: modalTab === 'basic' ? '2px solid var(--orange)' : '2px solid transparent',
                     fontSize: '0.82rem',
                     fontWeight: 700,
                     cursor: 'pointer',
-                    background: modalTab === 'basic' ? '#356c89' : '#f4f4f5',
-                    color: modalTab === 'basic' ? '#ffffff' : '#52525b'
+                    background: modalTab === 'basic' ? 'var(--surface-subtle)' : 'var(--card)',
+                    color: 'var(--navy)'
                   }}
                 >
                   1. Course Info
@@ -475,25 +475,26 @@ export default function CompanyCourseManager() {
                   style={{
                     padding: '6px 14px',
                     borderRadius: '6px',
-                    border: 'none',
+                    border: '1px solid var(--border)',
+                    borderBottom: modalTab === 'content' ? '2px solid var(--orange)' : '2px solid transparent',
                     fontSize: '0.82rem',
                     fontWeight: 700,
                     cursor: 'pointer',
-                    background: modalTab === 'content' ? '#356c89' : '#f4f4f5',
-                    color: modalTab === 'content' ? '#ffffff' : '#52525b',
+                    background: modalTab === 'content' ? 'var(--surface-subtle)' : 'var(--card)',
+                    color: 'var(--navy)',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '4px'
                   }}
                 >
                   2. Initial Lesson (Optional)
-                  {form.includeInitialContent && <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e' }} />}
+                  {form.includeInitialContent && <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--success-text)' }} />}
                 </button>
               </div>
             )}
 
             {error && (
-              <div style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', marginBottom: '16px' }}>
+              <div style={{ background: 'var(--danger-bg)', border: '1px solid var(--danger-border)', color: 'var(--danger-text)', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', marginBottom: '16px' }}>
                 {error}
               </div>
             )}
@@ -538,8 +539,8 @@ export default function CompanyCourseManager() {
                   </div>
 
                   {!isEditing && (
-                    <div style={{ marginBottom: '18px', padding: '12px 14px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px' }}>
-                      <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem', color: '#1e293b', fontWeight: 600, cursor: 'pointer' }}>
+                    <div style={{ marginBottom: '18px', padding: '12px 14px', background: 'var(--surface-muted)', border: '1px solid var(--border)', borderRadius: '8px' }}>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem', color: 'var(--navy)', fontWeight: 600, cursor: 'pointer' }}>
                         <input
                           type="checkbox"
                           checked={form.openCurriculumAfterCreate}
@@ -547,7 +548,7 @@ export default function CompanyCourseManager() {
                         />
                         Open Curriculum & Lesson Builder immediately after creating
                       </label>
-                      <p style={{ fontSize: '0.74rem', color: '#64748b', marginTop: '4px', marginLeft: '24px' }}>
+                      <p style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginTop: '4px', marginLeft: '24px' }}>
                         Recommended: easily add multiple modules, interactive reading materials, and video links.
                       </p>
                     </div>
@@ -556,7 +557,7 @@ export default function CompanyCourseManager() {
               ) : (
                 /* Tab 2: Initial content during creation */
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginBottom: '18px' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#1e293b', fontWeight: 700, cursor: 'pointer' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: 'var(--navy)', fontWeight: 700, cursor: 'pointer' }}>
                     <input
                       type="checkbox"
                       checked={form.includeInitialContent}
@@ -566,7 +567,7 @@ export default function CompanyCourseManager() {
                   </label>
 
                   {form.includeInitialContent && (
-                    <div style={{ padding: '16px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px' }}>
+                    <div style={{ padding: '16px', background: 'var(--surface-muted)', border: '1px solid var(--border)', borderRadius: '10px' }}>
                       <div style={{ marginBottom: '12px' }}>
                         <label className="form-label">Initial Module Title *</label>
                         <input
@@ -627,7 +628,7 @@ export default function CompanyCourseManager() {
                     </div>
                   )}
 
-                  <div style={{ padding: '12px 14px', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px', fontSize: '0.8rem', color: '#166534' }}>
+                  <div style={{ padding: '12px 14px', background: 'var(--success-bg)', border: '1px solid var(--success-border)', borderRadius: '8px', fontSize: '0.8rem', color: 'var(--success-text)' }}>
                     💡 You can always add, edit, or remove modules and lessons later using the <strong>Curriculum</strong> button on any course card.
                   </div>
                 </div>
@@ -652,25 +653,25 @@ export default function CompanyCourseManager() {
           role="alertdialog"
           aria-modal="true"
           aria-labelledby="delete-course-title"
-          style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0, 0, 0, 0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 110, padding: '20px' }}
+          style={{ position: 'fixed', inset: 0, backgroundColor: 'var(--navy)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 110, padding: '20px' }}
         >
-          <div style={{ width: '440px', maxWidth: '100%', padding: '28px', backgroundColor: '#ffffff', border: '1px solid #e4e4e7', borderRadius: '16px', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' }}>
+          <div style={{ width: '440px', maxWidth: '100%', padding: '28px', backgroundColor: 'var(--card)', border: '1px solid var(--border)', borderRadius: '12px', boxShadow: 'var(--shadow-card)' }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', marginBottom: '18px' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: '#fef2f2', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <AlertTriangle size={20} color="#b91c1c" />
+              <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: 'var(--danger-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <AlertTriangle size={20} color="var(--danger-text)" />
               </div>
               <div>
-                <h2 id="delete-course-title" style={{ fontSize: '1.1rem', fontWeight: 700, color: '#18181b', marginBottom: '6px' }}>
+                <h2 id="delete-course-title" style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>
                   Delete this course?
                 </h2>
-                <p style={{ fontSize: '0.85rem', color: '#52525b', lineHeight: '1.5' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
                   <strong>{deleteTarget.title}</strong> and all of its modules, lessons and quiz will be permanently removed. This cannot be undone.
                 </p>
               </div>
             </div>
 
             {deleteError && (
-              <div style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', marginBottom: '16px' }}>
+              <div style={{ background: 'var(--danger-bg)', border: '1px solid var(--danger-border)', color: 'var(--danger-text)', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', marginBottom: '16px' }}>
                 {deleteError}
               </div>
             )}
@@ -684,15 +685,14 @@ export default function CompanyCourseManager() {
                 onClick={handleDelete}
                 disabled={deleting}
                 style={{
-                  background: '#b91c1c',
-                  color: '#ffffff',
+                  background: 'var(--danger-text)',
+                  color: 'var(--card)',
                   border: 'none',
                   borderRadius: '8px',
                   padding: '9px 16px',
                   fontSize: '0.85rem',
                   fontWeight: 600,
                   cursor: deleting ? 'not-allowed' : 'pointer',
-                  opacity: deleting ? 0.7 : 1,
                   display: 'flex',
                   alignItems: 'center',
                   gap: '6px'

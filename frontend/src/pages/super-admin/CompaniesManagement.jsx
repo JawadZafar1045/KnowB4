@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
+import { formatOrganizationName, formatStatus } from '../../utils/displayFormatters';
 import {
   Building2, Shield, Users, CheckCircle2, XCircle, Clock,
   ChevronDown, ChevronUp, Copy, Check, AlertCircle, Search,
@@ -83,14 +84,15 @@ export default function CompaniesManagement() {
   });
 
   const statusConfig = {
-    'PENDING_APPROVAL': { bg: '#d97706', label: 'Pending Approval', icon: Clock },
-    'ACTIVE': { bg: '#15803d', label: 'Active', icon: CheckCircle2 },
-    'SUSPENDED': { bg: '#be123c', label: 'Suspended', icon: Ban },
-    'TRIAL': { bg: '#2563eb', label: 'Trial', icon: Clock }
+    'PENDING_APPROVAL': { label: 'Pending Approval', icon: Clock },
+    'ACTIVE': { label: 'Active', icon: CheckCircle2 },
+    'SUSPENDED': { label: 'Suspended', icon: Ban },
+    'REJECTED': { label: 'Rejected', icon: Ban },
+    'TRIAL': { label: 'Trial', icon: Clock }
   };
 
   if (loading) return (
-    <div style={{ padding: '60px', textAlign: 'center', color: '#71717a' }}>
+    <div style={{ padding: '60px', textAlign: 'center', color: 'var(--text-muted)' }}>
       <RefreshCw size={24} style={{ animation: 'spin 1s linear infinite' }} />
       <p style={{ marginTop: '12px' }}>Loading organizations...</p>
       <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
@@ -102,10 +104,10 @@ export default function CompaniesManagement() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#18181b' }}>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text)' }}>
             Tenant Organizations
           </h1>
-          <p style={{ color: '#71717a', fontSize: '0.85rem' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
             Manage multi-tenant customer accounts, approve registrations & admin activation
           </p>
         </div>
@@ -114,8 +116,8 @@ export default function CompaniesManagement() {
           style={{
             display: 'flex', alignItems: 'center', gap: '6px',
             padding: '8px 16px', borderRadius: '8px',
-            background: '#f4f4f5', border: '1px solid #e4e4e7',
-            color: '#52525b', fontSize: '0.82rem', fontWeight: 600,
+            background: 'var(--bg)', border: '1px solid var(--border)',
+            color: 'var(--text-muted)', fontSize: '0.82rem', fontWeight: 600,
             cursor: 'pointer'
           }}
         >
@@ -128,22 +130,22 @@ export default function CompaniesManagement() {
         <div style={{
           display: 'flex', alignItems: 'center', gap: '12px',
           padding: '14px 18px', borderRadius: '12px',
-          background: 'linear-gradient(135deg, rgba(217,119,6,0.08), rgba(245,158,11,0.12))',
-          border: '1px solid rgba(217,119,6,0.25)',
+          background: 'var(--warning-bg)',
+          border: '1px solid var(--warning-bg)',
           marginBottom: '20px'
-        }}>
+        }} className="pending-approval-banner">
           <div style={{
             width: '36px', height: '36px', borderRadius: '10px',
-            background: '#d97706', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: 'var(--warning-text)', display: 'flex', alignItems: 'center', justifyContent: 'center',
             flexShrink: 0
           }}>
-            <AlertCircle size={20} color="#fff" />
+            <AlertCircle size={20} color="var(--card)" />
           </div>
           <div>
-            <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#92400e' }}>
+            <div style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--warning-text)' }}>
               {pendingCount} Organization{pendingCount > 1 ? 's' : ''} Pending Approval
             </div>
-            <div style={{ fontSize: '0.78rem', color: '#a16207' }}>
+            <div style={{ fontSize: '0.78rem', color: 'var(--warning-text)' }}>
               New registrations require your review before admins can access their dashboards.
             </div>
           </div>
@@ -152,8 +154,8 @@ export default function CompaniesManagement() {
             style={{
               marginLeft: 'auto',
               padding: '6px 14px', borderRadius: '8px',
-              background: '#d97706', border: 'none',
-              color: '#fff', fontSize: '0.78rem', fontWeight: 700,
+              background: 'var(--warning-text)', border: 'none',
+              color: 'var(--card)', fontSize: '0.78rem', fontWeight: 700,
               cursor: 'pointer', whiteSpace: 'nowrap'
             }}
           >
@@ -176,9 +178,10 @@ export default function CompaniesManagement() {
             style={{
               padding: '7px 16px',
               borderRadius: '8px',
-              border: filter === tab.key ? '1px solid #356c89' : '1px solid #e4e4e7',
-              background: filter === tab.key ? '#356c89' : 'transparent',
-              color: filter === tab.key ? '#fff' : '#71717a',
+              border: '1px solid var(--border)',
+              borderBottom: filter === tab.key ? '2px solid var(--orange)' : '2px solid transparent',
+              background: filter === tab.key ? 'var(--surface-subtle)' : 'var(--card)',
+              color: 'var(--navy)',
               fontSize: '0.8rem',
               fontWeight: 600,
               cursor: 'pointer',
@@ -190,7 +193,7 @@ export default function CompaniesManagement() {
         ))}
 
         <div style={{ marginLeft: 'auto', position: 'relative' }}>
-          <Search size={14} color="#a1a1aa" style={{ position: 'absolute', left: '10px', top: '10px' }} />
+          <Search size={14} color="var(--text-muted)" style={{ position: 'absolute', left: '10px', top: '10px' }} />
           <input
             type="text"
             value={search}
@@ -199,11 +202,11 @@ export default function CompaniesManagement() {
             style={{
               padding: '8px 12px 8px 32px',
               borderRadius: '8px',
-              border: '1px solid #e4e4e7',
+              border: '1px solid var(--border)',
               fontSize: '0.82rem',
               width: '240px',
               outline: 'none',
-              color: '#18181b'
+              color: 'var(--text)'
             }}
           />
         </div>
@@ -212,7 +215,7 @@ export default function CompaniesManagement() {
       {/* Company Cards */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         {filtered.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '40px', color: '#a1a1aa' }}>
+          <div style={{ textAlign: 'center', padding: '40px', color: 'var(--text-muted)' }}>
             No organizations match your filter.
           </div>
         )}
@@ -223,9 +226,9 @@ export default function CompaniesManagement() {
           const isExpanded = expandedId === company._id;
 
           return (
-            <div key={company._id} className="glass-card" style={{
+            <div key={company._id} className="surface-card" style={{
               padding: 0,
-              border: company.status === 'PENDING_APPROVAL' ? '2px solid rgba(217,119,6,0.35)' : undefined,
+              border: '1px solid var(--border)',
               overflow: 'hidden'
             }}>
               {/* Main Row */}
@@ -240,17 +243,15 @@ export default function CompaniesManagement() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: '1 1 300px' }}>
                   <div style={{
                     width: '48px', height: '48px', borderRadius: '12px',
-                    background: company.status === 'PENDING_APPROVAL'
-                      ? 'linear-gradient(135deg, #d97706, #f59e0b)'
-                      : '#356c89',
+                    background: 'var(--icon-tile)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     flexShrink: 0
                   }}>
-                    <Building2 size={24} color="#ffffff" />
+                    <Building2 size={24} color="var(--orange)" />
                   </div>
                   <div>
-                    <div style={{ fontSize: '1.05rem', fontWeight: 700, color: '#18181b' }}>{company.name}</div>
-                    <div style={{ fontSize: '0.78rem', color: '#71717a', marginTop: '2px' }}>
+                    <div style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text)' }}>{formatOrganizationName(company.name)}</div>
+                    <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '2px' }}>
                       {company.industry} &bull; {company.email}
                     </div>
                     {/* Tenant ID */}
@@ -259,13 +260,13 @@ export default function CompaniesManagement() {
                         display: 'inline-flex', alignItems: 'center', gap: '6px',
                         marginTop: '6px',
                         padding: '3px 10px',
-                        background: 'rgba(6,182,212,0.08)',
-                        border: '1px solid rgba(6,182,212,0.2)',
+                        background: 'var(--surface-subtle)',
+                        border: '1px solid var(--border)',
                         borderRadius: '6px'
                       }}>
                         <span style={{
                           fontSize: '0.72rem', fontWeight: 700,
-                          color: '#0891b2', fontFamily: 'monospace', letterSpacing: '0.05em'
+                          color: 'var(--navy)', fontFamily: 'monospace', letterSpacing: '0.05em'
                         }}>
                           {company.tenantId}
                         </span>
@@ -278,8 +279,8 @@ export default function CompaniesManagement() {
                           title="Copy Tenant ID"
                         >
                           {copiedId === company.tenantId
-                            ? <Check size={12} color="#059669" />
-                            : <Copy size={12} color="#0891b2" />}
+                            ? <Check size={12} color="var(--success-text)" />
+                            : <Copy size={12} color="var(--navy)" />}
                         </button>
                       </div>
                     )}
@@ -289,29 +290,20 @@ export default function CompaniesManagement() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
                   {/* Stats */}
                   <div style={{ textAlign: 'center', minWidth: '55px' }}>
-                    <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#356c89' }}>
+                    <div style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--navy)' }}>
                       {company.employeeCount || 0}
                     </div>
-                    <div style={{ fontSize: '0.68rem', color: '#71717a' }}>Users</div>
+                    <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>Users</div>
                   </div>
 
                   {/* Status Badge */}
-                  <span style={{
-                    background: sc.bg, color: '#ffffff',
-                    fontSize: '0.72rem', fontWeight: 700,
-                    padding: '4px 12px', borderRadius: '9999px',
-                    display: 'inline-flex', alignItems: 'center', gap: '4px'
-                  }}>
+                  <span className={`badge ${company.status === 'ACTIVE' ? 'badge-green' : company.status === 'PENDING_APPROVAL' ? 'badge-amber' : ['SUSPENDED', 'REJECTED'].includes(company.status) ? 'badge-rose' : 'badge-slate'}`}>
                     <StatusIcon size={12} />
-                    {sc.label}
+                    {formatStatus(sc.label)}
                   </span>
 
                   {/* Plan Badge */}
-                  <span style={{
-                    background: '#356c89', color: '#ffffff',
-                    fontSize: '0.72rem', fontWeight: 700,
-                    padding: '4px 12px', borderRadius: '9999px'
-                  }}>
+                  <span className="badge badge-slate">
                     {company.subscriptionPlan}
                   </span>
 
@@ -324,9 +316,9 @@ export default function CompaniesManagement() {
                         style={{
                           display: 'flex', alignItems: 'center', gap: '4px',
                           padding: '7px 14px', borderRadius: '8px',
-                          background: '#15803d', border: 'none',
-                          color: '#fff', fontSize: '0.78rem', fontWeight: 700,
-                          cursor: 'pointer', opacity: actionLoading === company._id ? 0.6 : 1
+                          background: 'var(--success-text)', border: 'none',
+                          color: 'var(--card)', fontSize: '0.78rem', fontWeight: 700,
+                          cursor: 'pointer'
                         }}
                       >
                         <CheckCircle2 size={14} /> Approve
@@ -337,9 +329,9 @@ export default function CompaniesManagement() {
                         style={{
                           display: 'flex', alignItems: 'center', gap: '4px',
                           padding: '7px 14px', borderRadius: '8px',
-                          background: '#be123c', border: 'none',
-                          color: '#fff', fontSize: '0.78rem', fontWeight: 700,
-                          cursor: 'pointer', opacity: actionLoading === company._id ? 0.6 : 1
+                          background: 'var(--danger-text)', border: 'none',
+                          color: 'var(--card)', fontSize: '0.78rem', fontWeight: 700,
+                          cursor: 'pointer'
                         }}
                       >
                         <XCircle size={14} /> Reject
@@ -352,9 +344,9 @@ export default function CompaniesManagement() {
                       style={{
                         display: 'flex', alignItems: 'center', gap: '4px',
                         padding: '7px 14px', borderRadius: '8px',
-                        background: company.status === 'ACTIVE' ? 'rgba(190,18,60,0.1)' : 'rgba(21,128,61,0.1)',
-                        border: `1px solid ${company.status === 'ACTIVE' ? 'rgba(190,18,60,0.3)' : 'rgba(21,128,61,0.3)'}`,
-                        color: company.status === 'ACTIVE' ? '#be123c' : '#15803d',
+                        background: company.status === 'ACTIVE' ? 'var(--danger-bg)' : 'var(--success-bg)',
+                        border: `1px solid ${company.status === 'ACTIVE' ? 'var(--danger-border)' : 'var(--success-border)'}`,
+                        color: company.status === 'ACTIVE' ? 'var(--danger-text)' : 'var(--success-text)',
                         fontSize: '0.78rem', fontWeight: 700,
                         cursor: 'pointer'
                       }}
@@ -367,10 +359,10 @@ export default function CompaniesManagement() {
                   <button
                     onClick={() => setExpandedId(isExpanded ? null : company._id)}
                     style={{
-                      background: 'none', border: '1px solid #e4e4e7',
+                      background: 'none', border: '1px solid var(--border)',
                       borderRadius: '8px', padding: '6px',
                       cursor: 'pointer', display: 'flex',
-                      color: '#71717a'
+                      color: 'var(--text-muted)'
                     }}
                     title="View details"
                   >
@@ -382,76 +374,68 @@ export default function CompaniesManagement() {
               {/* Expanded Details */}
               {isExpanded && (
                 <div style={{
-                  borderTop: '1px solid #f0f0f0',
+                  borderTop: '1px solid var(--surface-muted)',
                   padding: '18px 22px',
-                  background: '#fafafa'
+                  background: 'var(--bg)'
                 }}>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
                     {/* Organization Info */}
                     <div>
-                      <h4 style={{ fontSize: '0.8rem', fontWeight: 700, color: '#52525b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px' }}>
+                      <h4 style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px' }}>
                         Organization Details
                       </h4>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.82rem' }}>
-                        <div><span style={{ color: '#71717a' }}>Slug:</span> <span style={{ color: '#18181b', fontWeight: 600 }}>{company.slug}</span></div>
-                        <div><span style={{ color: '#71717a' }}>Tenant ID:</span> <span style={{ color: '#0891b2', fontWeight: 700, fontFamily: 'monospace' }}>{company.tenantId || 'N/A'}</span></div>
-                        <div><span style={{ color: '#71717a' }}>Subscription:</span> <span style={{ color: '#18181b', fontWeight: 600 }}>{company.subscriptionPlan} ({company.subscriptionStatus})</span></div>
-                        <div><span style={{ color: '#71717a' }}>Registered:</span> <span style={{ color: '#18181b', fontWeight: 600 }}>{new Date(company.createdAt).toLocaleDateString()}</span></div>
+                        <div><span style={{ color: 'var(--text-muted)' }}>Slug:</span> <span style={{ color: 'var(--text)', fontWeight: 600 }}>{company.slug}</span></div>
+                        <div><span style={{ color: 'var(--text-muted)' }}>Tenant ID:</span> <span style={{ color: 'var(--navy)', fontWeight: 700, fontFamily: 'monospace' }}>{company.tenantId || 'N/A'}</span></div>
+                        <div><span style={{ color: 'var(--text-muted)' }}>Subscription:</span> <span style={{ color: 'var(--text)', fontWeight: 600 }}>{company.subscriptionPlan} ({company.subscriptionStatus})</span></div>
+                        <div><span style={{ color: 'var(--text-muted)' }}>Registered:</span> <span style={{ color: 'var(--text)', fontWeight: 600 }}>{new Date(company.createdAt).toLocaleDateString()}</span></div>
                         {company.activatedAt && (
-                          <div><span style={{ color: '#71717a' }}>Activated:</span> <span style={{ color: '#15803d', fontWeight: 600 }}>{new Date(company.activatedAt).toLocaleDateString()}</span></div>
+                          <div><span style={{ color: 'var(--text-muted)' }}>Activated:</span> <span style={{ color: 'var(--success-text)', fontWeight: 600 }}>{new Date(company.activatedAt).toLocaleDateString()}</span></div>
                         )}
                       </div>
                     </div>
 
                     {/* Admin Info */}
                     <div>
-                      <h4 style={{ fontSize: '0.8rem', fontWeight: 700, color: '#52525b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px' }}>
+                      <h4 style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px' }}>
                         <UserCog size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />
                         Company Admin
                       </h4>
                       {company.admin ? (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.82rem' }}>
-                          <div><span style={{ color: '#71717a' }}>Name:</span> <span style={{ color: '#18181b', fontWeight: 600 }}>{company.admin.name}</span></div>
-                          <div><span style={{ color: '#71717a' }}>Email:</span> <span style={{ color: '#18181b', fontWeight: 600 }}>{company.admin.email}</span></div>
+                          <div><span style={{ color: 'var(--text-muted)' }}>Name:</span> <span style={{ color: 'var(--text)', fontWeight: 600 }}>{company.admin.name}</span></div>
+                          <div><span style={{ color: 'var(--text-muted)' }}>Email:</span> <span style={{ color: 'var(--text)', fontWeight: 600 }}>{company.admin.email}</span></div>
                           <div>
-                            <span style={{ color: '#71717a' }}>Status:</span>{' '}
-                            <span style={{
-                              display: 'inline-block',
-                              padding: '2px 8px',
-                              borderRadius: '4px',
-                              fontSize: '0.72rem',
-                              fontWeight: 700,
-                              background: company.admin.status === 'ACTIVE' ? 'rgba(21,128,61,0.1)' : 'rgba(190,18,60,0.1)',
-                              color: company.admin.status === 'ACTIVE' ? '#15803d' : '#be123c'
-                            }}>
-                              {company.admin.status}
+                            <span style={{ color: 'var(--text-muted)' }}>Status:</span>{' '}
+                            <span className={`badge ${company.admin.status === 'ACTIVE' ? 'badge-green' : 'badge-rose'}`}>
+                              {formatStatus(company.admin.status)}
                             </span>
                           </div>
-                          <div><span style={{ color: '#71717a' }}>Last Login:</span> <span style={{ color: '#18181b', fontWeight: 600 }}>{company.admin.lastLoginAt ? new Date(company.admin.lastLoginAt).toLocaleString() : 'Never'}</span></div>
+                          <div><span style={{ color: 'var(--text-muted)' }}>Last Login:</span> <span style={{ color: 'var(--text)', fontWeight: 600 }}>{company.admin.lastLoginAt ? new Date(company.admin.lastLoginAt).toLocaleString() : 'Never'}</span></div>
                         </div>
                       ) : (
-                        <div style={{ color: '#a1a1aa', fontSize: '0.82rem' }}>No admin assigned</div>
+                        <div style={{ color: 'var(--text-muted)', fontSize: '0.82rem' }}>No admin assigned</div>
                       )}
                     </div>
 
                     {/* Branding */}
                     <div>
-                      <h4 style={{ fontSize: '0.8rem', fontWeight: 700, color: '#52525b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px' }}>
+                      <h4 style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px' }}>
                         Branding
                       </h4>
                       <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                         <div style={{
                           width: '32px', height: '32px', borderRadius: '8px',
-                          background: company.branding?.primaryColor || '#06b6d4',
-                          border: '2px solid #e4e4e7'
+                          background: company.branding?.primaryColor || 'var(--navy)',
+                          border: '2px solid var(--border)'
                         }} />
                         <div style={{
                           width: '32px', height: '32px', borderRadius: '8px',
-                          background: company.branding?.secondaryColor || '#3b82f6',
-                          border: '2px solid #e4e4e7'
+                          background: company.branding?.secondaryColor || 'var(--navy)',
+                          border: '2px solid var(--border)'
                         }} />
-                        <span style={{ fontSize: '0.78rem', color: '#71717a' }}>
-                          {company.branding?.primaryColor || '#06b6d4'} / {company.branding?.secondaryColor || '#3b82f6'}
+                        <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                          {company.branding?.primaryColor || 'var(--navy)'} / {company.branding?.secondaryColor || 'var(--navy)'}
                         </span>
                       </div>
                     </div>

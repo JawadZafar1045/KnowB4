@@ -243,7 +243,7 @@ export default function GlobalCourseManager() {
 
   if (loading) {
     return (
-      <div style={{ color: '#71717a', padding: '40px' }}>
+      <div style={{ color: 'var(--text-muted)', padding: '40px' }}>
         Loading course catalog...
       </div>
     );
@@ -251,27 +251,27 @@ export default function GlobalCourseManager() {
 
   const difficultyStyles = {
     BEGINNER: {
-      background: '#15803d',
-      color: '#ffffff'
+      background: 'var(--success-text)',
+      color: 'var(--card)'
     },
     INTERMEDIATE: {
-      background: '#b45309',
-      color: '#ffffff'
+      background: 'var(--warning-text)',
+      color: 'var(--card)'
     },
     ADVANCED: {
-      background: '#be123c',
-      color: '#ffffff'
+      background: 'var(--danger-text)',
+      color: 'var(--card)'
     }
   };
 
-  const iconButtonStyle = (color = '#52525b') => ({
+  const iconButtonStyle = (color = 'var(--text-muted)') => ({
     width: '30px',
     height: '30px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    background: '#ffffff',
-    border: '1px solid #e4e4e7',
+    background: 'var(--card)',
+    border: '1px solid var(--border)',
     borderRadius: '8px',
     cursor: 'pointer',
     color,
@@ -285,9 +285,9 @@ export default function GlobalCourseManager() {
   };
 
   const hoverOff = (e) => {
-    e.currentTarget.style.background = '#ffffff';
-    e.currentTarget.style.color = '#52525b';
-    e.currentTarget.style.borderColor = '#e4e4e7';
+    e.currentTarget.style.background = 'var(--card)';
+    e.currentTarget.style.color = 'var(--text-muted)';
+    e.currentTarget.style.borderColor = 'var(--border)';
   };
 
   const isEditing = Boolean(editingId);
@@ -308,7 +308,7 @@ export default function GlobalCourseManager() {
             style={{
               fontSize: '1.5rem',
               fontWeight: 800,
-              color: '#18181b'
+              color: 'var(--text)'
             }}
           >
             Global Course Catalog
@@ -316,7 +316,7 @@ export default function GlobalCourseManager() {
 
           <p
             style={{
-              color: '#71717a',
+              color: 'var(--text-muted)',
               fontSize: '0.85rem'
             }}
           >
@@ -340,9 +340,9 @@ export default function GlobalCourseManager() {
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            background: '#f0fdf4',
-            border: '1px solid #bbf7d0',
-            color: '#15803d',
+            background: 'var(--success-bg)',
+            border: '1px solid var(--success-border)',
+            color: 'var(--success-text)',
             padding: '10px 14px',
             borderRadius: '8px',
             fontSize: '0.85rem',
@@ -360,17 +360,17 @@ export default function GlobalCourseManager() {
           style={{
             padding: '60px',
             textAlign: 'center',
-            backgroundColor: '#ffffff',
-            border: '1px solid #e4e4e7',
+            backgroundColor: 'var(--card)',
+            border: '1px solid var(--border)',
             borderRadius: '12px',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+            boxShadow: 'var(--shadow-card)'
           }}
         >
-          <BookOpen size={40} color="#a1a1aa" />
+          <BookOpen size={40} color="var(--text-muted)" />
 
           <p
             style={{
-              color: '#71717a',
+              color: 'var(--text-muted)',
               marginTop: '14px'
             }}
           >
@@ -390,10 +390,10 @@ export default function GlobalCourseManager() {
               key={course._id}
               style={{
                 padding: '24px',
-                backgroundColor: '#ffffff',
-                border: '1px solid #e4e4e7',
+                backgroundColor: 'var(--card)',
+                border: '1px solid var(--border)',
                 borderRadius: '12px',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+                boxShadow: 'var(--shadow-card)'
               }}
             >
               {/* Card Header */}
@@ -418,14 +418,14 @@ export default function GlobalCourseManager() {
                       width: '40px',
                       height: '40px',
                       borderRadius: '10px',
-                      backgroundColor: '#356c89',
+                      backgroundColor: 'var(--navy)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       flexShrink: 0
                     }}
                   >
-                    <BookOpen size={20} color="#ffffff" />
+                    <BookOpen size={20} color="var(--card)" />
                   </div>
 
                   <div>
@@ -433,7 +433,7 @@ export default function GlobalCourseManager() {
                       style={{
                         fontSize: '1rem',
                         fontWeight: 700,
-                        color: '#18181b'
+                        color: 'var(--text)'
                       }}
                     >
                       {course.title}
@@ -442,7 +442,7 @@ export default function GlobalCourseManager() {
                     <div
                       style={{
                         fontSize: '0.75rem',
-                        color: '#71717a'
+                        color: 'var(--text-muted)'
                       }}
                     >
                       {course.category}
@@ -478,20 +478,20 @@ export default function GlobalCourseManager() {
                     title="Manage course curriculum and lesson content"
                     aria-label={`Manage content for ${course.title}`}
                     style={{
-                      ...iconButtonStyle('#356c89'),
+                      ...iconButtonStyle('var(--navy)'),
                       width: 'auto',
                       padding: '0 10px',
                       gap: '6px',
                       fontSize: '0.75rem',
                       fontWeight: 600,
-                      background: 'rgba(53, 108, 137, 0.06)',
-                      borderColor: 'rgba(53, 108, 137, 0.4)'
+                      background: 'var(--surface-subtle)',
+                      borderColor: 'var(--border)'
                     }}
-                    onMouseEnter={hoverOn('#356c89', 'rgba(53, 108, 137, 0.12)')}
+                    onMouseEnter={hoverOn('var(--navy)', 'var(--surface-subtle)')}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'rgba(53, 108, 137, 0.06)';
-                      e.currentTarget.style.color = '#356c89';
-                      e.currentTarget.style.borderColor = 'rgba(53, 108, 137, 0.4)';
+                      e.currentTarget.style.background = 'var(--surface-subtle)';
+                      e.currentTarget.style.color = 'var(--navy)';
+                      e.currentTarget.style.borderColor = 'var(--border)';
                     }}
                   >
                     <Layers size={13} /> Curriculum
@@ -504,7 +504,7 @@ export default function GlobalCourseManager() {
                     title="Edit course"
                     aria-label={`Edit ${course.title}`}
                     style={iconButtonStyle()}
-                    onMouseEnter={hoverOn('#356c89', '#f4f4f5')}
+                    onMouseEnter={hoverOn('var(--navy)', 'var(--bg)')}
                     onMouseLeave={hoverOff}
                   >
                     <Pencil size={14} />
@@ -517,7 +517,7 @@ export default function GlobalCourseManager() {
                     title="Delete course"
                     aria-label={`Delete ${course.title}`}
                     style={iconButtonStyle()}
-                    onMouseEnter={hoverOn('#b91c1c', '#fef2f2')}
+                    onMouseEnter={hoverOn('var(--danger-text)', 'var(--danger-bg)')}
                     onMouseLeave={hoverOff}
                   >
                     <Trash2 size={14} />
@@ -529,7 +529,7 @@ export default function GlobalCourseManager() {
               <p
                 style={{
                   fontSize: '0.82rem',
-                  color: '#52525b',
+                  color: 'var(--text-muted)',
                   marginBottom: '14px',
                   lineHeight: '1.5'
                 }}
@@ -544,7 +544,7 @@ export default function GlobalCourseManager() {
                   alignItems: 'center',
                   gap: '16px',
                   fontSize: '0.78rem',
-                  color: '#71717a',
+                  color: 'var(--text-muted)',
                   flexWrap: 'wrap'
                 }}
               >
@@ -554,7 +554,7 @@ export default function GlobalCourseManager() {
                   style={{
                     background: 'transparent',
                     border: 'none',
-                    color: '#356c89',
+                    color: 'var(--navy)',
                     fontWeight: 600,
                     cursor: 'pointer',
                     display: 'flex',
@@ -573,7 +573,7 @@ export default function GlobalCourseManager() {
                   style={{
                     background: 'transparent',
                     border: 'none',
-                    color: '#356c89',
+                    color: 'var(--navy)',
                     fontWeight: 600,
                     cursor: 'pointer',
                     display: 'flex',
@@ -619,7 +619,7 @@ export default function GlobalCourseManager() {
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+            backgroundColor: 'var(--navy)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -634,10 +634,10 @@ export default function GlobalCourseManager() {
               padding: '28px',
               maxHeight: '90vh',
               overflowY: 'auto',
-              backgroundColor: '#ffffff',
-              border: '1px solid #e4e4e7',
-              borderRadius: '16px',
-              boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+              backgroundColor: 'var(--card)',
+              border: '1px solid var(--border)',
+              borderRadius: '12px',
+              boxShadow: 'var(--shadow-card)',
               transition: 'width 0.2s ease'
             }}
           >
@@ -654,12 +654,12 @@ export default function GlobalCourseManager() {
                   style={{
                     fontSize: '1.2rem',
                     fontWeight: 700,
-                    color: '#18181b'
+                    color: 'var(--text)'
                   }}
                 >
                   {isEditing ? 'Edit Course' : 'Create Global Course & Content'}
                 </h2>
-                <p style={{ fontSize: '0.78rem', color: '#71717a' }}>
+                <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                   {isEditing ? 'Update course information or open curriculum builder' : 'Configure course details and learning materials for all tenants'}
                 </p>
               </div>
@@ -673,16 +673,16 @@ export default function GlobalCourseManager() {
                   cursor: 'pointer'
                 }}
               >
-                <X size={20} color="#71717a" />
+                <X size={20} color="var(--text-muted)" />
               </button>
             </div>
 
             {/* Quick jump to curriculum for editing */}
             {isEditing && (
-              <div style={{ marginBottom: '18px', padding: '12px 16px', background: '#f0f9ff', border: '1px solid #bae6fd', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ marginBottom: '18px', padding: '12px 16px', background: 'var(--surface-muted)', border: '1px solid var(--border)', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                  <div style={{ fontSize: '0.84rem', fontWeight: 700, color: '#0369a1' }}>Course Curriculum & Lessons</div>
-                  <div style={{ fontSize: '0.74rem', color: '#0284c7' }}>Create, preview, or edit learning modules and lesson content</div>
+                  <div style={{ fontSize: '0.84rem', fontWeight: 700, color: 'var(--navy)' }}>Course Curriculum & Lessons</div>
+                  <div style={{ fontSize: '0.74rem', color: 'var(--navy)' }}>Create, preview, or edit learning modules and lesson content</div>
                 </div>
                 <button
                   type="button"
@@ -701,19 +701,20 @@ export default function GlobalCourseManager() {
 
             {/* Mode Tabs for Create Course */}
             {!isEditing && (
-              <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid #e4e4e7', paddingBottom: '12px', marginBottom: '18px' }}>
+              <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid var(--border)', paddingBottom: '12px', marginBottom: '18px' }}>
                 <button
                   type="button"
                   onClick={() => setModalTab('basic')}
                   style={{
                     padding: '6px 14px',
                     borderRadius: '6px',
-                    border: 'none',
+                    border: '1px solid var(--border)',
+                    borderBottom: modalTab === 'basic' ? '2px solid var(--orange)' : '2px solid transparent',
                     fontSize: '0.82rem',
                     fontWeight: 700,
                     cursor: 'pointer',
-                    background: modalTab === 'basic' ? '#356c89' : '#f4f4f5',
-                    color: modalTab === 'basic' ? '#ffffff' : '#52525b'
+                    background: modalTab === 'basic' ? 'var(--surface-subtle)' : 'var(--card)',
+                    color: 'var(--navy)'
                   }}
                 >
                   1. Course Info
@@ -724,19 +725,20 @@ export default function GlobalCourseManager() {
                   style={{
                     padding: '6px 14px',
                     borderRadius: '6px',
-                    border: 'none',
+                    border: '1px solid var(--border)',
+                    borderBottom: modalTab === 'content' ? '2px solid var(--orange)' : '2px solid transparent',
                     fontSize: '0.82rem',
                     fontWeight: 700,
                     cursor: 'pointer',
-                    background: modalTab === 'content' ? '#356c89' : '#f4f4f5',
-                    color: modalTab === 'content' ? '#ffffff' : '#52525b',
+                    background: modalTab === 'content' ? 'var(--surface-subtle)' : 'var(--card)',
+                    color: 'var(--navy)',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '4px'
                   }}
                 >
                   2. Initial Lesson (Optional)
-                  {form.includeInitialContent && <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e' }} />}
+                  {form.includeInitialContent && <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--success-text)' }} />}
                 </button>
               </div>
             )}
@@ -744,9 +746,9 @@ export default function GlobalCourseManager() {
             {error && (
               <div
                 style={{
-                  background: '#fef2f2',
-                  border: '1px solid #fecaca',
-                  color: '#b91c1c',
+                  background: 'var(--danger-bg)',
+                  border: '1px solid var(--danger-border)',
+                  color: 'var(--danger-text)',
                   padding: '10px 14px',
                   borderRadius: '8px',
                   fontSize: '0.82rem',
@@ -897,8 +899,8 @@ export default function GlobalCourseManager() {
                   </div>
 
                   {!isEditing && (
-                    <div style={{ marginBottom: '18px', padding: '12px 14px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px' }}>
-                      <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem', color: '#1e293b', fontWeight: 600, cursor: 'pointer' }}>
+                    <div style={{ marginBottom: '18px', padding: '12px 14px', background: 'var(--surface-muted)', border: '1px solid var(--border)', borderRadius: '8px' }}>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem', color: 'var(--navy)', fontWeight: 600, cursor: 'pointer' }}>
                         <input
                           type="checkbox"
                           checked={form.openCurriculumAfterCreate}
@@ -906,7 +908,7 @@ export default function GlobalCourseManager() {
                         />
                         Open Curriculum & Lesson Builder immediately after creating
                       </label>
-                      <p style={{ fontSize: '0.74rem', color: '#64748b', marginTop: '4px', marginLeft: '24px' }}>
+                      <p style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginTop: '4px', marginLeft: '24px' }}>
                         Recommended: easily add multiple modules, interactive reading materials, and video links.
                       </p>
                     </div>
@@ -915,7 +917,7 @@ export default function GlobalCourseManager() {
               ) : (
                 /* Tab 2: Initial content during creation */
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginBottom: '18px' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#1e293b', fontWeight: 700, cursor: 'pointer' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: 'var(--navy)', fontWeight: 700, cursor: 'pointer' }}>
                     <input
                       type="checkbox"
                       checked={form.includeInitialContent}
@@ -925,7 +927,7 @@ export default function GlobalCourseManager() {
                   </label>
 
                   {form.includeInitialContent && (
-                    <div style={{ padding: '16px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px' }}>
+                    <div style={{ padding: '16px', background: 'var(--surface-muted)', border: '1px solid var(--border)', borderRadius: '10px' }}>
                       <div style={{ marginBottom: '12px' }}>
                         <label className="form-label">Initial Module Title *</label>
                         <input
@@ -986,7 +988,7 @@ export default function GlobalCourseManager() {
                     </div>
                   )}
 
-                  <div style={{ padding: '12px 14px', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px', fontSize: '0.8rem', color: '#166534' }}>
+                  <div style={{ padding: '12px 14px', background: 'var(--success-bg)', border: '1px solid var(--success-border)', borderRadius: '8px', fontSize: '0.8rem', color: 'var(--success-text)' }}>
                     💡 You can always add, edit, or remove modules and lessons later using the <strong>Curriculum</strong> button on any course card.
                   </div>
                 </div>
@@ -1037,7 +1039,7 @@ export default function GlobalCourseManager() {
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+            backgroundColor: 'var(--navy)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -1050,10 +1052,10 @@ export default function GlobalCourseManager() {
               width: '440px',
               maxWidth: '100%',
               padding: '28px',
-              backgroundColor: '#ffffff',
-              border: '1px solid #e4e4e7',
-              borderRadius: '16px',
-              boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)'
+              backgroundColor: 'var(--card)',
+              border: '1px solid var(--border)',
+              borderRadius: '12px',
+              boxShadow: 'var(--shadow-card)'
             }}
           >
             <div
@@ -1069,7 +1071,7 @@ export default function GlobalCourseManager() {
                   width: '40px',
                   height: '40px',
                   borderRadius: '10px',
-                  backgroundColor: '#fef2f2',
+                  backgroundColor: 'var(--danger-bg)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -1078,7 +1080,7 @@ export default function GlobalCourseManager() {
               >
                 <AlertTriangle
                   size={20}
-                  color="#b91c1c"
+                  color="var(--danger-text)"
                 />
               </div>
 
@@ -1088,7 +1090,7 @@ export default function GlobalCourseManager() {
                   style={{
                     fontSize: '1.1rem',
                     fontWeight: 700,
-                    color: '#18181b',
+                    color: 'var(--text)',
                     marginBottom: '6px'
                   }}
                 >
@@ -1098,7 +1100,7 @@ export default function GlobalCourseManager() {
                 <p
                   style={{
                     fontSize: '0.85rem',
-                    color: '#52525b',
+                    color: 'var(--text-muted)',
                     lineHeight: '1.5'
                   }}
                 >
@@ -1113,9 +1115,9 @@ export default function GlobalCourseManager() {
             {deleteError && (
               <div
                 style={{
-                  background: '#fef2f2',
-                  border: '1px solid #fecaca',
-                  color: '#b91c1c',
+                  background: 'var(--danger-bg)',
+                  border: '1px solid var(--danger-border)',
+                  color: 'var(--danger-text)',
                   padding: '10px 14px',
                   borderRadius: '8px',
                   fontSize: '0.82rem',
@@ -1147,8 +1149,8 @@ export default function GlobalCourseManager() {
                 onClick={handleDelete}
                 disabled={deleting}
                 style={{
-                  background: '#b91c1c',
-                  color: '#ffffff',
+                  background: 'var(--danger-text)',
+                  color: 'var(--card)',
                   border: 'none',
                   borderRadius: '8px',
                   padding: '9px 16px',
@@ -1157,7 +1159,6 @@ export default function GlobalCourseManager() {
                   cursor: deleting
                     ? 'not-allowed'
                     : 'pointer',
-                  opacity: deleting ? 0.7 : 1,
                   display: 'flex',
                   alignItems: 'center',
                   gap: '6px'

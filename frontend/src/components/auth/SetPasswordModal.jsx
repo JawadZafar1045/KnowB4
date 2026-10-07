@@ -49,50 +49,48 @@ export default function SetPasswordModal({ onComplete }) {
     <div style={{
       position: 'fixed',
       inset: 0,
-      background: 'rgba(15, 23, 42, 0.85)',
-      backdropFilter: 'blur(8px)',
+      background: 'var(--navy)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       zIndex: 9999,
       padding: '20px'
     }}>
-      <div className="glass-card" style={{
+      <div className="surface-card" style={{
         padding: '36px',
         width: '100%',
         maxWidth: '440px',
-        borderRadius: '16px',
-        background: '#ffffff',
-        boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
-        border: '1px solid #e2e8f0'
+        borderRadius: '12px',
+        background: 'var(--card)',
+        boxShadow: 'var(--shadow-card)',
+        border: '1px solid var(--border)'
       }}>
         <div style={{ textAlign: 'center', marginBottom: '24px' }}>
           <div style={{
             width: '56px',
             height: '56px',
             borderRadius: '16px',
-            background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+            background: 'var(--icon-tile)',
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 8px 16px rgba(37,99,235,0.25)',
             marginBottom: '14px'
           }}>
-            <Key size={28} color="#ffffff" />
+            <Key size={28} color="var(--card)" />
           </div>
-          <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>
+          <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--navy)', margin: 0 }}>
             Set Your Permanent Password
           </h2>
-          <p style={{ color: '#64748b', fontSize: '0.85rem', marginTop: '6px', lineHeight: '1.4' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '6px', lineHeight: '1.4' }}>
             Welcome! Because this is your first login with a temporary password, please establish a secure new password for your account.
           </p>
         </div>
 
         {error && (
           <div style={{
-            background: '#fef2f2',
-            border: '1px solid #fecaca',
-            color: '#dc2626',
+            background: 'var(--danger-bg)',
+            border: '1px solid var(--danger-border)',
+            color: 'var(--danger-text)',
             padding: '12px',
             borderRadius: '8px',
             fontSize: '0.82rem',
@@ -104,7 +102,7 @@ export default function SetPasswordModal({ onComplete }) {
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>
-            <label className="form-label" style={{ fontSize: '0.8rem', color: '#475569', fontWeight: 600 }}>New Password</label>
+            <label className="form-label" style={{ fontSize: '0.8rem', color: 'var(--slate)', fontWeight: 600 }}>New Password</label>
             <div style={{ position: 'relative' }}>
               <input
                 type="password"
@@ -115,12 +113,12 @@ export default function SetPasswordModal({ onComplete }) {
                 onChange={e => setNewPassword(e.target.value)}
                 required
               />
-              <Lock size={16} color="#94a3b8" style={{ position: 'absolute', left: '12px', top: '11px' }} />
+              <Lock size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '12px', top: '11px' }} />
             </div>
           </div>
 
           <div>
-            <label className="form-label" style={{ fontSize: '0.8rem', color: '#475569', fontWeight: 600 }}>Confirm New Password</label>
+            <label className="form-label" style={{ fontSize: '0.8rem', color: 'var(--slate)', fontWeight: 600 }}>Confirm New Password</label>
             <div style={{ position: 'relative' }}>
               <input
                 type="password"
@@ -131,7 +129,7 @@ export default function SetPasswordModal({ onComplete }) {
                 onChange={e => setConfirmPassword(e.target.value)}
                 required
               />
-              <Lock size={16} color="#94a3b8" style={{ position: 'absolute', left: '12px', top: '11px' }} />
+              <Lock size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '12px', top: '11px' }} />
             </div>
           </div>
 
@@ -148,7 +146,7 @@ export default function SetPasswordModal({ onComplete }) {
               alignItems: 'center',
               justifyContent: 'center',
               gap: '8px',
-              background: 'linear-gradient(135deg, #2563eb, #1d4ed8)'
+              background: 'var(--orange)'
             }}
           >
             {loading ? 'Updating Password...' : 'Save Password & Continue'}
