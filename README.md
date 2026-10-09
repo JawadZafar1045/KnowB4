@@ -36,4 +36,4 @@ npm run dev
 cd frontend
 npm install
 npm run dev
-# App runs on http://localhost:5173
+# App runs on http://localhost:5000
