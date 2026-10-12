@@ -4,8 +4,8 @@
   "description": "CyberAware Multi-Tenant SaaS Backend",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js",
+    "start": "node api.js && node server.js",
+    "dev": "node api.js && node server.js",
     "seed": "node src/utils/seed.js"
   },
   "dependencies": {
