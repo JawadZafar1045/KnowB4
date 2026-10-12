@@ -256,14 +256,14 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
   const getContentTypeBadge = (type) => {
     switch (type) {
       case 'VIDEO':
-        return { label: 'Video', icon: Video, bg: '#ede9fe', color: '#6d28d9' };
+        return { label: 'Video', icon: Video, bg: 'var(--surface-muted)', color: 'var(--navy)' };
       case 'PDF':
-        return { label: 'PDF Document', icon: File, bg: '#fee2e2', color: '#b91c1c' };
+        return { label: 'PDF Document', icon: File, bg: 'var(--danger-bg)', color: 'var(--danger-text)' };
       case 'EXTERNAL':
-        return { label: 'External Resource', icon: ExternalLink, bg: '#f4f4f5', color: '#3f3f46' };
+        return { label: 'External Resource', icon: ExternalLink, bg: 'var(--bg)', color: 'var(--text)' };
       case 'TEXT':
       default:
-        return { label: 'Interactive Reading', icon: FileText, bg: '#e0f2fe', color: '#0369a1' };
+        return { label: 'Interactive Reading', icon: FileText, bg: 'var(--surface-muted)', color: 'var(--navy)' };
     }
   };
 
@@ -279,7 +279,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
       style={{
         position: 'fixed',
         inset: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.65)',
+        backgroundColor: 'var(--navy)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -292,12 +292,12 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
           width: '900px',
           maxWidth: '100%',
           maxHeight: '92vh',
-          backgroundColor: '#ffffff',
-          borderRadius: '16px',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+          backgroundColor: 'var(--card)',
+          borderRadius: '12px',
+          boxShadow: 'var(--shadow-card)',
           display: 'flex',
           flexDirection: 'column',
-          border: '1px solid #e4e4e7',
+          border: '1px solid var(--border)',
           overflow: 'hidden'
         }}
       >
@@ -305,19 +305,19 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
         <div
           style={{
             padding: '20px 24px',
-            borderBottom: '1px solid #e4e4e7',
+            borderBottom: '1px solid var(--border)',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            background: 'linear-gradient(180deg, #fbfcfd 0%, #f4f7f9 100%)'
+            background: 'var(--surface-subtle)'
           }}
         >
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
               <span
                 style={{
-                  background: '#356c89',
-                  color: '#ffffff',
+                  background: 'var(--navy)',
+                  color: 'var(--card)',
                   fontSize: '0.72rem',
                   fontWeight: 700,
                   padding: '3px 10px',
@@ -329,12 +329,12 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                 Curriculum & Content Builder
               </span>
               {course && (
-                <span style={{ fontSize: '0.8rem', color: '#71717a' }}>
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
                   {course.category} • {course.difficulty}
                 </span>
               )}
             </div>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#18181b' }}>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text)' }}>
               {course ? course.title : 'Course Content'}
             </h2>
           </div>
@@ -353,8 +353,8 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
               onClick={onClose}
               aria-label="Close"
               style={{
-                background: '#ffffff',
-                border: '1px solid #e4e4e7',
+                background: 'var(--card)',
+                border: '1px solid var(--border)',
                 borderRadius: '8px',
                 width: '32px',
                 height: '32px',
@@ -362,7 +362,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
-                color: '#52525b'
+                color: 'var(--text-muted)'
               }}
             >
               <X size={18} />
@@ -379,9 +379,9 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              background: '#f0fdf4',
-              border: '1px solid #bbf7d0',
-              color: '#15803d',
+              background: 'var(--success-bg)',
+              border: '1px solid var(--success-border)',
+              color: 'var(--success-text)',
               padding: '10px 14px',
               borderRadius: '8px',
               fontSize: '0.85rem'
@@ -396,9 +396,9 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
           <div
             style={{
               margin: '12px 24px 0',
-              background: '#fef2f2',
-              border: '1px solid #fecaca',
-              color: '#b91c1c',
+              background: 'var(--danger-bg)',
+              border: '1px solid var(--danger-border)',
+              color: 'var(--danger-text)',
               padding: '10px 14px',
               borderRadius: '8px',
               fontSize: '0.85rem'
@@ -411,11 +411,11 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
         {/* Scrollable Content Body */}
         <div style={{ padding: '20px 24px', overflowY: 'auto', flex: 1 }}>
           {loading ? (
-            <div style={{ padding: '60px', textAlign: 'center', color: '#71717a' }}>
+            <div style={{ padding: '60px', textAlign: 'center', color: 'var(--text-muted)' }}>
               Loading course structure & lessons...
             </div>
           ) : !course ? (
-            <div style={{ padding: '40px', textAlign: 'center', color: '#b91c1c' }}>
+            <div style={{ padding: '40px', textAlign: 'center', color: 'var(--danger-text)' }}>
               Could not load course.
             </div>
           ) : course.modules?.length === 0 ? (
@@ -423,8 +423,8 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
               style={{
                 textAlign: 'center',
                 padding: '60px 20px',
-                backgroundColor: '#fbfbfb',
-                border: '2px dashed #e4e4e7',
+                backgroundColor: 'var(--surface-muted)',
+                border: '2px dashed var(--border)',
                 borderRadius: '12px'
               }}
             >
@@ -433,8 +433,8 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                   width: '52px',
                   height: '52px',
                   borderRadius: '12px',
-                  backgroundColor: '#e0f2fe',
-                  color: '#0284c7',
+                  backgroundColor: 'var(--surface-muted)',
+                  color: 'var(--navy)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -443,10 +443,10 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
               >
                 <Layers size={28} />
               </div>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#18181b', marginBottom: '6px' }}>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>
                 No Modules Yet
               </h3>
-              <p style={{ color: '#71717a', fontSize: '0.85rem', maxWidth: '420px', margin: '0 auto 20px' }}>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', maxWidth: '420px', margin: '0 auto 20px' }}>
                 Organize this course into progressive modules and lessons (e.g. Module 1: Phishing Basics, Lesson 1: Identifying Spoofed Emails).
               </p>
               <button className="btn-primary" onClick={openAddModule}>
@@ -462,22 +462,22 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   padding: '12px 18px',
-                  backgroundColor: '#f8fafc',
-                  border: '1px solid #e2e8f0',
+                  backgroundColor: 'var(--surface-muted)',
+                  border: '1px solid var(--border)',
                   borderRadius: '10px',
                   fontSize: '0.82rem',
-                  color: '#475569'
+                  color: 'var(--slate)'
                 }}
               >
                 <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
                   <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600 }}>
-                    <Layers size={15} color="#356c89" /> {course.modules.length} Modules
+                    <Layers size={15} color="var(--navy)" /> {course.modules.length} Modules
                   </span>
                   <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600 }}>
-                    <FileText size={15} color="#356c89" /> {totalLessons} Lessons
+                    <FileText size={15} color="var(--navy)" /> {totalLessons} Lessons
                   </span>
                   <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <Clock size={15} color="#356c89" /> Course Duration: {course.estimatedDuration}m
+                    <Clock size={15} color="var(--navy)" /> Course Duration: {course.estimatedDuration}m
                   </span>
                 </div>
                 <button
@@ -486,7 +486,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                   style={{
                     background: 'transparent',
                     border: 'none',
-                    color: '#356c89',
+                    color: 'var(--navy)',
                     fontWeight: 700,
                     cursor: 'pointer',
                     display: 'flex',
@@ -504,10 +504,10 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                 <div
                   key={mod._id}
                   style={{
-                    backgroundColor: '#ffffff',
-                    border: '1px solid #e4e4e7',
+                    backgroundColor: 'var(--card)',
+                    border: '1px solid var(--border)',
                     borderRadius: '12px',
-                    boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
+                    boxShadow: 'var(--shadow-card)',
                     overflow: 'hidden'
                   }}
                 >
@@ -515,8 +515,8 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                   <div
                     style={{
                       padding: '14px 18px',
-                      backgroundColor: '#f8fafc',
-                      borderBottom: '1px solid #e4e4e7',
+                      backgroundColor: 'var(--surface-muted)',
+                      borderBottom: '1px solid var(--border)',
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center'
@@ -526,8 +526,8 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span
                           style={{
-                            background: '#356c89',
-                            color: '#ffffff',
+                            background: 'var(--navy)',
+                            color: 'var(--card)',
                             borderRadius: '6px',
                             padding: '2px 8px',
                             fontSize: '0.72rem',
@@ -536,12 +536,12 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                         >
                           Module {modIdx + 1}
                         </span>
-                        <h3 style={{ fontSize: '0.98rem', fontWeight: 700, color: '#18181b', margin: 0 }}>
+                        <h3 style={{ fontSize: '0.98rem', fontWeight: 700, color: 'var(--text)', margin: 0 }}>
                           {mod.title}
                         </h3>
                       </div>
                       {mod.description && (
-                        <p style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '4px', marginLeft: '2px' }}>
+                        <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px', marginLeft: '2px' }}>
                           {mod.description}
                         </p>
                       )}
@@ -552,8 +552,8 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                         type="button"
                         onClick={() => openAddLesson(mod._id)}
                         style={{
-                          background: '#356c89',
-                          color: '#ffffff',
+                          background: 'var(--navy)',
+                          color: 'var(--card)',
                           border: 'none',
                           borderRadius: '6px',
                           padding: '6px 12px',
@@ -573,8 +573,8 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                         onClick={() => openEditModule(mod)}
                         title="Edit Module Title/Description"
                         style={{
-                          background: '#ffffff',
-                          border: '1px solid #cbd5e1',
+                          background: 'var(--card)',
+                          border: '1px solid var(--border)',
                           borderRadius: '6px',
                           width: '28px',
                           height: '28px',
@@ -582,7 +582,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                           alignItems: 'center',
                           justifyContent: 'center',
                           cursor: 'pointer',
-                          color: '#475569'
+                          color: 'var(--slate)'
                         }}
                       >
                         <Pencil size={13} />
@@ -593,8 +593,8 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                         onClick={() => confirmDeleteModule(mod)}
                         title="Delete Module"
                         style={{
-                          background: '#ffffff',
-                          border: '1px solid #cbd5e1',
+                          background: 'var(--card)',
+                          border: '1px solid var(--border)',
                           borderRadius: '6px',
                           width: '28px',
                           height: '28px',
@@ -602,7 +602,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                           alignItems: 'center',
                           justifyContent: 'center',
                           cursor: 'pointer',
-                          color: '#dc2626'
+                          color: 'var(--danger-text)'
                         }}
                       >
                         <Trash2 size={13} />
@@ -617,11 +617,11 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                         style={{
                           padding: '24px',
                           textAlign: 'center',
-                          color: '#94a3b8',
+                          color: 'var(--text-muted)',
                           fontSize: '0.82rem',
-                          border: '1px dashed #e2e8f0',
+                          border: '1px dashed var(--border)',
                           borderRadius: '8px',
-                          background: '#fafafa'
+                          background: 'var(--bg)'
                         }}
                       >
                         No lessons in this module yet. Click{' '}
@@ -631,7 +631,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                           style={{
                             background: 'transparent',
                             border: 'none',
-                            color: '#356c89',
+                            color: 'var(--navy)',
                             fontWeight: 700,
                             cursor: 'pointer',
                             textDecoration: 'underline'
@@ -652,9 +652,9 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                             <div
                               key={lesson._id}
                               style={{
-                                border: '1px solid #e2e8f0',
+                                border: '1px solid var(--border)',
                                 borderRadius: '8px',
-                                backgroundColor: isExpanded ? '#f8fafc' : '#ffffff',
+                                backgroundColor: isExpanded ? 'var(--surface-muted)' : 'var(--card)',
                                 transition: 'all 0.15s ease'
                               }}
                             >
@@ -673,7 +673,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                                     style={{
                                       fontSize: '0.75rem',
                                       fontWeight: 700,
-                                      color: '#94a3b8',
+                                      color: 'var(--text-muted)',
                                       width: '20px'
                                     }}
                                   >
@@ -703,7 +703,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                                       style={{
                                         fontSize: '0.86rem',
                                         fontWeight: 600,
-                                        color: '#1e293b',
+                                        color: 'var(--navy)',
                                         whiteSpace: 'nowrap',
                                         overflow: 'hidden',
                                         textOverflow: 'ellipsis'
@@ -715,7 +715,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                                       <div
                                         style={{
                                           fontSize: '0.75rem',
-                                          color: '#64748b',
+                                          color: 'var(--text-muted)',
                                           whiteSpace: 'nowrap',
                                           overflow: 'hidden',
                                           textOverflow: 'ellipsis'
@@ -731,7 +731,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                                   <span
                                     style={{
                                       fontSize: '0.75rem',
-                                      color: '#64748b',
+                                      color: 'var(--text-muted)',
                                       display: 'flex',
                                       alignItems: 'center',
                                       gap: '3px'
@@ -745,8 +745,8 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                                       style={{
                                         fontSize: '0.68rem',
                                         fontWeight: 700,
-                                        color: '#b45309',
-                                        background: '#fef3c7',
+                                        color: 'var(--warning-text)',
+                                        background: 'var(--warning-bg)',
                                         padding: '1px 6px',
                                         borderRadius: '4px'
                                       }}
@@ -761,9 +761,9 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                                     onClick={() => toggleLessonPreview(lesson._id)}
                                     title="Preview content"
                                     style={{
-                                      background: isExpanded ? '#356c89' : '#ffffff',
-                                      color: isExpanded ? '#ffffff' : '#64748b',
-                                      border: '1px solid #cbd5e1',
+                                      background: isExpanded ? 'var(--navy)' : 'var(--card)',
+                                      color: isExpanded ? 'var(--card)' : 'var(--text-muted)',
+                                      border: '1px solid var(--border)',
                                       borderRadius: '6px',
                                       padding: '4px 8px',
                                       fontSize: '0.74rem',
@@ -783,8 +783,8 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                                     onClick={() => openEditLesson(lesson)}
                                     title="Edit lesson"
                                     style={{
-                                      background: '#ffffff',
-                                      border: '1px solid #cbd5e1',
+                                      background: 'var(--card)',
+                                      border: '1px solid var(--border)',
                                       borderRadius: '6px',
                                       width: '26px',
                                       height: '26px',
@@ -792,7 +792,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                                       alignItems: 'center',
                                       justifyContent: 'center',
                                       cursor: 'pointer',
-                                      color: '#334155'
+                                      color: 'var(--slate)'
                                     }}
                                   >
                                     <Pencil size={12} />
@@ -804,8 +804,8 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                                     onClick={() => confirmDeleteLesson(lesson)}
                                     title="Delete lesson"
                                     style={{
-                                      background: '#ffffff',
-                                      border: '1px solid #cbd5e1',
+                                      background: 'var(--card)',
+                                      border: '1px solid var(--border)',
                                       borderRadius: '6px',
                                       width: '26px',
                                       height: '26px',
@@ -813,7 +813,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                                       alignItems: 'center',
                                       justifyContent: 'center',
                                       cursor: 'pointer',
-                                      color: '#dc2626'
+                                      color: 'var(--danger-text)'
                                     }}
                                   >
                                     <Trash2 size={12} />
@@ -825,9 +825,9 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                               {isExpanded && (
                                 <div
                                   style={{
-                                    borderTop: '1px solid #e2e8f0',
+                                    borderTop: '1px solid var(--border)',
                                     padding: '16px 20px',
-                                    backgroundColor: '#ffffff',
+                                    backgroundColor: 'var(--card)',
                                     borderBottomLeftRadius: '8px',
                                     borderBottomRightRadius: '8px'
                                   }}
@@ -836,7 +836,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                                     <div
                                       style={{
                                         fontSize: '0.88rem',
-                                        color: '#334155',
+                                        color: 'var(--slate)',
                                         lineHeight: '1.6',
                                         whiteSpace: 'pre-wrap'
                                       }}
@@ -850,7 +850,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                                                 style={{
                                                   fontSize: '1rem',
                                                   fontWeight: 700,
-                                                  color: '#0f172a',
+                                                  color: 'var(--navy)',
                                                   marginTop: '12px',
                                                   marginBottom: '6px'
                                                 }}
@@ -866,7 +866,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                                                 style={{
                                                   fontSize: '0.9rem',
                                                   fontWeight: 600,
-                                                  color: '#1e293b',
+                                                  color: 'var(--navy)',
                                                   marginTop: '8px',
                                                   marginBottom: '4px'
                                                 }}
@@ -892,19 +892,19 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                                           return <p key={idx} style={{ marginBottom: '6px' }}>{line}</p>;
                                         })
                                       ) : (
-                                        <em style={{ color: '#94a3b8' }}>No text content entered yet.</em>
+                                        <em style={{ color: 'var(--text-muted)' }}>No text content entered yet.</em>
                                       )}
                                     </div>
                                   )}
 
                                   {lesson.contentType === 'VIDEO' && (
-                                    <div style={{ textAlign: 'center', padding: '16px', backgroundColor: '#f1f5f9', borderRadius: '8px' }}>
-                                      <Play size={28} color="#6d28d9" style={{ margin: '0 auto 8px' }} />
-                                      <div style={{ fontSize: '0.82rem', fontWeight: 600, color: '#334155' }}>
+                                    <div style={{ textAlign: 'center', padding: '16px', backgroundColor: 'var(--surface-muted)', borderRadius: '8px' }}>
+                                      <Play size={28} color="var(--navy)" style={{ margin: '0 auto 8px' }} />
+                                      <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--slate)' }}>
                                         Video Resource: {lesson.contentUrl || 'No URL configured'}
                                       </div>
                                       {lesson.textContent && (
-                                        <p style={{ fontSize: '0.78rem', color: '#64748b', marginTop: '8px' }}>
+                                        <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '8px' }}>
                                           {lesson.textContent}
                                         </p>
                                       )}
@@ -912,12 +912,12 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                                   )}
 
                                   {(lesson.contentType === 'PDF' || lesson.contentType === 'EXTERNAL') && (
-                                    <div style={{ padding: '12px', backgroundColor: '#f8fafc', borderRadius: '8px' }}>
-                                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem', color: '#0369a1', fontWeight: 600 }}>
+                                    <div style={{ padding: '12px', backgroundColor: 'var(--surface-muted)', borderRadius: '8px' }}>
+                                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem', color: 'var(--navy)', fontWeight: 600 }}>
                                         <ExternalLink size={14} /> Resource URL: {lesson.contentUrl || 'Not specified'}
                                       </div>
                                       {lesson.textContent && (
-                                        <p style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '6px' }}>
+                                        <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '6px' }}>
                                           {lesson.textContent}
                                         </p>
                                       )}
@@ -941,14 +941,14 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
         <div
           style={{
             padding: '14px 24px',
-            borderTop: '1px solid #e4e4e7',
+            borderTop: '1px solid var(--border)',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            backgroundColor: '#ffffff'
+            backgroundColor: 'var(--card)'
           }}
         >
-          <div style={{ fontSize: '0.78rem', color: '#71717a' }}>
+          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
             Tip: Changes to curriculum and lessons are instantly available to learners enrolled in this course.
           </div>
           <button className="btn-secondary" onClick={onClose} style={{ padding: '8px 18px' }}>
@@ -964,7 +964,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            backgroundColor: 'var(--navy)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -976,20 +976,20 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
             style={{
               width: '460px',
               maxWidth: '100%',
-              backgroundColor: '#ffffff',
-              borderRadius: '14px',
+              backgroundColor: 'var(--card)',
+              borderRadius: '12px',
               padding: '24px',
-              border: '1px solid #e4e4e7',
-              boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.15)'
+              border: '1px solid var(--border)',
+              boxShadow: 'var(--shadow-card)'
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#18181b' }}>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text)' }}>
                 {moduleModal.isNew ? 'Create New Module' : 'Edit Module'}
               </h3>
               <button
                 onClick={() => setModuleModal(null)}
-                style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#71717a' }}
+                style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}
               >
                 <X size={18} />
               </button>
@@ -1039,7 +1039,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.75)',
+            backgroundColor: 'var(--navy)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -1054,10 +1054,10 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
               maxHeight: '90vh',
               display: 'flex',
               flexDirection: 'column',
-              backgroundColor: '#ffffff',
-              borderRadius: '16px',
-              border: '1px solid #e4e4e7',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+              backgroundColor: 'var(--card)',
+              borderRadius: '12px',
+              border: '1px solid var(--border)',
+              boxShadow: 'var(--shadow-card)',
               overflow: 'hidden'
             }}
           >
@@ -1065,24 +1065,24 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
             <div
               style={{
                 padding: '18px 24px',
-                borderBottom: '1px solid #e4e4e7',
+                borderBottom: '1px solid var(--border)',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                backgroundColor: '#f8fafc'
+                backgroundColor: 'var(--surface-muted)'
               }}
             >
               <div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#0f172a' }}>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--navy)' }}>
                   {lessonModal.isNew ? 'Add New Lesson' : 'Edit Lesson'}
                 </h3>
-                <p style={{ fontSize: '0.78rem', color: '#64748b' }}>
+                <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                   Create rich reading content, video links, or security documents for learners.
                 </p>
               </div>
               <button
                 onClick={() => setLessonModal(null)}
-                style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#64748b' }}
+                style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}
               >
                 <X size={20} />
               </button>
@@ -1157,7 +1157,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                         alignItems: 'center',
                         gap: '6px',
                         fontSize: '0.82rem',
-                        color: '#334155',
+                        color: 'var(--slate)',
                         marginTop: '8px',
                         cursor: 'pointer'
                       }}
@@ -1211,20 +1211,20 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                     </label>
 
                     {lessonModal.contentType === 'TEXT' && (
-                      <div style={{ display: 'flex', gap: '4px', background: '#f1f5f9', padding: '2px', borderRadius: '6px' }}>
+                      <div style={{ display: 'flex', gap: '4px', background: 'var(--surface-muted)', padding: '2px', borderRadius: '6px' }}>
                         <button
                           type="button"
                           onClick={() => setLessonTab('edit')}
                           style={{
-                            border: 'none',
                             padding: '3px 10px',
                             fontSize: '0.74rem',
                             fontWeight: 600,
                             borderRadius: '4px',
                             cursor: 'pointer',
-                            background: lessonTab === 'edit' ? '#ffffff' : 'transparent',
-                            color: lessonTab === 'edit' ? '#0f172a' : '#64748b',
-                            boxShadow: lessonTab === 'edit' ? '0 1px 2px rgba(0,0,0,0.06)' : 'none'
+                            background: lessonTab === 'edit' ? 'var(--surface-subtle)' : 'var(--card)',
+                            border: '1px solid var(--border)',
+                            borderBottom: lessonTab === 'edit' ? '2px solid var(--orange)' : '2px solid transparent',
+                            color: 'var(--navy)'
                           }}
                         >
                           Edit
@@ -1233,15 +1233,15 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                           type="button"
                           onClick={() => setLessonTab('preview')}
                           style={{
-                            border: 'none',
                             padding: '3px 10px',
                             fontSize: '0.74rem',
                             fontWeight: 600,
                             borderRadius: '4px',
                             cursor: 'pointer',
-                            background: lessonTab === 'preview' ? '#ffffff' : 'transparent',
-                            color: lessonTab === 'preview' ? '#0f172a' : '#64748b',
-                            boxShadow: lessonTab === 'preview' ? '0 1px 2px rgba(0,0,0,0.06)' : 'none'
+                            background: lessonTab === 'preview' ? 'var(--surface-subtle)' : 'var(--card)',
+                            border: '1px solid var(--border)',
+                            borderBottom: lessonTab === 'preview' ? '2px solid var(--orange)' : '2px solid transparent',
+                            color: 'var(--navy)'
                           }}
                         >
                           Preview
@@ -1266,12 +1266,12 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                             type="button"
                             onClick={() => insertMarkdownSnippet('### Section Heading\n')}
                             style={{
-                              background: '#f8fafc',
-                              border: '1px solid #e2e8f0',
+                              background: 'var(--surface-muted)',
+                              border: '1px solid var(--border)',
                               borderRadius: '4px',
                               padding: '2px 8px',
                               fontSize: '0.72rem',
-                              color: '#334155',
+                              color: 'var(--slate)',
                               cursor: 'pointer'
                             }}
                           >
@@ -1281,12 +1281,12 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                             type="button"
                             onClick={() => insertMarkdownSnippet('#### Subsection\n')}
                             style={{
-                              background: '#f8fafc',
-                              border: '1px solid #e2e8f0',
+                              background: 'var(--surface-muted)',
+                              border: '1px solid var(--border)',
                               borderRadius: '4px',
                               padding: '2px 8px',
                               fontSize: '0.72rem',
-                              color: '#334155',
+                              color: 'var(--slate)',
                               cursor: 'pointer'
                             }}
                           >
@@ -1296,12 +1296,12 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                             type="button"
                             onClick={() => insertMarkdownSnippet('- Bullet point 1\n- Bullet point 2')}
                             style={{
-                              background: '#f8fafc',
-                              border: '1px solid #e2e8f0',
+                              background: 'var(--surface-muted)',
+                              border: '1px solid var(--border)',
                               borderRadius: '4px',
                               padding: '2px 8px',
                               fontSize: '0.72rem',
-                              color: '#334155',
+                              color: 'var(--slate)',
                               cursor: 'pointer'
                             }}
                           >
@@ -1311,12 +1311,12 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                             type="button"
                             onClick={() => insertMarkdownSnippet('1. Step One\n2. Step Two')}
                             style={{
-                              background: '#f8fafc',
-                              border: '1px solid #e2e8f0',
+                              background: 'var(--surface-muted)',
+                              border: '1px solid var(--border)',
                               borderRadius: '4px',
                               padding: '2px 8px',
                               fontSize: '0.72rem',
-                              color: '#334155',
+                              color: 'var(--slate)',
                               cursor: 'pointer'
                             }}
                           >
@@ -1326,12 +1326,12 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                             type="button"
                             onClick={() => insertMarkdownSnippet('*Always report suspicious emails immediately.*')}
                             style={{
-                              background: '#f8fafc',
-                              border: '1px solid #e2e8f0',
+                              background: 'var(--surface-muted)',
+                              border: '1px solid var(--border)',
                               borderRadius: '4px',
                               padding: '2px 8px',
                               fontSize: '0.72rem',
-                              color: '#334155',
+                              color: 'var(--slate)',
                               cursor: 'pointer'
                             }}
                           >
@@ -1354,17 +1354,17 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                     <div
                       style={{
                         padding: '18px 20px',
-                        border: '1px solid #cbd5e1',
+                        border: '1px solid var(--border)',
                         borderRadius: '8px',
                         minHeight: '220px',
-                        backgroundColor: '#f8fafc',
+                        backgroundColor: 'var(--surface-muted)',
                         overflowY: 'auto'
                       }}
                     >
-                      <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#356c89', textTransform: 'uppercase', marginBottom: '10px' }}>
+                      <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--navy)', textTransform: 'uppercase', marginBottom: '10px' }}>
                         Learner View Simulation
                       </div>
-                      <div style={{ fontSize: '0.9rem', color: '#1e293b', lineHeight: '1.7', whiteSpace: 'pre-wrap' }}>
+                      <div style={{ fontSize: '0.9rem', color: 'var(--navy)', lineHeight: '1.7', whiteSpace: 'pre-wrap' }}>
                         {lessonModal.textContent ? (
                           lessonModal.textContent.split('\n').map((line, i) => {
                             if (line.startsWith('###')) {
@@ -1374,7 +1374,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                                   style={{
                                     fontSize: '1.1rem',
                                     fontWeight: 700,
-                                    color: '#0f172a',
+                                    color: 'var(--navy)',
                                     marginTop: '14px',
                                     marginBottom: '6px'
                                   }}
@@ -1390,7 +1390,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                                   style={{
                                     fontSize: '0.95rem',
                                     fontWeight: 600,
-                                    color: '#1e293b',
+                                    color: 'var(--navy)',
                                     marginTop: '10px',
                                     marginBottom: '4px'
                                   }}
@@ -1406,13 +1406,13 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                               return <li key={i} style={{ marginLeft: '16px', marginBottom: '3px' }}>{line}</li>;
                             }
                             if (line.startsWith('*') && line.endsWith('*')) {
-                              return <em key={i} style={{ display: 'block', color: '#356c89', margin: '8px 0' }}>{line.replace(/\*/g, '')}</em>;
+                              return <em key={i} style={{ display: 'block', color: 'var(--navy)', margin: '8px 0' }}>{line.replace(/\*/g, '')}</em>;
                             }
                             if (line.trim() === '') return <br key={i} />;
                             return <p key={i} style={{ marginBottom: '6px' }}>{line}</p>;
                           })
                         ) : (
-                          <span style={{ color: '#94a3b8' }}>Type markdown text in the Edit tab to see a live preview here.</span>
+                          <span style={{ color: 'var(--text-muted)' }}>Type markdown text in the Edit tab to see a live preview here.</span>
                         )}
                       </div>
                     </div>
@@ -1424,11 +1424,11 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
               <div
                 style={{
                   padding: '14px 24px',
-                  borderTop: '1px solid #e4e4e7',
+                  borderTop: '1px solid var(--border)',
                   display: 'flex',
                   justifyContent: 'flex-end',
                   gap: '10px',
-                  backgroundColor: '#ffffff'
+                  backgroundColor: 'var(--card)'
                 }}
               >
                 <button type="button" className="btn-secondary" onClick={() => setLessonModal(null)}>
@@ -1450,7 +1450,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            backgroundColor: 'var(--navy)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -1463,10 +1463,10 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
               width: '420px',
               maxWidth: '100%',
               padding: '24px',
-              backgroundColor: '#ffffff',
-              borderRadius: '14px',
-              border: '1px solid #e4e4e7',
-              boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.2)'
+              backgroundColor: 'var(--card)',
+              borderRadius: '12px',
+              border: '1px solid var(--border)',
+              boxShadow: 'var(--shadow-card)'
             }}
           >
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
@@ -1475,8 +1475,8 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                   width: '36px',
                   height: '36px',
                   borderRadius: '8px',
-                  backgroundColor: '#fee2e2',
-                  color: '#dc2626',
+                  backgroundColor: 'var(--danger-bg)',
+                  color: 'var(--danger-text)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -1486,10 +1486,10 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                 <AlertTriangle size={18} />
               </div>
               <div>
-                <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#0f172a', marginBottom: '4px' }}>
+                <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--navy)', marginBottom: '4px' }}>
                   Delete {deleteConfirm.type === 'module' ? 'Module' : 'Lesson'}?
                 </h4>
-                <p style={{ fontSize: '0.82rem', color: '#64748b', lineHeight: '1.5' }}>
+                <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
                   Are you sure you want to delete <strong>"{deleteConfirm.title}"</strong>?
                   {deleteConfirm.type === 'module' && ' This will also permanently delete all lessons within this module.'}
                 </p>
@@ -1510,8 +1510,8 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                 onClick={executeDelete}
                 disabled={deleting}
                 style={{
-                  background: '#dc2626',
-                  color: '#ffffff',
+                  background: 'var(--danger-text)',
+                  color: 'var(--card)',
                   border: 'none',
                   borderRadius: '8px',
                   padding: '8px 16px',

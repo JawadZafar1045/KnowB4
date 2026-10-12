@@ -37,11 +37,11 @@ import CourseCatalog from '../pages/employee/CourseCatalog';
 
 // Public
 import CertificateVerificationPage from '../pages/public/CertificateVerificationPage';
-import HomePage from '../pages/public/HomePage';
+//import HomePage from '../pages/public/HomePage';
 
 function ProtectedRoute({ children, roles }) {
   const { user, loading } = useAuth();
-  if (loading) return <div style={{ padding: '60px', textAlign: 'center', color: '#94a3b8' }}>Loading...</div>;
+  if (loading) return <div style={{ padding: '60px', textAlign: 'center', color: 'var(--text-muted)' }}>Loading...</div>;
   if (!user) return <Navigate to="/login" replace />;
   if (roles && !roles.includes(user.role)) return <Navigate to="/login" replace />;
   return children;
@@ -61,7 +61,6 @@ export default function AppRoutes() {
     <BrowserRouter>
       <Routes>
         {/* Public Routes */}
-        <Route path="/home" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/verify/:certificateId" element={<CertificateVerificationPage />} />
@@ -109,7 +108,7 @@ export default function AppRoutes() {
         </Route>
 
         {/* Default Redirect */}
-        <Route path="/" element={user ? <Navigate to={getDefaultRoute()} replace /> : <HomePage />} />
+        <Route path="/" element={user ? <Navigate to={getDefaultRoute()} replace /> : <Navigate to="/login" replace />} />
         <Route path="*" element={<Navigate to={getDefaultRoute()} replace />} />
       </Routes>
     </BrowserRouter>

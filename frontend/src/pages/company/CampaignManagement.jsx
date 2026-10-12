@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
+import { formatStatus } from '../../utils/displayFormatters';
 import { Send, Plus, CalendarDays, BookOpen, Users, Target, X, Edit2, Trash2, CheckCircle } from 'lucide-react';
 
 export default function CampaignManagement() {
@@ -93,14 +94,14 @@ export default function CampaignManagement() {
     setForm(prev => ({ ...prev, courses: prev.courses.includes(id) ? prev.courses.filter(c => c !== id) : [...prev.courses, id] }));
   };
 
-  if (loading) return <div style={{ color: '#71717a', padding: '40px' }}>Loading campaigns...</div>;
+  if (loading) return <div style={{ color: 'var(--text-muted)', padding: '40px' }}>Loading campaigns...</div>;
 
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#18181b' }}>Training Campaigns</h1>
-          <p style={{ color: '#71717a', fontSize: '0.85rem' }}>Deploy awareness programs, update schedules, or clean up past campaigns</p>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text)' }}>Training Campaigns</h1>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Deploy awareness programs, update schedules, or clean up past campaigns</p>
         </div>
         <button className="btn-primary" onClick={() => setShowCreate(true)}><Plus size={14} /> Launch Campaign</button>
       </div>
@@ -108,32 +109,32 @@ export default function CampaignManagement() {
       {/* Campaign List */}
       <div style={{ display: 'grid', gap: '16px' }}>
         {campaigns.length === 0 ? (
-          <div className="glass-card" style={{ padding: '36px', textAlign: 'center', color: '#71717a' }}>
+          <div className="surface-card" style={{ padding: '36px', textAlign: 'center', color: 'var(--text-muted)' }}>
             No active training campaigns found. Click "Launch Campaign" to create one.
           </div>
         ) : (
           campaigns.map(c => (
             <div
               key={c._id}
-              className="glass-card"
+              className="surface-card"
               style={{ padding: '22px', position: 'relative', overflow: 'hidden', transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)' }}
             >
               <div
                 className="campaign-accent-bar"
                 style={{
                   position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
-                  background: 'linear-gradient(90deg, #356c89, #4e86a0)'
+                  background: 'var(--navy)'
                 }}
               />
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#18181b', marginBottom: '6px' }}>{c.name}</h3>
+                    <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>{c.name}</h3>
                     <span className={`badge ${c.status === 'ACTIVE' ? 'badge-green' : c.status === 'COMPLETED' ? 'badge-cyan' : 'badge-slate'}`}>
-                      {c.status}
+                      {formatStatus(c.status)}
                     </span>
                   </div>
-                  <p style={{ fontSize: '0.82rem', color: '#71717a', marginBottom: '10px' }}>{c.description?.substring(0, 100)}</p>
+                  <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '10px' }}>{c.description?.substring(0, 100)}</p>
                   <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                     {c.courses?.map(course => (
                       <span key={course._id} className="badge badge-cyan" style={{ fontSize: '0.72rem' }}>{course.title}</span>
@@ -143,27 +144,27 @@ export default function CampaignManagement() {
                 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexShrink: 0, marginLeft: '20px' }}>
                   <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#356c89' }}>{c.enrollmentCount || 0}</div>
-                    <div style={{ fontSize: '0.68rem', color: '#71717a' }}>Enrolled</div>
+                    <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--navy)' }}>{c.enrollmentCount || 0}</div>
+                    <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>Enrolled</div>
                   </div>
                   <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#15803d' }}>{c.completionRate || 0}%</div>
-                    <div style={{ fontSize: '0.68rem', color: '#71717a' }}>Complete</div>
+                    <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--success-text)' }}>{c.completionRate || 0}%</div>
+                    <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>Complete</div>
                   </div>
 
                   {/* Action Buttons: Edit & Delete */}
-                  <div style={{ display: 'flex', gap: '6px', marginLeft: '12px', borderLeft: '1px solid #e4e4e7', paddingLeft: '14px' }}>
+                  <div style={{ display: 'flex', gap: '6px', marginLeft: '12px', borderLeft: '1px solid var(--border)', paddingLeft: '14px' }}>
                     <button
                       onClick={(e) => handleOpenEdit(c, e)}
                       title="Edit Campaign"
-                      style={{ background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '6px', padding: '6px 10px', color: '#334155', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.78rem', fontWeight: 600 }}
+                      style={{ background: 'var(--surface-muted)', border: '1px solid var(--border)', borderRadius: '6px', padding: '6px 10px', color: 'var(--slate)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.78rem', fontWeight: 600 }}
                     >
                       <Edit2 size={13} /> Edit
                     </button>
                     <button
                       onClick={(e) => handleDelete(c._id, c.name, e)}
                       title="Delete Campaign"
-                      style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '6px', padding: '6px 10px', color: '#dc2626', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.78rem', fontWeight: 600 }}
+                      style={{ background: 'var(--danger-bg)', border: '1px solid var(--danger-border)', borderRadius: '6px', padding: '6px 10px', color: 'var(--danger-text)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.78rem', fontWeight: 600 }}
                     >
                       <Trash2 size={13} /> Delete
                     </button>
@@ -171,7 +172,7 @@ export default function CampaignManagement() {
                 </div>
               </div>
 
-              <div style={{ marginTop: '14px', fontSize: '0.78rem', color: '#71717a', display: 'flex', gap: '16px', borderTop: '1px solid #f1f5f9', paddingTop: '10px' }}>
+              <div style={{ marginTop: '14px', fontSize: '0.78rem', color: 'var(--text-muted)', display: 'flex', gap: '16px', borderTop: '1px solid var(--surface-muted)', paddingTop: '10px' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><CalendarDays size={12} /> Due: {new Date(c.dueDate).toLocaleDateString()}</span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Target size={12} /> {c.targetType?.replace('_', ' ')}</span>
               </div>
@@ -182,11 +183,11 @@ export default function CampaignManagement() {
 
       {/* Edit Campaign Modal */}
       {editingCampaign && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
-          <div className="glass-card" style={{ padding: '32px', width: '480px', borderRadius: '12px' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'var(--navy)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
+          <div className="surface-card" style={{ padding: '32px', width: '480px', borderRadius: '12px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#18181b' }}>Edit Campaign Details</h2>
-              <button onClick={() => setEditingCampaign(null)} style={{ background: 'none', border: 'none', color: '#71717a', cursor: 'pointer' }}><X size={18}/></button>
+              <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text)' }}>Edit Campaign Details</h2>
+              <button onClick={() => setEditingCampaign(null)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}><X size={18}/></button>
             </div>
             <form onSubmit={handleUpdate} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div>
@@ -223,11 +224,11 @@ export default function CampaignManagement() {
 
       {/* Create Campaign Modal */}
       {showCreate && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, overflowY: 'auto', padding: '40px 0' }}>
-          <div className="glass-card" style={{ padding: '32px', width: '560px', maxHeight: '90vh', overflowY: 'auto' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'var(--navy)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, overflowY: 'auto', padding: '40px 0' }}>
+          <div className="surface-card" style={{ padding: '32px', width: '560px', maxHeight: '90vh', overflowY: 'auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-              <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#18181b' }}>Launch New Campaign</h2>
-              <button onClick={() => setShowCreate(false)} style={{ background: 'none', border: 'none', color: '#71717a', cursor: 'pointer' }}><X size={18}/></button>
+              <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text)' }}>Launch New Campaign</h2>
+              <button onClick={() => setShowCreate(false)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}><X size={18}/></button>
             </div>
             <form onSubmit={handleLaunch} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div><label className="form-label">Campaign Name</label><input className="form-input" value={form.name} onChange={e => setForm({...form, name: e.target.value})} required placeholder="e.g. Annual Security Awareness 2026" /></div>
@@ -238,8 +239,8 @@ export default function CampaignManagement() {
                 <label className="form-label">Select Courses</label>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   {courses.map(course => (
-                    <label key={course._id} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 12px', borderRadius: '8px', background: form.courses.includes(course._id) ? 'rgba(53,108,137,0.1)' : '#ffffff', border: `1px solid ${form.courses.includes(course._id) ? 'rgba(53,108,137,0.4)' : '#e4e4e7'}`, cursor: 'pointer', fontSize: '0.85rem', color: '#27272a' }}>
-                      <input type="checkbox" checked={form.courses.includes(course._id)} onChange={() => toggleCourse(course._id)} style={{ accentColor: '#356c89' }} />
+                    <label key={course._id} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 12px', borderRadius: '8px', background: form.courses.includes(course._id) ? 'var(--surface-subtle)' : 'var(--card)', border: `1px solid ${form.courses.includes(course._id) ? 'var(--orange)' : 'var(--border)'}`, cursor: 'pointer', fontSize: '0.85rem', color: 'var(--navy)' }}>
+                      <input type="checkbox" checked={form.courses.includes(course._id)} onChange={() => toggleCourse(course._id)} style={{ accentColor: 'var(--navy)' }} />
                       {course.title}
                     </label>
                   ))}
@@ -259,10 +260,10 @@ export default function CampaignManagement() {
                 <div>
                   <label className="form-label">Select Departments</label>
                   {departments.map(d => (
-                    <label key={d._id} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#27272a', marginBottom: '6px' }}>
+                    <label key={d._id} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: 'var(--text)', marginBottom: '6px' }}>
                       <input type="checkbox" checked={form.targetDepartments.includes(d._id)} onChange={() => {
                         setForm(prev => ({ ...prev, targetDepartments: prev.targetDepartments.includes(d._id) ? prev.targetDepartments.filter(x => x !== d._id) : [...prev.targetDepartments, d._id] }));
-                      }} style={{ accentColor: '#356c89' }} />
+                      }} style={{ accentColor: 'var(--navy)' }} />
                       {d.name} ({d.employeeCount} employees)
                     </label>
                   ))}

@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Lock, Mail, ArrowRight, AlertCircle, Building2, ChevronDown, ChevronUp } from 'lucide-react';
-import loginBg from '../../assets/login-bg.jpg';
-import logoImg from '../../assets/logo.png';
+import logoImg from '../../assets/logo-transparent.png';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -38,50 +37,43 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{
+    <div className="login-page" style={{
       minHeight: '100vh',
-      backgroundImage: `linear-gradient(180deg, rgba(15,28,63,0.55) 0%, rgba(10,15,30,0.7) 100%), url(${loginBg})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
+      background: 'var(--card)',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '24px'
+      padding: 'clamp(24px, 6vh, 56px) 16px'
     }}>
-      <div style={{ width: '100%', maxWidth: '440px' }}>
+      <div style={{ width: '100%', maxWidth: '420px' }}>
         {/* Brand Logo */}
-        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-          <img
+        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+          <img className="auth-brand-logo"
             src={logoImg}
-            alt="Logo"
+            alt="ThinkB4Act"
             style={{
-              width: '72px',
-              height: '72px',
+              width: 'min(260px, 76vw)',
+              height: 'auto',
               objectFit: 'contain',
-              marginBottom: '16px'
+              display: 'block',
+              margin: '0 auto'
             }}
           />
-          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.03em' }}>
-            THINKB4<span style={{ color: '#01201bb4' }}>ACT</span>
-          </h1>
-          <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.9rem', marginTop: '6px' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginTop: '10px' }}>
             Multi-Tenant Security Awareness & Training Platform
           </p>
         </div>
 
-        {/* Glass Card */}
-        <div style={{
-          background: 'rgba(255,255,255,0.05)',
-          backdropFilter: 'blur(10px)',
-          WebkitBackdropFilter: 'blur(10px)',
-          border: '1px solid rgba(255,255,255,0.15)',
-          borderRadius: '16px',
-          padding: '32px',
-          boxShadow: '0 20px 40px rgba(0,0,0,0.25)'
+        {/* Sign-in card */}
+        <div className="login-card" style={{
+          background: 'var(--card)',
+          border: '1px solid var(--border)',
+          borderRadius: '12px',
+          padding: 'clamp(20px, 6vw, 32px)',
+          boxShadow: 'var(--shadow-card)'
         }}>
-          <h2 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#ffffff', marginBottom: '20px', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--navy)', marginBottom: '22px', textAlign: 'center' }}>
             Sign In to Portal
           </h2>
 
@@ -92,9 +84,9 @@ export default function LoginPage() {
               gap: '10px',
               padding: '12px',
               borderRadius: '8px',
-              background: 'rgba(190, 18, 60, 0.2)',
-              border: '1px solid rgba(190, 18, 60, 0.4)',
-              color: '#FCA5A5',
+              background: 'var(--danger-bg)',
+              border: '1px solid var(--danger-border)',
+              color: 'var(--danger-text)',
               fontSize: '0.85rem',
               marginBottom: '20px'
             }}>
@@ -112,7 +104,7 @@ export default function LoginPage() {
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#67e8f9',
+                  color: 'var(--orange-dark)',
                   fontSize: '0.78rem',
                   fontWeight: 600,
                   cursor: 'pointer',
@@ -131,7 +123,7 @@ export default function LoginPage() {
 
               {showTenantField && (
                 <div style={{ position: 'relative' }}>
-                  <Building2 size={16} color="#67e8f9" style={{ position: 'absolute', left: '12px', top: '14px' }} />
+                  <Building2 size={16} color="var(--orange-dark)" style={{ position: 'absolute', left: '12px', top: '14px' }} />
                   <input
                     type="text"
                     value={tenantId}
@@ -139,23 +131,32 @@ export default function LoginPage() {
                     placeholder="e.g. TB4-A3K9MN"
                     style={{
                       width: '100%',
-                      padding: '12px 14px 12px 38px',
-                      background: 'rgba(6,182,212,0.08)',
-                      border: '1px solid rgba(6,182,212,0.3)',
+                      padding: '10px 12px 10px 38px',
+                      background: 'var(--surface-subtle)',
+                      border: '1px solid var(--orange-border)',
                       borderRadius: '10px',
-                      color: '#5EEAD4',
+                      color: 'var(--navy)',
                       fontSize: '0.9rem',
                       fontFamily: 'monospace',
                       fontWeight: 700,
                       letterSpacing: '0.05em',
                       outline: 'none',
                       boxSizing: 'border-box',
-                      transition: 'border-color 0.2s ease'
+                      transition: 'border-color 0.2s ease, box-shadow 0.2s ease'
                     }}
-                    onFocus={(e) => e.target.style.borderColor = '#5EEAD4'}
-                    onBlur={(e) => e.target.style.borderColor = 'rgba(6,182,212,0.3)'}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = 'var(--orange)';
+                      e.target.style.outline = '2px solid var(--orange)';
+                      e.target.style.outlineOffset = '1px';
+                      e.target.style.boxShadow = 'none';
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = 'var(--orange-border)';
+                      e.target.style.outline = 'none';
+                      e.target.style.boxShadow = 'none';
+                    }}
                   />
-                  <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.4)', marginTop: '4px' }}>
+                  <p style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '6px' }}>
                     Your organization's unique Tenant ID (provided during registration)
                   </p>
                 </div>
@@ -163,11 +164,11 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'rgba(255,255,255,0.75)', marginBottom: '8px' }}>
+              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: 'var(--slate)', marginBottom: '6px' }}>
                 Corporate Email
               </label>
               <div style={{ position: 'relative' }}>
-                <Mail size={16} color="rgba(255,255,255,0.6)" style={{ position: 'absolute', left: '12px', top: '14px' }} />
+                <Mail size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '12px', top: '14px' }} />
                 <input
                   type="email"
                   value={email}
@@ -176,28 +177,37 @@ export default function LoginPage() {
                   required
                   style={{
                     width: '100%',
-                    padding: '12px 14px 12px 38px',
-                    background: 'rgba(255,255,255,0.08)',
-                    border: '1px solid rgba(255,255,255,0.25)',
+                    padding: '10px 12px 10px 38px',
+                    background: 'var(--surface-muted)',
+                    border: '1px solid var(--border)',
                     borderRadius: '10px',
-                    color: '#ffffff',
+                    color: 'var(--navy)',
                     fontSize: '0.9rem',
                     outline: 'none',
                     boxSizing: 'border-box',
-                    transition: 'border-color 0.2s ease'
+                    transition: 'border-color 0.2s ease, box-shadow 0.2s ease'
                   }}
-                  onFocus={(e) => e.target.style.borderColor = '#5EEAD4'}
-                  onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.25)'}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = 'var(--orange)';
+                    e.target.style.outline = '2px solid var(--orange)';
+                    e.target.style.outlineOffset = '1px';
+                    e.target.style.boxShadow = 'none';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = 'var(--border)';
+                    e.target.style.outline = 'none';
+                    e.target.style.boxShadow = 'none';
+                  }}
                 />
               </div>
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'rgba(255,255,255,0.75)', marginBottom: '8px' }}>
+              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: 'var(--slate)', marginBottom: '6px' }}>
                 Password
               </label>
               <div style={{ position: 'relative' }}>
-                <Lock size={16} color="rgba(255,255,255,0.6)" style={{ position: 'absolute', left: '12px', top: '14px' }} />
+                <Lock size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '12px', top: '14px' }} />
                 <input
                   type="password"
                   value={password}
@@ -206,18 +216,27 @@ export default function LoginPage() {
                   required
                   style={{
                     width: '100%',
-                    padding: '12px 14px 12px 38px',
-                    background: 'rgba(255,255,255,0.08)',
-                    border: '1px solid rgba(255,255,255,0.25)',
+                    padding: '10px 12px 10px 38px',
+                    background: 'var(--surface-muted)',
+                    border: '1px solid var(--border)',
                     borderRadius: '10px',
-                    color: '#ffffff',
+                    color: 'var(--navy)',
                     fontSize: '0.9rem',
                     outline: 'none',
                     boxSizing: 'border-box',
-                    transition: 'border-color 0.2s ease'
+                    transition: 'border-color 0.2s ease, box-shadow 0.2s ease'
                   }}
-                  onFocus={(e) => e.target.style.borderColor = '#5EEAD4'}
-                  onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.25)'}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = 'var(--orange)';
+                    e.target.style.outline = '2px solid var(--orange)';
+                    e.target.style.outlineOffset = '1px';
+                    e.target.style.boxShadow = 'none';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = 'var(--border)';
+                    e.target.style.outline = 'none';
+                    e.target.style.boxShadow = 'none';
+                  }}
                 />
               </div>
             </div>
@@ -231,12 +250,10 @@ export default function LoginPage() {
                 width: '100%',
                 padding: '12px',
                 marginTop: '8px',
-                background: isButtonHovered
-                  ? 'linear-gradient(135deg, #228296 0%, #123f4c 100%)'
-                  : 'linear-gradient(135deg, #196478 0%, #0d3741 100%)',
-                border: '1px solid rgba(255,255,255,0.1)',
+                background: isButtonHovered ? 'var(--orange-dark)' : 'var(--orange)',
+                border: '1px solid var(--orange)',
                 borderRadius: '10px',
-                color: '#ffffff',
+                color: 'var(--card)',
                 fontWeight: 700,
                 fontSize: '0.95rem',
                 cursor: loading ? 'not-allowed' : 'pointer',
@@ -244,12 +261,9 @@ export default function LoginPage() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
-                boxShadow: isButtonHovered
-                  ? '0 4px 14px rgba(25, 100, 120, 0.5)'
-                  : '0 2px 8px rgba(25, 100, 120, 0.35)',
+                boxShadow: 'none',
                 transform: isButtonHovered ? 'translateY(-1px)' : 'translateY(0)',
                 transition: 'all 0.2s ease',
-                opacity: loading ? 0.7 : 1
               }}
             >
               {loading ? 'Authenticating...' : (
@@ -264,15 +278,15 @@ export default function LoginPage() {
 
         {/* Register & Verify Links */}
         <div style={{ textAlign: 'center', marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)' }}>
+          <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
             New organization?{' '}
-            <Link to="/register" style={{ color: '#5EEAD4', textDecoration: 'none', fontWeight: 600 }}>
+            <Link to="/register" style={{ color: 'var(--orange-dark)', textDecoration: 'none', fontWeight: 700 }}>
               Register Your Organization
             </Link>
           </div>
-          <div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)' }}>
+          <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
             Have a certificate to verify?{' '}
-            <Link to="/verify/CA-2026-000001" style={{ color: '#5EEAD4', textDecoration: 'none', fontWeight: 600 }}>
+            <Link to="/verify/CA-2026-000001" style={{ color: 'var(--orange-dark)', textDecoration: 'none', fontWeight: 700 }}>
               Public Verification Portal
             </Link>
           </div>

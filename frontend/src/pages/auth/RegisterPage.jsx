@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../../services/api';
 import { Building2, User, Mail, Lock, Key, Phone, Briefcase, ArrowRight, AlertCircle, CheckCircle2, Shield, Copy, Check } from 'lucide-react';
-import loginBg from '../../assets/login-bg.jpg';
-import logoImg from '../../assets/logo.png';
+import logoImg from '../../assets/logo-transparent.png';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -87,11 +86,11 @@ export default function RegisterPage() {
 
   const inputStyle = {
     width: '100%',
-    padding: '11px 14px 11px 38px',
-    background: 'rgba(255,255,255,0.08)',
-    border: '1px solid rgba(255,255,255,0.25)',
+    padding: '10px 12px 10px 38px',
+    background: 'var(--card)',
+    border: '1px solid var(--border)',
     borderRadius: '10px',
-    color: '#ffffff',
+    color: 'var(--text)',
     fontSize: '0.88rem',
     outline: 'none',
     boxSizing: 'border-box',
@@ -102,18 +101,16 @@ export default function RegisterPage() {
     display: 'block',
     fontSize: '0.78rem',
     fontWeight: 600,
-    color: 'rgba(255,255,255,0.75)',
+    color: 'var(--slate)',
     marginBottom: '6px'
   };
 
   // Success Screen
   if (success) {
     return (
-      <div style={{
+      <div className="auth-register-page" style={{
         minHeight: '100vh',
-        backgroundImage: `linear-gradient(180deg, rgba(15,28,63,0.55) 0%, rgba(10,15,30,0.7) 100%), url(${loginBg})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        background: 'var(--bg)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -121,48 +118,46 @@ export default function RegisterPage() {
         padding: '24px'
       }}>
         <div style={{ width: '100%', maxWidth: '480px' }}>
-          <div style={{
-            background: 'rgba(255,255,255,0.06)',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
-            border: '1px solid rgba(255,255,255,0.18)',
-            borderRadius: '20px',
+          <div className="auth-register-card" style={{
+            background: 'var(--card)',
+            border: '1px solid var(--border)',
+            borderRadius: '12px',
             padding: '40px 32px',
             textAlign: 'center',
-            boxShadow: '0 20px 40px rgba(0,0,0,0.3)'
+            boxShadow: 'var(--shadow-card)'
           }}>
             <div style={{
               width: '72px', height: '72px',
               borderRadius: '50%',
-              background: 'linear-gradient(135deg, #059669, #10b981)',
+              background: 'var(--success-bg)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               margin: '0 auto 20px'
             }}>
-              <CheckCircle2 size={36} color="#fff" />
+              <CheckCircle2 size={36} color="var(--success-text)" />
             </div>
 
-            <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#ffffff', marginBottom: '8px' }}>
+            <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--navy)', marginBottom: '8px' }}>
               Registration Successful!
             </h2>
-            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.88rem', lineHeight: 1.6, marginBottom: '24px' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', lineHeight: 1.6, marginBottom: '24px' }}>
               {success.message}
             </p>
 
             <div style={{
-              background: 'rgba(6, 182, 212, 0.12)',
-              border: '1px solid rgba(6, 182, 212, 0.35)',
-              borderRadius: '14px',
+              background: 'var(--surface-subtle)',
+              border: '1px solid var(--border)',
+              borderRadius: '12px',
               padding: '20px',
               marginBottom: '20px'
             }}>
-              <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#67e8f9', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>
+              <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--navy)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>
                 Your Tenant ID
               </div>
               <div style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px'
               }}>
                 <span style={{
-                  fontSize: '1.6rem', fontWeight: 900, color: '#5EEAD4',
+                  fontSize: '1.6rem', fontWeight: 900, color: 'var(--navy)',
                   letterSpacing: '0.1em', fontFamily: 'monospace'
                 }}>
                   {success.tenantId}
@@ -170,11 +165,11 @@ export default function RegisterPage() {
                 <button
                   onClick={copyTenantId}
                   style={{
-                    background: copied ? 'rgba(16,185,129,0.3)' : 'rgba(255,255,255,0.1)',
-                    border: '1px solid rgba(255,255,255,0.2)',
+                    background: copied ? 'var(--success-bg)' : 'var(--card)',
+                    border: '1px solid var(--border)',
                     borderRadius: '8px',
                     padding: '6px 10px',
-                    color: '#fff',
+                    color: 'var(--navy)',
                     cursor: 'pointer',
                     display: 'flex', alignItems: 'center', gap: '4px',
                     fontSize: '0.75rem', fontWeight: 600,
@@ -184,22 +179,22 @@ export default function RegisterPage() {
                   {copied ? <><Check size={14} /> Copied</> : <><Copy size={14} /> Copy</>}
                 </button>
               </div>
-              <p style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.55)', marginTop: '10px' }}>
+              <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '10px' }}>
                 Save this ID! Your employees will use it to login to your organization's portal.
               </p>
             </div>
 
             <div style={{
-              background: 'rgba(245,158,11,0.12)',
-              border: '1px solid rgba(245,158,11,0.3)',
+              background: 'var(--warning-bg)',
+              border: '1px solid var(--warning-bg)',
               borderRadius: '10px',
               padding: '14px',
               marginBottom: '24px',
               display: 'flex', alignItems: 'flex-start', gap: '10px',
               textAlign: 'left'
             }}>
-              <Shield size={18} color="#fbbf24" style={{ flexShrink: 0, marginTop: '2px' }} />
-              <p style={{ fontSize: '0.8rem', color: '#fde68a', lineHeight: 1.5, margin: 0 }}>
+              <Shield size={18} color="var(--warning-text)" style={{ flexShrink: 0, marginTop: '2px' }} />
+              <p style={{ fontSize: '0.8rem', color: 'var(--warning-text)', lineHeight: 1.5, margin: 0 }}>
                 <strong>Pending Activation:</strong> A platform administrator will review and activate your organization. You'll be able to login once activated.
               </p>
             </div>
@@ -209,10 +204,10 @@ export default function RegisterPage() {
               style={{
                 width: '100%',
                 padding: '12px',
-                background: 'linear-gradient(135deg, #196478 0%, #0d3741 100%)',
-                border: '1px solid rgba(255,255,255,0.1)',
+                background: 'var(--orange)',
+                border: '1px solid var(--orange)',
                 borderRadius: '10px',
-                color: '#ffffff',
+                color: 'var(--card)',
                 fontWeight: 700,
                 fontSize: '0.92rem',
                 cursor: 'pointer',
@@ -229,11 +224,9 @@ export default function RegisterPage() {
   }
 
   return (
-    <div style={{
+    <div className="auth-register-page" style={{
       minHeight: '100vh',
-      backgroundImage: `linear-gradient(180deg, rgba(15,28,63,0.55) 0%, rgba(10,15,30,0.7) 100%), url(${loginBg})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
+      background: 'var(--bg)',
       backgroundRepeat: 'no-repeat',
       display: 'flex',
       flexDirection: 'column',
@@ -244,26 +237,21 @@ export default function RegisterPage() {
       <div style={{ width: '100%', maxWidth: '480px' }}>
         {/* Brand */}
         <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-          <img src={logoImg} alt="Logo" style={{ width: '56px', height: '56px', objectFit: 'contain', marginBottom: '10px' }} />
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.03em' }}>
-            THINKB4<span style={{ color: '#01201bb4' }}>ACT</span>
-          </h1>
-          <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.85rem', marginTop: '4px' }}>
+          <img className="auth-brand-logo" src={logoImg} alt="ThinkB4Act" style={{ width: 'min(220px, 72vw)', height: 'auto', objectFit: 'contain', marginBottom: '10px' }} />
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '4px' }}>
             Register Your Organization
           </p>
         </div>
 
         {/* Registration Card */}
-        <div style={{
-          background: 'rgba(255,255,255,0.05)',
-          backdropFilter: 'blur(10px)',
-          WebkitBackdropFilter: 'blur(10px)',
-          border: '1px solid rgba(255,255,255,0.15)',
-          borderRadius: '16px',
+        <div className="auth-register-card" style={{
+          background: 'var(--card)',
+          border: '1px solid var(--border)',
+          borderRadius: '12px',
           padding: '28px',
-          boxShadow: '0 20px 40px rgba(0,0,0,0.25)'
+          boxShadow: 'var(--shadow-card)'
         }}>
-          <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#ffffff', marginBottom: '16px', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--navy)', marginBottom: '16px', textAlign: 'center' }}>
             Organization Registration
           </h2>
 
@@ -271,40 +259,40 @@ export default function RegisterPage() {
             <div style={{
               display: 'flex', alignItems: 'center', gap: '10px',
               padding: '10px 12px', borderRadius: '8px',
-              background: 'rgba(190, 18, 60, 0.2)',
-              border: '1px solid rgba(190, 18, 60, 0.4)',
-              color: '#FCA5A5', fontSize: '0.82rem', marginBottom: '16px'
+              background: 'var(--danger-bg)',
+              border: '1px solid var(--danger-border)',
+              color: 'var(--danger-text)', fontSize: '0.82rem', marginBottom: '16px'
             }}>
               <AlertCircle size={16} />
               {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {/* Secret Key */}
             <div style={{
-              background: 'rgba(245,158,11,0.08)',
-              border: '1px solid rgba(245,158,11,0.25)',
+              background: 'var(--warning-bg)',
+              border: '1px solid var(--warning-bg)',
               borderRadius: '12px',
               padding: '14px'
             }}>
-              <label style={{ ...labelStyle, color: '#fbbf24' }}>
+              <label style={{ ...labelStyle, color: 'var(--warning-text)' }}>
                 Platform Registration Key *
               </label>
               <div style={{ position: 'relative' }}>
-                <Key size={16} color="#fbbf24" style={{ position: 'absolute', left: '12px', top: '13px' }} />
+                <Key size={16} color="var(--warning-text)" style={{ position: 'absolute', left: '12px', top: '13px' }} />
                 <input
                   type="password"
                   value={form.secretKey}
                   onChange={(e) => handleChange('secretKey', e.target.value)}
                   placeholder="Enter secret registration key"
                   required
-                  style={{ ...inputStyle, borderColor: 'rgba(245,158,11,0.35)' }}
-                  onFocus={(e) => e.target.style.borderColor = '#fbbf24'}
-                  onBlur={(e) => e.target.style.borderColor = 'rgba(245,158,11,0.35)'}
+                  style={{ ...inputStyle, borderColor: 'var(--warning-text)' }}
+                  onFocus={(e) => e.target.style.borderColor = 'var(--warning-text)'}
+                  onBlur={(e) => e.target.style.borderColor = 'var(--warning-text)'}
                 />
               </div>
-              <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.45)', marginTop: '6px' }}>
+              <p style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '6px' }}>
                 Contact the platform administrator to obtain this key
               </p>
             </div>
@@ -313,7 +301,7 @@ export default function RegisterPage() {
             <div>
               <label style={labelStyle}>Organization Name *</label>
               <div style={{ position: 'relative' }}>
-                <Building2 size={16} color="rgba(255,255,255,0.6)" style={{ position: 'absolute', left: '12px', top: '13px' }} />
+                <Building2 size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '12px', top: '13px' }} />
                 <input
                   type="text"
                   value={form.companyName}
@@ -321,8 +309,8 @@ export default function RegisterPage() {
                   placeholder="Acme Corporation"
                   required
                   style={inputStyle}
-                  onFocus={(e) => e.target.style.borderColor = '#5EEAD4'}
-                  onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.25)'}
+                  onFocus={(e) => e.target.style.borderColor = 'var(--navy)'}
+                  onBlur={(e) => e.target.style.borderColor = 'var(--border)'}
                 />
               </div>
             </div>
@@ -332,14 +320,14 @@ export default function RegisterPage() {
               <div>
                 <label style={labelStyle}>Industry</label>
                 <div style={{ position: 'relative' }}>
-                  <Briefcase size={16} color="rgba(255,255,255,0.6)" style={{ position: 'absolute', left: '12px', top: '13px' }} />
+                  <Briefcase size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '12px', top: '13px' }} />
                   <select
                     value={form.industry}
                     onChange={(e) => handleChange('industry', e.target.value)}
                     style={{ ...inputStyle, appearance: 'none', paddingRight: '12px' }}
                   >
                     {industries.map(ind => (
-                      <option key={ind} value={ind} style={{ background: '#1a1a2e', color: '#fff' }}>{ind}</option>
+                      <option key={ind} value={ind} style={{ background: 'var(--card)', color: 'var(--text)' }}>{ind}</option>
                     ))}
                   </select>
                 </div>
@@ -347,28 +335,28 @@ export default function RegisterPage() {
               <div>
                 <label style={labelStyle}>Phone</label>
                 <div style={{ position: 'relative' }}>
-                  <Phone size={16} color="rgba(255,255,255,0.6)" style={{ position: 'absolute', left: '12px', top: '13px' }} />
+                  <Phone size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '12px', top: '13px' }} />
                   <input
                     type="tel"
                     value={form.phone}
                     onChange={(e) => handleChange('phone', e.target.value)}
                     placeholder="+1 (555) 000-0000"
                     style={inputStyle}
-                    onFocus={(e) => e.target.style.borderColor = '#5EEAD4'}
-                    onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.25)'}
+                    onFocus={(e) => e.target.style.borderColor = 'var(--navy)'}
+                    onBlur={(e) => e.target.style.borderColor = 'var(--border)'}
                   />
                 </div>
               </div>
             </div>
 
             {/* Divider */}
-            <div style={{ borderTop: '1px solid rgba(255,255,255,0.12)', margin: '4px 0' }} />
+            <div style={{ borderTop: '1px solid var(--border)', margin: '4px 0' }} />
 
             {/* Admin Name */}
             <div>
               <label style={labelStyle}>Administrator Full Name *</label>
               <div style={{ position: 'relative' }}>
-                <User size={16} color="rgba(255,255,255,0.6)" style={{ position: 'absolute', left: '12px', top: '13px' }} />
+                <User size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '12px', top: '13px' }} />
                 <input
                   type="text"
                   value={form.adminName}
@@ -376,8 +364,8 @@ export default function RegisterPage() {
                   placeholder="John Doe"
                   required
                   style={inputStyle}
-                  onFocus={(e) => e.target.style.borderColor = '#5EEAD4'}
-                  onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.25)'}
+                  onFocus={(e) => e.target.style.borderColor = 'var(--navy)'}
+                  onBlur={(e) => e.target.style.borderColor = 'var(--border)'}
                 />
               </div>
             </div>
@@ -386,7 +374,7 @@ export default function RegisterPage() {
             <div>
               <label style={labelStyle}>Administrator Email *</label>
               <div style={{ position: 'relative' }}>
-                <Mail size={16} color="rgba(255,255,255,0.6)" style={{ position: 'absolute', left: '12px', top: '13px' }} />
+                <Mail size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '12px', top: '13px' }} />
                 <input
                   type="email"
                   value={form.email}
@@ -394,8 +382,8 @@ export default function RegisterPage() {
                   placeholder="admin@company.com"
                   required
                   style={inputStyle}
-                  onFocus={(e) => e.target.style.borderColor = '#5EEAD4'}
-                  onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.25)'}
+                  onFocus={(e) => e.target.style.borderColor = 'var(--navy)'}
+                  onBlur={(e) => e.target.style.borderColor = 'var(--border)'}
                 />
               </div>
             </div>
@@ -405,7 +393,7 @@ export default function RegisterPage() {
               <div>
                 <label style={labelStyle}>Password *</label>
                 <div style={{ position: 'relative' }}>
-                  <Lock size={16} color="rgba(255,255,255,0.6)" style={{ position: 'absolute', left: '12px', top: '13px' }} />
+                  <Lock size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '12px', top: '13px' }} />
                   <input
                     type="password"
                     value={form.password}
@@ -413,15 +401,15 @@ export default function RegisterPage() {
                     placeholder="Min 8 characters"
                     required
                     style={inputStyle}
-                    onFocus={(e) => e.target.style.borderColor = '#5EEAD4'}
-                    onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.25)'}
+                    onFocus={(e) => e.target.style.borderColor = 'var(--navy)'}
+                    onBlur={(e) => e.target.style.borderColor = 'var(--border)'}
                   />
                 </div>
               </div>
               <div>
                 <label style={labelStyle}>Confirm Password *</label>
                 <div style={{ position: 'relative' }}>
-                  <Lock size={16} color="rgba(255,255,255,0.6)" style={{ position: 'absolute', left: '12px', top: '13px' }} />
+                  <Lock size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '12px', top: '13px' }} />
                   <input
                     type="password"
                     value={form.confirmPassword}
@@ -429,8 +417,8 @@ export default function RegisterPage() {
                     placeholder="Repeat password"
                     required
                     style={inputStyle}
-                    onFocus={(e) => e.target.style.borderColor = '#5EEAD4'}
-                    onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.25)'}
+                    onFocus={(e) => e.target.style.borderColor = 'var(--navy)'}
+                    onBlur={(e) => e.target.style.borderColor = 'var(--border)'}
                   />
                 </div>
               </div>
@@ -445,22 +433,17 @@ export default function RegisterPage() {
                 width: '100%',
                 padding: '12px',
                 marginTop: '4px',
-                background: isButtonHovered
-                  ? 'linear-gradient(135deg, #228296 0%, #123f4c 100%)'
-                  : 'linear-gradient(135deg, #196478 0%, #0d3741 100%)',
-                border: '1px solid rgba(255,255,255,0.1)',
+                background: isButtonHovered ? 'var(--orange-dark)' : 'var(--orange)',
+                border: '1px solid var(--orange)',
                 borderRadius: '10px',
-                color: '#ffffff',
+                color: 'var(--card)',
                 fontWeight: 700,
                 fontSize: '0.92rem',
                 cursor: loading ? 'not-allowed' : 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                boxShadow: isButtonHovered
-                  ? '0 4px 14px rgba(25, 100, 120, 0.5)'
-                  : '0 2px 8px rgba(25, 100, 120, 0.35)',
+                boxShadow: 'none',
                 transform: isButtonHovered ? 'translateY(-1px)' : 'translateY(0)',
                 transition: 'all 0.2s ease',
-                opacity: loading ? 0.7 : 1
               }}
             >
               {loading ? 'Registering Organization...' : (
@@ -473,9 +456,9 @@ export default function RegisterPage() {
         </div>
 
         {/* Login Link */}
-        <div style={{ textAlign: 'center', marginTop: '16px', fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)' }}>
+        <div style={{ textAlign: 'center', marginTop: '16px', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
           Already registered?{' '}
-          <Link to="/login" style={{ color: '#5EEAD4', textDecoration: 'none', fontWeight: 600 }}>
+          <Link to="/login" style={{ color: 'var(--navy)', textDecoration: 'none', fontWeight: 600 }}>
             Sign In to Portal
           </Link>
         </div>

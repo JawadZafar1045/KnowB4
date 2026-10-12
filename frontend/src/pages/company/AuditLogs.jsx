@@ -10,7 +10,7 @@ export default function AuditLogs() {
     api.get('/reports/audit-logs').then(res => setLogs(res.data.logs || [])).catch(console.error).finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <div style={{ color: '#94a3b8', padding: '40px' }}>Loading audit trail...</div>;
+  if (loading) return <div style={{ color: 'var(--text-muted)', padding: '40px' }}>Loading audit trail...</div>;
 
   const actionColors = {
     CERTIFICATE_ISSUED: 'badge-green',
@@ -25,29 +25,31 @@ export default function AuditLogs() {
   return (
     <div>
       <div style={{ marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#18181b' }}>Compliance Audit Trail</h1>
-        <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Security event log for organizational governance</p>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text)' }}>Compliance Audit Trail</h1>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Security event log for organizational governance</p>
       </div>
 
-      <div className="glass-panel" style={{ overflow: 'hidden' }}>
-        <table className="data-table">
+      <div className="surface-panel" style={{ overflow: 'hidden' }}>
+        <div className="table-responsive">
+          <table className="data-table">
           <thead><tr><th>Timestamp</th><th>User</th><th>Action</th><th>Resource</th><th>Details</th></tr></thead>
           <tbody>
             {logs.map(log => (
               <tr key={log._id}>
-                <td style={{ fontSize: '0.78rem', color: '#64748b', whiteSpace: 'nowrap' }}>
+                <td style={{ fontSize: '0.78rem', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>
                   {new Date(log.createdAt).toLocaleString()}
                 </td>
                 <td style={{ fontWeight: 600, fontSize: '0.85rem' }}>{log.userId?.name || 'System'}</td>
                 <td><span className={`badge ${actionColors[log.action] || 'badge-slate'}`} style={{ fontSize: '0.7rem' }}>{log.action}</span></td>
-                <td style={{ color: '#94a3b8' }}>{log.resource}</td>
-                <td style={{ fontSize: '0.78rem', color: '#64748b', maxWidth: '250px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                <td style={{ color: 'var(--text-muted)' }}>{log.resource}</td>
+                <td style={{ fontSize: '0.78rem', color: 'var(--text-muted)', maxWidth: '250px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {JSON.stringify(log.details)}
                 </td>
               </tr>
             ))}
           </tbody>
-        </table>
+          </table>
+        </div>
       </div>
     </div>
   );
