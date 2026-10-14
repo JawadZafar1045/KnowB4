@@ -1,12 +1,13 @@
 const PDFDocument = require('pdfkit');
 const QRCode = require('qrcode');
-const fs = require('fs');
-const path = require('path');
-const { certificatesDir } = require('../config/storage');
+// const fs = require('fs');
+// const path = require('path');
+// const { certificatesDir } = require('../config/storage');
 const Certificate = require('../models/Certificate');
 const AuditLog = require('../models/AuditLog');
 const { generateCertificateId, generateVerificationToken } = require('../utils/generateCertificateId');
 const config = require('../config/environment');
+const { uploadPdfBuffer } = require('../config/cloudinary');
 
 /**
  * Generate a high-resolution QR code as Data URL
@@ -25,7 +26,7 @@ const generateQRCodeDataUrl = async (verificationUrl) => {
 /**
  * Render a professional cybersecurity certificate PDF using PDFKit
  */
-const renderCertificatePDF = async ({ certificateId, recipientName, courseName, companyName, score, issuedAt, qrDataUrl, filePath }) => {
+const renderCertificatePDFBuffer = async ({ certificateId, recipientName, courseName, companyName, score, issuedAt, qrDataUrl }) => {
   return new Promise((resolve, reject) => {
     // Landscape A4 certificate (841.89 x 595.28 pt)
     const doc = new PDFDocument({
@@ -33,8 +34,13 @@ const renderCertificatePDF = async ({ certificateId, recipientName, courseName, 
       margins: { top: 30, bottom: 30, left: 30, right: 30 }
     });
 
-    const writeStream = fs.createWriteStream(filePath);
-    doc.pipe(writeStream);
+    // const writeStream = fs.createWriteStream(filePath);
+    // doc.pipe(writeStream);
+
+    const buffers = [];
+    doc.on('data', (chunk) => buffers.push(chunk));
+    doc.on('end', () => resolve(Buffer.concat(buffers)));
+    doc.on('error', reject);
 
     // Dark security background accents
     doc.rect(0, 0, 842, 595).fill('#0b0f19');
@@ -144,8 +150,8 @@ const renderCertificatePDF = async ({ certificateId, recipientName, courseName, 
 
     doc.end();
 
-    writeStream.on('finish', () => resolve(filePath));
-    writeStream.on('error', reject);
+    // writeStream.on('finish', () => resolve(filePath));
+    // writeStream.on('error', reject);
   });
 };
 
@@ -170,22 +176,56 @@ const issueCertificate = async ({ user, company, course, campaignId, score }) =>
   const verificationUrl = `${config.appUrl}/verify/${certificateId}`;
 
   const qrCodeUrl = await generateQRCodeDataUrl(verificationUrl);
-  const fileName = `${certificateId}.pdf`;
-  const filePath = path.join(certificatesDir, fileName);
+  // const fileName = `${certificateId}.pdf`;
+  // const filePath = path.join(certificatesDir, fileName);
 
-  await renderCertificatePDF({
+  // await renderCertificatePDF({
+  //   certificateId,
+  //   recipientName: user.name,
+  //   courseName: course.title,
+  //   companyName: company.name,
+  //   score,
+  //   issuedAt: new Date(),
+  //   qrDataUrl: qrCodeUrl,
+  //   filePath
+  // });
+
+  // const relativePdfUrl = `/uploads/certificates/${fileName}`;
+
+  // const certificate = await Certificate.create({
+  //   certificateId,
+  //   userId: user._id,
+  //   companyId: company._id,
+  //   campaignId: campaignId || null,
+  //   courseId: course._id,
+  //   recipientName: user.name,
+  //   courseName: course.title,
+  //   companyName: company.name,
+  //   score,
+  //   issuedAt: new Date(),
+  //   verificationToken,
+  //   pdfUrl: relativePdfUrl,
+  //   qrCodeUrl,
+  //   status: 'VALID'
+  // });
+
+    const fileName = `${certificateId}`;
+
+  // 1. PDF Buffer generate 
+  const pdfBuffer = await renderCertificatePDFBuffer({
     certificateId,
     recipientName: user.name,
     courseName: course.title,
     companyName: company.name,
     score,
     issuedAt: new Date(),
-    qrDataUrl: qrCodeUrl,
-    filePath
+    qrDataUrl: qrCodeUrl
   });
 
-  const relativePdfUrl = `/uploads/certificates/${fileName}`;
+  // 2. Buffer Cloudinary stream 
+  const cloudinaryResult = await uploadPdfBuffer(pdfBuffer, fileName);
 
+  // 3. Database entry in Cloudinary secure link store
   const certificate = await Certificate.create({
     certificateId,
     userId: user._id,
@@ -198,10 +238,11 @@ const issueCertificate = async ({ user, company, course, campaignId, score }) =>
     score,
     issuedAt: new Date(),
     verificationToken,
-    pdfUrl: relativePdfUrl,
+    pdfUrl: cloudinaryResult.secure_url,
     qrCodeUrl,
     status: 'VALID'
   });
+
 
   // Audit log creation
   await AuditLog.create({
@@ -218,5 +259,5 @@ const issueCertificate = async ({ user, company, course, campaignId, score }) =>
 module.exports = {
   issueCertificate,
   generateQRCodeDataUrl,
-  renderCertificatePDF
+  renderCertificatePDFBuffer
 };
