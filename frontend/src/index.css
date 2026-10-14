@@ -1321,3 +1321,13 @@ div[style*='position: fixed'][style*='inset: 0'] {
     transition-duration: 0.01ms !important;
   }
 }
+/* Register page: readable text on solid orange (warning) boxes */
+.auth-register-card [style*='var(--warning-bg)'] :is(label, p, strong, span) {
+  color: #FFFFFF !important;
+}
+
+/* Key icon sits inside the white input, so keep it navy (was white on white) */
+.auth-register-card [style*='var(--warning-bg)'] div[style*='position: relative'] > svg {
+  color: var(--navy) !important;
+  stroke: var(--navy) !important;
+}
