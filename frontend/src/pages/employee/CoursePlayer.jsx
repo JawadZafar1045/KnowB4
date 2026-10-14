@@ -60,15 +60,15 @@ export default function CoursePlayer() {
     <div style={{ display: 'flex', gap: '24px', minHeight: 'calc(100vh - 160px)' }}>
       {/* Sidebar: Module/Lesson Checklist */}
       <aside style={{
-        width: '300px', flexShrink: 0, background: 'var(--navy)',
-        borderRadius: '12px', border: '1px solid #1D3858', padding: '20px', overflowY: 'auto',
+        width: '300px', flexShrink: 0, background: 'var(--card)',
+        borderRadius: '12px', border: '1px solid var(--border)', padding: '20px', overflowY: 'auto',
         boxShadow: 'var(--shadow-card)'
       }}>
-        <Link to="/employee" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--card)', fontSize: '0.8rem', textDecoration: 'none', marginBottom: '16px' }}>
+        <Link to="/employee" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--navy)', fontSize: '0.8rem', fontWeight: 600, textDecoration: 'none', marginBottom: '16px' }}>
           <ChevronLeft size={14} /> Back to Training
         </Link>
-        <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--card)', marginBottom: '4px' }}>{course.title}</h3>
-        <div style={{ fontSize: '0.78rem', color: 'var(--card)', marginBottom: '16px' }}>
+        <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--navy)', marginBottom: '4px' }}>{course.title}</h3>
+        <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '16px' }}>
           {completedCount}/{totalLessons} lessons completed
         </div>
         {/* Progress bar */}
@@ -78,7 +78,7 @@ export default function CoursePlayer() {
 
         {(course.modules || []).map((mod, modIdx) => (
           <div key={mod._id} style={{ marginBottom: '16px' }}>
-            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--card)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>
+            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--navy)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>
               Module {modIdx + 1}: {mod.title}
             </div>
             {(mod.lessons || []).map((lesson) => {
@@ -91,9 +91,9 @@ export default function CoursePlayer() {
                   style={{
                     display: 'flex', alignItems: 'center', gap: '10px',
                     width: '100%', padding: '8px 12px', borderRadius: '8px',
-                    border: isActive ? '1px solid #64748B' : '1px solid var(--navy)',
-                    background: isActive ? '#1D3858' : 'var(--navy)',
-                    color: done ? 'var(--success-text)' : 'var(--card)',
+                    border: isActive ? '1px solid var(--navy)' : '1px solid var(--border)',
+                    background: isActive ? 'var(--navy)' : 'var(--card)',
+                    color: isActive ? '#FFFFFF' : (done ? 'var(--success-text)' : 'var(--navy)'),
                     cursor: 'pointer', textAlign: 'left',
                     fontSize: '0.82rem', fontWeight: isActive ? 600 : 400,
                     marginBottom: '4px', transition: 'all 0.15s ease'
@@ -109,15 +109,15 @@ export default function CoursePlayer() {
 
         {/* Quiz Link */}
         {course.quiz && (
-          <div style={{ marginTop: '8px', paddingTop: '12px', borderTop: '1px solid #1D3858' }}>
+          <div style={{ marginTop: '8px', paddingTop: '12px', borderTop: '1px solid var(--border)' }}>
             <Link
               to={`/employee/course/${courseId}/quiz`}
               style={{
                 display: 'flex', alignItems: 'center', gap: '8px',
                 padding: '10px 14px', borderRadius: '8px',
-                background: allDone ? '#1D3858' : 'var(--navy)',
-                border: `1px solid ${allDone ? '#64748B' : '#1D3858'}`,
-                color: allDone ? 'var(--success-text)' : 'var(--card)',
+                background: allDone ? 'var(--navy)' : 'var(--card)',
+                border: `1px solid ${allDone ? 'var(--navy)' : 'var(--border)'}`,
+                color: allDone ? '#FFFFFF' : 'var(--navy)',
                 textDecoration: 'none', fontSize: '0.85rem', fontWeight: 700,
                 transition: 'all 0.15s ease'
               }}
@@ -257,7 +257,7 @@ export default function CoursePlayer() {
                   <CheckCircle2 size={16} /> Mark Complete & Next Lesson
                 </button>
               ) : (
-                <span style={{ background: 'var(--success-bg)', color: 'var(--success-text)', fontSize: '0.85rem', fontWeight: 700, padding: '8px 16px', borderRadius: '9999px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ background: 'var(--success-bg)', color: '#FFFFFF', fontSize: '0.85rem', fontWeight: 700, padding: '8px 16px', borderRadius: '9999px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
                   <CheckCircle2 size={14} /> Lesson Completed
                 </span>
               )}

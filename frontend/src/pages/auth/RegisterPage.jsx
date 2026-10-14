@@ -194,8 +194,8 @@ export default function RegisterPage() {
               textAlign: 'left'
             }}>
               <Shield size={18} color="var(--warning-text)" style={{ flexShrink: 0, marginTop: '2px' }} />
-              <p style={{ fontSize: '0.8rem', color: 'var(--warning-text)', lineHeight: 1.5, margin: 0 }}>
-                <strong>Pending Activation:</strong> A platform administrator will review and activate your organization. You'll be able to login once activated.
+              <p style={{ fontSize: '0.8rem', color: '#FFFFFF', lineHeight: 1.5, margin: 0 }}>
+                <strong style={{ color: '#FFFFFF' }}>Pending Activation:</strong> A platform administrator will review and activate your organization. You'll be able to login once activated.
               </p>
             </div>
 
@@ -276,11 +276,11 @@ export default function RegisterPage() {
               borderRadius: '12px',
               padding: '14px'
             }}>
-              <label style={{ ...labelStyle, color: 'var(--warning-text)' }}>
+              <label style={{ ...labelStyle, color: '#FFFFFF' }}>
                 Platform Registration Key *
               </label>
               <div style={{ position: 'relative' }}>
-                <Key size={16} color="var(--warning-text)" style={{ position: 'absolute', left: '12px', top: '13px' }} />
+                <Key size={16} color="#FFFFFF" style={{ position: 'absolute', left: '12px', top: '13px' }} />
                 <input
                   type="password"
                   value={form.secretKey}
@@ -292,7 +292,7 @@ export default function RegisterPage() {
                   onBlur={(e) => e.target.style.borderColor = 'var(--warning-text)'}
                 />
               </div>
-              <p style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '6px' }}>
+              <p style={{ fontSize: '0.72rem', color: '#FFFFFF', marginTop: '6px' }}>
                 Contact the platform administrator to obtain this key
               </p>
             </div>
