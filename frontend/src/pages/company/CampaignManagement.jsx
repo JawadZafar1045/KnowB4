@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import api from '../../services/api';
 import { formatStatus } from '../../utils/displayFormatters';
 import { Send, Plus, CalendarDays, BookOpen, Users, Target, X, Edit2, Trash2, CheckCircle } from 'lucide-react';
 
 export default function CampaignManagement() {
+  const location = useLocation();
   const [campaigns, setCampaigns] = useState([]);
   const [courses, setCourses] = useState([]);
   const [departments, setDepartments] = useState([]);
@@ -43,6 +45,22 @@ export default function CampaignManagement() {
       setEmployees(emp.data.employees || []);
     }).catch(console.error).finally(() => setLoading(false));
   }, []);
+
+  // Handle preselected course from Course Library
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const courseId = location.state?.preselectedCourseId || params.get('courseId');
+    const courseTitle = location.state?.courseTitle || params.get('courseTitle');
+
+    if (courseId) {
+      setShowCreate(true);
+      setForm(prev => ({
+        ...prev,
+        courses: [courseId],
+        name: courseTitle ? `${courseTitle} Training Campaign` : prev.name
+      }));
+    }
+  }, [location]);
 
   const handleLaunch = async (e) => {
     e.preventDefault();

@@ -12,9 +12,30 @@ import {
   Trash2,
   CheckCircle2,
   AlertTriangle,
-  Sparkles
+  Sparkles,
+  Building2,
+  Briefcase,
+  Tv,
+  Search,
+  Filter
 } from 'lucide-react';
 import CourseCurriculumModal from '../../components/course/CourseCurriculumModal';
+
+const PRESET_OFFICE_CATEGORIES = [
+  { value: 'ALL', label: '🌐 All Offices & Companies (Universal)' },
+  { value: 'TV Channels / Media & Broadcasting', label: '📺 TV Channels / Media & Broadcasting' },
+  { value: 'Technology & Software', label: '💻 Technology & Software' },
+  { value: 'Finance & Banking', label: '🏦 Finance & Banking' },
+  { value: 'Healthcare & Hospitals', label: '🏥 Healthcare & Hospitals' },
+  { value: 'Education & Academia', label: '🎓 Education & Academia' },
+  { value: 'Government & Public Sector', label: '🏛️ Government & Public Sector' },
+  { value: 'Retail & E-Commerce', label: '🛒 Retail & E-Commerce' },
+  { value: 'Manufacturing & Logistics', label: '🏭 Manufacturing & Logistics' },
+  { value: 'Legal & Law Firms', label: '⚖️ Legal & Law Firms' },
+  { value: 'Energy & Utilities', label: '⚡ Energy & Utilities' },
+  { value: 'Telecommunications', label: '📡 Telecommunications' },
+  { value: 'CUSTOM', label: '✏️ Custom Office Category...' }
+];
 
 export default function GlobalCourseManager() {
   const [courses, setCourses] = useState([]);
@@ -34,6 +55,10 @@ export default function GlobalCourseManager() {
   // Success message
   const [successMsg, setSuccessMsg] = useState('');
 
+  // Filter & Search state
+  const [targetCategoryFilter, setTargetCategoryFilter] = useState('ALL');
+  const [searchQuery, setSearchQuery] = useState('');
+
   // Delete confirmation
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
@@ -43,6 +68,8 @@ export default function GlobalCourseManager() {
     title: '',
     description: '',
     category: 'General Security',
+    targetCategory: 'ALL',
+    customTargetCategory: '',
     difficulty: 'BEGINNER',
     estimatedDuration: 20,
     passingScore: 80,
@@ -108,11 +135,16 @@ export default function GlobalCourseManager() {
     setEditingId(course._id);
     setModalTab('basic');
 
+    const courseTarget = course.targetCategory || 'ALL';
+    const isPreset = PRESET_OFFICE_CATEGORIES.some(p => p.value !== 'CUSTOM' && p.value === courseTarget);
+
     setForm({
       ...emptyForm,
       title: course.title || '',
       description: course.description || '',
       category: course.category || 'General Security',
+      targetCategory: isPreset ? courseTarget : 'CUSTOM',
+      customTargetCategory: isPreset ? '' : courseTarget,
       difficulty: course.difficulty || 'BEGINNER',
       estimatedDuration: course.estimatedDuration ?? 20,
       passingScore: course.passingScore ?? 80,
@@ -142,10 +174,15 @@ export default function GlobalCourseManager() {
       return;
     }
 
+    const resolvedTargetCategory = form.targetCategory === 'CUSTOM'
+      ? (form.customTargetCategory?.trim() || 'ALL')
+      : (form.targetCategory || 'ALL');
+
     const payload = {
       title: form.title.trim(),
       description: form.description.trim(),
       category: form.category || 'General Security',
+      targetCategory: resolvedTargetCategory,
       difficulty: form.difficulty || 'BEGINNER',
       estimatedDuration: Number(form.estimatedDuration),
       passingScore: Number(form.passingScore),
@@ -354,101 +391,257 @@ export default function GlobalCourseManager() {
         </div>
       )}
 
-      {/* Courses */}
-      {courses.length === 0 ? (
-        <div
-          style={{
-            padding: '60px',
-            textAlign: 'center',
-            backgroundColor: 'var(--card)',
-            border: '1px solid var(--border)',
-            borderRadius: '12px',
-            boxShadow: 'var(--shadow-card)'
-          }}
-        >
-          <BookOpen size={40} color="var(--text-muted)" />
-
-          <p
-            style={{
-              color: 'var(--text-muted)',
-              marginTop: '14px'
-            }}
-          >
-            No courses yet. Click "Add Course" to create the first one.
-          </p>
-        </div>
-      ) : (
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: '16px'
-          }}
-        >
-          {courses.map((course) => (
-            <div
-              key={course._id}
+      {/* Search and Category Filter Bar */}
+      <div style={{
+        background: 'var(--card)',
+        border: '1px solid var(--border)',
+        borderRadius: '12px',
+        padding: '14px 16px',
+        marginBottom: '20px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px',
+        boxShadow: 'var(--shadow-card)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
+          {/* Search box */}
+          <div style={{ position: 'relative', flex: '1', minWidth: '240px' }}>
+            <Search size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search courses by title, topic, or target category..."
               style={{
-                padding: '24px',
+                width: '100%',
+                padding: '8px 12px 8px 36px',
+                background: 'var(--bg)',
+                border: '1px solid var(--border)',
+                borderRadius: '8px',
+                color: 'var(--text)',
+                fontSize: '0.85rem',
+                outline: 'none',
+                boxSizing: 'border-box'
+              }}
+            />
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.80rem', color: 'var(--text-muted)' }}>
+            <Filter size={14} />
+            <span>Target Office:</span>
+          </div>
+        </div>
+
+        {/* Filter Pills */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+          {[
+            { id: 'ALL', label: 'All Courses' },
+            { id: 'ALL_OFFICES', label: '🌐 All Offices' },
+            { id: 'TV Channels', label: '📺 TV Channels' },
+            { id: 'Technology', label: '💻 Technology' },
+            { id: 'Healthcare', label: '🏥 Healthcare' },
+            { id: 'Finance', label: '🏦 Finance' },
+            { id: 'Education', label: '🎓 Education' },
+            { id: 'Government', label: '🏛️ Government' }
+          ].map(pill => {
+            const isActive = targetCategoryFilter === pill.id;
+            return (
+              <button
+                key={pill.id}
+                type="button"
+                onClick={() => setTargetCategoryFilter(pill.id)}
+                style={{
+                  padding: '5px 12px',
+                  borderRadius: '20px',
+                  border: '1px solid',
+                  borderColor: isActive ? 'var(--navy)' : 'var(--border)',
+                  background: isActive ? 'var(--navy)' : 'var(--surface-subtle)',
+                  color: isActive ? 'var(--card)' : 'var(--text)',
+                  fontSize: '0.76rem',
+                  fontWeight: isActive ? 700 : 500,
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                {pill.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Courses */}
+      {(() => {
+        const filteredCourses = courses.filter((course) => {
+          if (targetCategoryFilter !== 'ALL') {
+            const tc = (course.targetCategory || 'ALL').toLowerCase();
+            if (targetCategoryFilter === 'ALL_OFFICES') {
+              if (tc !== 'all') return false;
+            } else {
+              if (!tc.includes(targetCategoryFilter.toLowerCase())) return false;
+            }
+          }
+
+          if (searchQuery.trim()) {
+            const q = searchQuery.toLowerCase();
+            const matchTitle = course.title?.toLowerCase().includes(q);
+            const matchDesc = course.description?.toLowerCase().includes(q);
+            const matchCat = course.category?.toLowerCase().includes(q);
+            const matchTarget = course.targetCategory?.toLowerCase().includes(q);
+            return matchTitle || matchDesc || matchCat || matchTarget;
+          }
+
+          return true;
+        });
+
+        if (filteredCourses.length === 0) {
+          return (
+            <div
+              style={{
+                padding: '60px',
+                textAlign: 'center',
                 backgroundColor: 'var(--card)',
                 border: '1px solid var(--border)',
                 borderRadius: '12px',
                 boxShadow: 'var(--shadow-card)'
               }}
             >
-              {/* Card Header */}
+              <BookOpen size={40} color="var(--text-muted)" />
+              <p style={{ color: 'var(--text-muted)', marginTop: '14px', fontSize: '0.9rem' }}>
+                {courses.length === 0
+                  ? 'No courses yet. Click "Add Course" to create the first one.'
+                  : 'No courses match the selected filters or search query.'}
+              </p>
+              {courses.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => { setTargetCategoryFilter('ALL'); setSearchQuery(''); }}
+                  style={{
+                    marginTop: '10px',
+                    padding: '6px 14px',
+                    borderRadius: '6px',
+                    border: '1px solid var(--border)',
+                    background: 'var(--surface-subtle)',
+                    color: 'var(--navy)',
+                    fontSize: '0.80rem',
+                    fontWeight: 600,
+                    cursor: 'pointer'
+                  }}
+                >
+                  Clear Filters
+                </button>
+              )}
+            </div>
+          );
+        }
+
+        return (
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, 1fr)',
+              gap: '16px'
+            }}
+          >
+            {filteredCourses.map((course) => (
               <div
+                key={course._id}
                 style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'flex-start',
-                  marginBottom: '14px',
-                  gap: '10px'
+                  padding: '24px',
+                  backgroundColor: 'var(--card)',
+                  border: '1px solid var(--border)',
+                  borderRadius: '12px',
+                  boxShadow: 'var(--shadow-card)'
                 }}
               >
+                {/* Card Header */}
                 <div
                   style={{
                     display: 'flex',
-                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                    marginBottom: '14px',
                     gap: '10px'
                   }}
                 >
                   <div
                     style={{
-                      width: '40px',
-                      height: '40px',
-                      borderRadius: '10px',
-                      backgroundColor: 'var(--navy)',
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0
+                      gap: '10px'
                     }}
                   >
-                    <BookOpen size={20} color="var(--card)" />
-                  </div>
-
-                  <div>
-                    <h3
-                      style={{
-                        fontSize: '1rem',
-                        fontWeight: 700,
-                        color: 'var(--text)'
-                      }}
-                    >
-                      {course.title}
-                    </h3>
-
                     <div
                       style={{
-                        fontSize: '0.75rem',
-                        color: 'var(--text-muted)'
+                        width: '40px',
+                        height: '40px',
+                        borderRadius: '10px',
+                        backgroundColor: 'var(--navy)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0
                       }}
                     >
-                      {course.category}
+                      <BookOpen size={20} color="var(--card)" />
+                    </div>
+
+                    <div>
+                      <h3
+                        style={{
+                          fontSize: '1rem',
+                          fontWeight: 700,
+                          color: 'var(--text)'
+                        }}
+                      >
+                        {course.title}
+                      </h3>
+
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px', flexWrap: 'wrap' }}>
+                        <span
+                          style={{
+                            fontSize: '0.75rem',
+                            color: 'var(--text-muted)'
+                          }}
+                        >
+                          {course.category}
+                        </span>
+
+                        {/* Office / Target Category Badge */}
+                        {(!course.targetCategory || course.targetCategory === 'ALL') ? (
+                          <span style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '3px',
+                            padding: '2px 7px',
+                            borderRadius: '5px',
+                            fontSize: '0.70rem',
+                            fontWeight: 600,
+                            background: 'rgba(6, 182, 212, 0.1)',
+                            color: '#0284c7',
+                            border: '1px solid rgba(6, 182, 212, 0.25)'
+                          }}>
+                            🌐 All Offices
+                          </span>
+                        ) : (
+                          <span style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '3px',
+                            padding: '2px 7px',
+                            borderRadius: '5px',
+                            fontSize: '0.70rem',
+                            fontWeight: 700,
+                            background: course.targetCategory.toLowerCase().includes('tv') ? 'rgba(234, 88, 12, 0.12)' : 'rgba(99, 102, 241, 0.1)',
+                            color: course.targetCategory.toLowerCase().includes('tv') ? '#ea580c' : '#4f46e5',
+                            border: course.targetCategory.toLowerCase().includes('tv') ? '1px solid rgba(234, 88, 12, 0.3)' : '1px solid rgba(99, 102, 241, 0.25)'
+                          }}>
+                            {course.targetCategory.toLowerCase().includes('tv') ? '📺' : '🏢'} {course.targetCategory}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
 
                 {/* Difficulty + Edit + Delete */}
                 <div
@@ -611,7 +804,8 @@ export default function GlobalCourseManager() {
             </div>
           ))}
         </div>
-      )}
+        );
+      })()}
 
       {/* Add / Edit Course Modal */}
       {showAddModal && (
@@ -846,6 +1040,69 @@ export default function GlobalCourseManager() {
                           Advanced
                         </option>
                       </select>
+                    </div>
+                  </div>
+
+                  {/* Target Office / Company Category */}
+                  <div style={{
+                    marginBottom: '16px',
+                    padding: '14px',
+                    background: 'var(--surface-subtle)',
+                    border: '1px solid var(--border)',
+                    borderRadius: '10px'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                      <label className="form-label" style={{ marginBottom: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <Building2 size={15} color="var(--navy)" />
+                        Target Office / Organization Category *
+                      </label>
+                      <span style={{ fontSize: '0.70rem', color: 'var(--text-muted)' }}>
+                        Controls tenant office visibility
+                      </span>
+                    </div>
+
+                    <select
+                      className="form-input"
+                      value={form.targetCategory}
+                      onChange={(e) => handleChange('targetCategory', e.target.value)}
+                      style={{ cursor: 'pointer', marginBottom: form.targetCategory === 'CUSTOM' ? '10px' : '0' }}
+                    >
+                      {PRESET_OFFICE_CATEGORIES.map(opt => (
+                        <option key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </option>
+                      ))}
+                    </select>
+
+                    {form.targetCategory === 'CUSTOM' && (
+                      <div style={{ marginTop: '10px' }}>
+                        <label className="form-label" style={{ fontSize: '0.75rem' }}>
+                          Specify Custom Office Category *
+                        </label>
+                        <input
+                          className="form-input"
+                          value={form.customTargetCategory}
+                          onChange={(e) => handleChange('customTargetCategory', e.target.value)}
+                          placeholder="e.g. TV Broadcasting Network, Media Production, Regional Bureau..."
+                          required={form.targetCategory === 'CUSTOM'}
+                        />
+                      </div>
+                    )}
+
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      fontSize: '0.73rem',
+                      color: 'var(--text-muted)',
+                      marginTop: '8px'
+                    }}>
+                      <Briefcase size={12} />
+                      <span>
+                        {form.targetCategory === 'ALL'
+                          ? 'Universal: Available to all registered customer offices and industries.'
+                          : `Belongs specifically to offices matching "${form.targetCategory === 'CUSTOM' ? (form.customTargetCategory || 'custom category') : form.targetCategory}".`}
+                      </span>
                     </div>
                   </div>
 

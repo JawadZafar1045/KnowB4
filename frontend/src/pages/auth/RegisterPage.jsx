@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import api from '../../services/api';
 import { Building2, User, Mail, Lock, Key, Phone, Briefcase, ArrowRight, AlertCircle, CheckCircle2, Shield, Copy, Check } from 'lucide-react';
 import logoImg from '../../assets/logo-transparent.png';
+import PublicVerificationWidget from '../../components/common/PublicVerificationWidget';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -13,7 +14,8 @@ export default function RegisterPage() {
     password: '',
     confirmPassword: '',
     phone: '',
-    industry: 'Technology',
+    industry: 'TV Channels / Media & Broadcasting',
+    customIndustry: '',
     secretKey: ''
   });
   const [error, setError] = useState('');
@@ -23,9 +25,18 @@ export default function RegisterPage() {
   const [isButtonHovered, setIsButtonHovered] = useState(false);
 
   const industries = [
-    'Technology', 'Finance & Banking', 'Healthcare', 'Education',
-    'Government', 'Retail', 'Manufacturing', 'Legal',
-    'Energy & Utilities', 'Telecommunications', 'Other'
+    'TV Channels / Media & Broadcasting',
+    'Technology & Software',
+    'Finance & Banking',
+    'Healthcare & Hospitals',
+    'Education & Academia',
+    'Government & Public Sector',
+    'Retail & E-Commerce',
+    'Manufacturing & Logistics',
+    'Legal & Law Firms',
+    'Energy & Utilities',
+    'Telecommunications',
+    'Other (Custom Category)'
   ];
 
   const handleChange = (field, value) => {
@@ -42,6 +53,11 @@ export default function RegisterPage() {
       return;
     }
 
+    if (form.industry === 'Other (Custom Category)' && !form.customIndustry.trim()) {
+      setError('Please specify your office category');
+      return;
+    }
+
     if (form.password !== form.confirmPassword) {
       setError('Passwords do not match');
       return;
@@ -52,6 +68,10 @@ export default function RegisterPage() {
       return;
     }
 
+    const selectedCategory = form.industry === 'Other (Custom Category)'
+      ? form.customIndustry.trim()
+      : form.industry;
+
     setLoading(true);
     try {
       const res = await api.post('/auth/register-company', {
@@ -60,7 +80,8 @@ export default function RegisterPage() {
         email: form.email,
         password: form.password,
         phone: form.phone,
-        industry: form.industry,
+        industry: selectedCategory,
+        category: selectedCategory,
         secretKey: form.secretKey
       });
 
@@ -315,16 +336,16 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            {/* Two Column: Industry + Phone */}
+            {/* Two Column: Office Category + Phone */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <div>
-                <label style={labelStyle}>Industry</label>
+                <label style={labelStyle}>Office / Company Category *</label>
                 <div style={{ position: 'relative' }}>
                   <Briefcase size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '12px', top: '13px' }} />
                   <select
                     value={form.industry}
                     onChange={(e) => handleChange('industry', e.target.value)}
-                    style={{ ...inputStyle, appearance: 'none', paddingRight: '12px' }}
+                    style={{ ...inputStyle, appearance: 'none', paddingRight: '12px', cursor: 'pointer' }}
                   >
                     {industries.map(ind => (
                       <option key={ind} value={ind} style={{ background: 'var(--card)', color: 'var(--text)' }}>{ind}</option>
@@ -347,6 +368,26 @@ export default function RegisterPage() {
                   />
                 </div>
               </div>
+            </div>
+
+            {/* Custom Category Input if 'Other (Custom Category)' selected */}
+            {form.industry === 'Other (Custom Category)' && (
+              <div style={{ marginTop: '-4px', marginBottom: '8px' }}>
+                <label style={labelStyle}>Specify Office / Industry Category *</label>
+                <input
+                  type="text"
+                  value={form.customIndustry}
+                  onChange={(e) => handleChange('customIndustry', e.target.value)}
+                  placeholder="e.g. TV Broadcasting Network, Media Production..."
+                  required
+                  style={inputStyle}
+                  onFocus={(e) => e.target.style.borderColor = 'var(--navy)'}
+                  onBlur={(e) => e.target.style.borderColor = 'var(--border)'}
+                />
+              </div>
+            )}
+            <div style={{ fontSize: '0.73rem', color: 'var(--text-muted)', marginTop: '-6px', marginBottom: '6px' }}>
+              Select your category (e.g. TV Channels) so relevant security training courses in the catalog belong to your office.
             </div>
 
             {/* Divider */}
@@ -454,6 +495,9 @@ export default function RegisterPage() {
             </button>
           </form>
         </div>
+
+        {/* Public Verification Portal Widget */}
+        <PublicVerificationWidget style={{ marginTop: '16px' }} />
 
         {/* Login Link */}
         <div style={{ textAlign: 'center', marginTop: '16px', fontSize: '0.85rem', color: 'var(--text-muted)' }}>

@@ -30,6 +30,11 @@ const CourseSchema = new mongoose.Schema({
     type: String,
     default: 'General Security'
   },
+  targetCategory: {
+    type: String,
+    default: 'ALL', // 'ALL' = Available to all office categories, or specific e.g. 'TV Channels'
+    trim: true
+  },
   difficulty: {
     type: String,
     enum: ['BEGINNER', 'INTERMEDIATE', 'ADVANCED'],
@@ -59,5 +64,7 @@ const CourseSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 CourseSchema.index({ status: 1 });
+CourseSchema.index({ targetCategory: 1 });
+CourseSchema.index({ companyId: 1, targetCategory: 1 });
 
 module.exports = mongoose.model('Course', CourseSchema);

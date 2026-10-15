@@ -2,27 +2,81 @@ const Course = require('../models/Course');
 const Module = require('../models/Module');
 const Lesson = require('../models/Lesson');
 const Quiz = require('../models/Quiz');
+const Company = require('../models/Company');
 
-// DEMO SWITCH: true = company admin can edit/delete ALL courses (for demo).
-// Set to false for production. Must match DEMO_MODE in CompanyCourseManager.jsx.
-const DEMO_MODE = true;
+// Production Mode: only Super Admin can author, edit, or delete courses.
+// Company admins consume and launch campaigns from tailored courses.
+const DEMO_MODE = false;
 
 // @route   GET /api/courses
-// @desc    Get all available courses
+// @desc    Get all available courses (filtered by office/company category for tenants)
 // @access  Private
 const getCourses = async (req, res, next) => {
   try {
     let filter = {};
+    const { targetCategory } = req.query;
 
-    if (req.user.role === 'EMPLOYEE') {
-      filter = { status: 'PUBLISHED' };
-    } else if (req.user.role === 'COMPANY_ADMIN') {
-      filter = {
-        $or: [
-          { companyId: req.user.companyId },
-          { companyId: null }
-        ]
-      };
+    if (req.user.role === 'SUPER_ADMIN') {
+      if (targetCategory && targetCategory !== 'ALL_INCLUSIVE' && targetCategory !== 'ANY') {
+        if (targetCategory === 'ALL') {
+          filter.$or = [
+            { targetCategory: 'ALL' },
+            { targetCategory: { $exists: false } },
+            { targetCategory: null },
+            { targetCategory: '' }
+          ];
+        } else {
+          filter.targetCategory = new RegExp(`^${targetCategory.trim()}$`, 'i');
+        }
+      }
+    } else {
+      // For COMPANY_ADMIN and EMPLOYEE:
+      // 1. Own company's courses: { companyId: req.user.companyId }
+      // 2. Global courses: targetCategory === 'ALL', not specified, OR matches the tenant's category
+      let companyCat = null;
+      if (req.user.companyId) {
+        const comp = await Company.findById(req.user.companyId).select('industry category');
+        if (comp) {
+          companyCat = comp.category || comp.industry;
+        }
+      }
+
+      const globalConditions = [
+        { targetCategory: 'ALL' },
+        { targetCategory: { $exists: false } },
+        { targetCategory: null },
+        { targetCategory: '' }
+      ];
+
+      if (companyCat && companyCat.trim()) {
+        const trimmedCat = companyCat.trim();
+        const escaped = trimmedCat.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+        globalConditions.push({
+          targetCategory: new RegExp(`^${escaped}$`, 'i')
+        });
+        globalConditions.push({
+          targetCategory: { $regex: new RegExp(escaped, 'i') }
+        });
+      }
+
+      const orBranches = [
+        { companyId: req.user.companyId },
+        {
+          companyId: null,
+          $or: globalConditions
+        }
+      ];
+
+      if (req.user.role === 'EMPLOYEE') {
+        filter = {
+          status: 'PUBLISHED',
+          $or: orBranches
+        };
+      } else if (req.user.role === 'COMPANY_ADMIN') {
+        filter = {
+          $or: orBranches
+        };
+      }
     }
 
     const courses = await Course.find(filter).sort({ createdAt: -1 });
@@ -66,15 +120,36 @@ const getCourseById = async (req, res, next) => {
       });
     }
 
-    if (
-      req.user.role === 'COMPANY_ADMIN' &&
-      course.companyId &&
-      course.companyId.toString() !== req.user.companyId.toString()
-    ) {
-      return res.status(403).json({
-        success: false,
-        message: 'You do not have access to this course'
-      });
+    if (req.user.role !== 'SUPER_ADMIN') {
+      let companyCat = null;
+      if (req.user.companyId) {
+        const comp = await Company.findById(req.user.companyId).select('industry category');
+        if (comp) companyCat = comp.category || comp.industry;
+      }
+
+      if (course.companyId) {
+        if (!req.user.companyId || course.companyId.toString() !== req.user.companyId.toString()) {
+          return res.status(403).json({
+            success: false,
+            message: 'You do not have access to this course'
+          });
+        }
+      } else {
+        // Global course access check
+        const isGlobalAll = !course.targetCategory || course.targetCategory === 'ALL' || course.targetCategory === '';
+        const matchesCategory = companyCat && (
+          course.targetCategory.toLowerCase() === companyCat.toLowerCase() ||
+          course.targetCategory.toLowerCase().includes(companyCat.toLowerCase()) ||
+          companyCat.toLowerCase().includes(course.targetCategory.toLowerCase())
+        );
+
+        if (!isGlobalAll && !matchesCategory) {
+          return res.status(403).json({
+            success: false,
+            message: `This course is specifically targeted for offices in the "${course.targetCategory}" category.`
+          });
+        }
+      }
     }
 
     const modules = await Module.find({
@@ -126,10 +201,18 @@ const getCourseById = async (req, res, next) => {
 // @access  Private (Super Admin)
 const createCourse = async (req, res, next) => {
   try {
+    if (req.user.role !== 'SUPER_ADMIN') {
+      return res.status(403).json({
+        success: false,
+        message: 'Only the platform administrator (Super Admin) can create courses'
+      });
+    }
+
     const {
       title,
       description,
       category,
+      targetCategory,
       difficulty,
       estimatedDuration,
       passingScore,
@@ -155,11 +238,13 @@ const createCourse = async (req, res, next) => {
       ? `${slug}-${Date.now().toString().slice(-4)}`
       : slug;
 
+    let resolvedTargetCategory = targetCategory ? String(targetCategory).trim() : 'ALL';
     const coursePayload = {
       title,
       slug: finalSlug,
       description,
       category: category || 'General Security',
+      targetCategory: resolvedTargetCategory,
       difficulty: difficulty || 'BEGINNER',
       estimatedDuration: estimatedDuration || 20,
       passingScore: passingScore || 80,
@@ -170,6 +255,12 @@ const createCourse = async (req, res, next) => {
 
     if (req.user.role === 'COMPANY_ADMIN') {
       coursePayload.companyId = req.user.companyId;
+      if (!targetCategory || targetCategory === 'ALL') {
+        const comp = await Company.findById(req.user.companyId).select('category industry');
+        if (comp) {
+          coursePayload.targetCategory = comp.category || comp.industry || 'ALL';
+        }
+      }
     }
 
     const course = await Course.create(coursePayload);
@@ -219,26 +310,10 @@ const createCourse = async (req, res, next) => {
 };
 
 // Helper: decides whether the logged-in user may edit/delete a given course.
-//  - SUPER_ADMIN: any course
-//  - COMPANY_ADMIN: only courses that belong to their own company
-//    (global courses with companyId = null are shared by all tenants, so a
-//     company admin must not change or remove them)
-//  - everyone else (e.g. EMPLOYEE): never
-const canManageCourse = (user, course) => {
-  if (user.role === 'SUPER_ADMIN') return true;
-
-  if (user.role === 'COMPANY_ADMIN') {
-    // DEMO_MODE: company admin may also edit/delete shared (global) courses
-    if (DEMO_MODE) return true;
-
-    return (
-      !!course.companyId &&
-      !!user.companyId &&
-      course.companyId.toString() === user.companyId.toString()
-    );
-  }
-
-  return false;
+// Only SUPER_ADMIN can modify course curriculum, materials, or delete courses.
+// Company admins launch campaigns from tailored courses without editing course material.
+const canManageCourse = (user) => {
+  return user && user.role === 'SUPER_ADMIN';
 };
 
 // @route   PUT /api/courses/:id
@@ -266,6 +341,7 @@ const updateCourse = async (req, res, next) => {
       title,
       description,
       category,
+      targetCategory,
       difficulty,
       estimatedDuration,
       passingScore,
@@ -296,6 +372,10 @@ const updateCourse = async (req, res, next) => {
 
     if (category !== undefined) {
       course.category = category || 'General Security';
+    }
+
+    if (targetCategory !== undefined) {
+      course.targetCategory = targetCategory ? String(targetCategory).trim() : 'ALL';
     }
 
     if (difficulty !== undefined) {

@@ -47,7 +47,8 @@ const getCompanies = async (req, res, next) => {
 // @access  Private (Super Admin)
 const createCompany = async (req, res, next) => {
   try {
-    const { name, email, phone, industry, subscriptionPlan } = req.body;
+    const { name, email, phone, industry, category, subscriptionPlan } = req.body;
+    const compCategory = (category || industry || 'Technology').trim();
     
     const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
     let existing = await Company.findOne({ slug });
@@ -58,7 +59,8 @@ const createCompany = async (req, res, next) => {
       slug: finalSlug,
       email,
       phone,
-      industry,
+      industry: compCategory,
+      category: compCategory,
       subscriptionPlan: subscriptionPlan || 'PROFESSIONAL',
       status: 'ACTIVE',
       activatedAt: new Date(),
@@ -266,9 +268,51 @@ const updateMyCompany = async (req, res, next) => {
   }
 };
 
+// @route   PUT /api/companies/:id
+// @desc    Update organization details and office category (Super Admin)
+// @access  Private (Super Admin)
+const updateCompany = async (req, res, next) => {
+  try {
+    const { name, email, phone, industry, category, subscriptionPlan } = req.body;
+    const updateData = {};
+    if (name) updateData.name = name;
+    if (email) updateData.email = email;
+    if (phone !== undefined) updateData.phone = phone;
+    if (category || industry) {
+      const compCategory = (category || industry).trim();
+      updateData.category = compCategory;
+      updateData.industry = compCategory;
+    }
+    if (subscriptionPlan) updateData.subscriptionPlan = subscriptionPlan;
+
+    const company = await Company.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      { new: true }
+    );
+
+    if (!company) {
+      return res.status(404).json({ success: false, message: 'Company not found' });
+    }
+
+    await AuditLog.create({
+      userId: req.user._id,
+      companyId: company._id,
+      action: 'COMPANY_UPDATED',
+      resource: 'Company',
+      details: updateData
+    });
+
+    res.json({ success: true, company });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getCompanies,
   createCompany,
+  updateCompany,
   updateCompanyStatus,
   activateCompany,
   rejectCompany,

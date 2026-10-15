@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Lock, Mail, ArrowRight, AlertCircle, Building2, ChevronDown, ChevronUp } from 'lucide-react';
 import logoImg from '../../assets/logo-transparent.png';
+import PublicVerificationWidget from '../../components/common/PublicVerificationWidget';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -276,18 +277,15 @@ export default function LoginPage() {
 
         </div>
 
-        {/* Register & Verify Links */}
-        <div style={{ textAlign: 'center', marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {/* Public Verification Portal Widget */}
+        <PublicVerificationWidget style={{ marginTop: '16px' }} />
+
+        {/* Register Link */}
+        <div style={{ textAlign: 'center', marginTop: '16px' }}>
           <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
             New organization?{' '}
             <Link to="/register" style={{ color: 'var(--orange-dark)', textDecoration: 'none', fontWeight: 700 }}>
               Register Your Organization
-            </Link>
-          </div>
-          <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-            Have a certificate to verify?{' '}
-            <Link to="/verify/CA-2026-000001" style={{ color: 'var(--orange-dark)', textDecoration: 'none', fontWeight: 700 }}>
-              Public Verification Portal
             </Link>
           </div>
         </div>

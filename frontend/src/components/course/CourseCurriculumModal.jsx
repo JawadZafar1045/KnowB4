@@ -22,7 +22,7 @@ import {
   Play
 } from 'lucide-react';
 
-export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdated }) {
+export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdated, readOnly = false }) {
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -82,6 +82,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
 
   // ----- MODULE HANDLERS -----
   const openAddModule = () => {
+    if (readOnly) return;
     setModuleModal({
       isNew: true,
       title: '',
@@ -90,6 +91,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
   };
 
   const openEditModule = (mod) => {
+    if (readOnly) return;
     setModuleModal({
       isNew: false,
       _id: mod._id,
@@ -101,6 +103,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
 
   const handleSaveModule = async (e) => {
     e.preventDefault();
+    if (readOnly) return;
     if (!moduleModal?.title?.trim()) {
       alert('Module title is required.');
       return;
@@ -134,6 +137,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
 
   // ----- LESSON HANDLERS -----
   const openAddLesson = (targetModuleId) => {
+    if (readOnly) return;
     setLessonTab('edit');
     setLessonModal({
       isNew: true,
@@ -149,6 +153,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
   };
 
   const openEditLesson = (lesson) => {
+    if (readOnly) return;
     setLessonTab('edit');
     setLessonModal({
       isNew: false,
@@ -167,6 +172,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
 
   const handleSaveLesson = async (e) => {
     e.preventDefault();
+    if (readOnly) return;
     if (!lessonModal?.title?.trim()) {
       alert('Lesson title is required.');
       return;
@@ -208,6 +214,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
 
   // ----- DELETE HANDLERS -----
   const confirmDeleteModule = (mod) => {
+    if (readOnly) return;
     setDeleteConfirm({
       type: 'module',
       id: mod._id,
@@ -216,6 +223,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
   };
 
   const confirmDeleteLesson = (lesson) => {
+    if (readOnly) return;
     setDeleteConfirm({
       type: 'lesson',
       id: lesson._id,
@@ -225,7 +233,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
   };
 
   const executeDelete = async () => {
-    if (!deleteConfirm) return;
+    if (readOnly || !deleteConfirm) return;
     setDeleting(true);
     try {
       if (deleteConfirm.type === 'module') {
@@ -316,17 +324,17 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
               <span
                 style={{
-                  background: 'var(--navy)',
                   color: 'var(--card)',
                   fontSize: '0.72rem',
                   fontWeight: 700,
                   padding: '3px 10px',
                   borderRadius: '9999px',
                   textTransform: 'uppercase',
-                  letterSpacing: '0.04em'
+                  letterSpacing: '0.04em',
+                  background: readOnly ? 'var(--orange)' : 'var(--navy)'
                 }}
               >
-                Curriculum & Content Builder
+                {readOnly ? 'Curriculum Preview (Read-Only)' : 'Curriculum & Content Builder'}
               </span>
               {course && (
                 <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
@@ -340,7 +348,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            {course && (
+            {course && !readOnly && (
               <button
                 className="btn-primary"
                 onClick={openAddModule}
@@ -449,9 +457,15 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
               <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', maxWidth: '420px', margin: '0 auto 20px' }}>
                 Organize this course into progressive modules and lessons (e.g. Module 1: Phishing Basics, Lesson 1: Identifying Spoofed Emails).
               </p>
-              <button className="btn-primary" onClick={openAddModule}>
-                <Plus size={16} /> Create First Module
-              </button>
+              {!readOnly ? (
+                <button className="btn-primary" onClick={openAddModule}>
+                  <Plus size={16} /> Create First Module
+                </button>
+              ) : (
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginTop: '10px' }}>
+                  No modules have been configured for this course yet.
+                </p>
+              )}
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -480,23 +494,25 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                     <Clock size={15} color="var(--navy)" /> Course Duration: {course.estimatedDuration}m
                   </span>
                 </div>
-                <button
-                  type="button"
-                  onClick={openAddModule}
-                  style={{
-                    background: 'transparent',
-                    border: 'none',
-                    color: 'var(--navy)',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    fontSize: '0.82rem'
-                  }}
-                >
-                  <Plus size={14} /> New Module
-                </button>
+                {!readOnly && (
+                  <button
+                    type="button"
+                    onClick={openAddModule}
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      color: 'var(--navy)',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      fontSize: '0.82rem'
+                    }}
+                  >
+                    <Plus size={14} /> New Module
+                  </button>
+                )}
               </div>
 
               {/* Modules List */}
@@ -547,67 +563,69 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                       )}
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <button
-                        type="button"
-                        onClick={() => openAddLesson(mod._id)}
-                        style={{
-                          background: 'var(--navy)',
-                          color: 'var(--card)',
-                          border: 'none',
-                          borderRadius: '6px',
-                          padding: '6px 12px',
-                          fontSize: '0.78rem',
-                          fontWeight: 600,
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '6px'
-                        }}
-                      >
-                        <Plus size={14} /> Add Lesson
-                      </button>
+                    {!readOnly && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <button
+                          type="button"
+                          onClick={() => openAddLesson(mod._id)}
+                          style={{
+                            background: 'var(--navy)',
+                            color: 'var(--card)',
+                            border: 'none',
+                            borderRadius: '6px',
+                            padding: '6px 12px',
+                            fontSize: '0.78rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px'
+                          }}
+                        >
+                          <Plus size={14} /> Add Lesson
+                        </button>
 
-                      <button
-                        type="button"
-                        onClick={() => openEditModule(mod)}
-                        title="Edit Module Title/Description"
-                        style={{
-                          background: 'var(--card)',
-                          border: '1px solid var(--border)',
-                          borderRadius: '6px',
-                          width: '28px',
-                          height: '28px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          cursor: 'pointer',
-                          color: 'var(--slate)'
-                        }}
-                      >
-                        <Pencil size={13} />
-                      </button>
+                        <button
+                          type="button"
+                          onClick={() => openEditModule(mod)}
+                          title="Edit Module Title/Description"
+                          style={{
+                            background: 'var(--card)',
+                            border: '1px solid var(--border)',
+                            borderRadius: '6px',
+                            width: '28px',
+                            height: '28px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            color: 'var(--slate)'
+                          }}
+                        >
+                          <Pencil size={13} />
+                        </button>
 
-                      <button
-                        type="button"
-                        onClick={() => confirmDeleteModule(mod)}
-                        title="Delete Module"
-                        style={{
-                          background: 'var(--card)',
-                          border: '1px solid var(--border)',
-                          borderRadius: '6px',
-                          width: '28px',
-                          height: '28px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          cursor: 'pointer',
-                          color: 'var(--danger-text)'
-                        }}
-                      >
-                        <Trash2 size={13} />
-                      </button>
-                    </div>
+                        <button
+                          type="button"
+                          onClick={() => confirmDeleteModule(mod)}
+                          title="Delete Module"
+                          style={{
+                            background: 'var(--card)',
+                            border: '1px solid var(--border)',
+                            borderRadius: '6px',
+                            width: '28px',
+                            height: '28px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            color: 'var(--danger-text)'
+                          }}
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   {/* Lessons list inside this module */}
@@ -624,22 +642,28 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                           background: 'var(--bg)'
                         }}
                       >
-                        No lessons in this module yet. Click{' '}
-                        <button
-                          type="button"
-                          onClick={() => openAddLesson(mod._id)}
-                          style={{
-                            background: 'transparent',
-                            border: 'none',
-                            color: 'var(--navy)',
-                            fontWeight: 700,
-                            cursor: 'pointer',
-                            textDecoration: 'underline'
-                          }}
-                        >
-                          + Add Lesson
-                        </button>{' '}
-                        to add reading material, video guides, or policies.
+                        {readOnly ? (
+                          'No lessons added to this module yet.'
+                        ) : (
+                          <>
+                            No lessons in this module yet. Click{' '}
+                            <button
+                              type="button"
+                              onClick={() => openAddLesson(mod._id)}
+                              style={{
+                                background: 'transparent',
+                                border: 'none',
+                                color: 'var(--navy)',
+                                fontWeight: 700,
+                                cursor: 'pointer',
+                                textDecoration: 'underline'
+                              }}
+                            >
+                              + Add Lesson
+                            </button>{' '}
+                            to add reading material, video guides, or policies.
+                          </>
+                        )}
                       </div>
                     ) : (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -777,47 +801,51 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                                     <Eye size={12} /> {isExpanded ? 'Hide' : 'Preview'}
                                   </button>
 
-                                  {/* Edit Lesson */}
-                                  <button
-                                    type="button"
-                                    onClick={() => openEditLesson(lesson)}
-                                    title="Edit lesson"
-                                    style={{
-                                      background: 'var(--card)',
-                                      border: '1px solid var(--border)',
-                                      borderRadius: '6px',
-                                      width: '26px',
-                                      height: '26px',
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      justifyContent: 'center',
-                                      cursor: 'pointer',
-                                      color: 'var(--slate)'
-                                    }}
-                                  >
-                                    <Pencil size={12} />
-                                  </button>
+                                  {!readOnly && (
+                                    <>
+                                      {/* Edit Lesson */}
+                                      <button
+                                        type="button"
+                                        onClick={() => openEditLesson(lesson)}
+                                        title="Edit lesson"
+                                        style={{
+                                          background: 'var(--card)',
+                                          border: '1px solid var(--border)',
+                                          borderRadius: '6px',
+                                          width: '26px',
+                                          height: '26px',
+                                          display: 'flex',
+                                          alignItems: 'center',
+                                          justifyContent: 'center',
+                                          cursor: 'pointer',
+                                          color: 'var(--slate)'
+                                        }}
+                                      >
+                                        <Pencil size={12} />
+                                      </button>
 
-                                  {/* Delete Lesson */}
-                                  <button
-                                    type="button"
-                                    onClick={() => confirmDeleteLesson(lesson)}
-                                    title="Delete lesson"
-                                    style={{
-                                      background: 'var(--card)',
-                                      border: '1px solid var(--border)',
-                                      borderRadius: '6px',
-                                      width: '26px',
-                                      height: '26px',
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      justifyContent: 'center',
-                                      cursor: 'pointer',
-                                      color: 'var(--danger-text)'
-                                    }}
-                                  >
-                                    <Trash2 size={12} />
-                                  </button>
+                                      {/* Delete Lesson */}
+                                      <button
+                                        type="button"
+                                        onClick={() => confirmDeleteLesson(lesson)}
+                                        title="Delete lesson"
+                                        style={{
+                                          background: 'var(--card)',
+                                          border: '1px solid var(--border)',
+                                          borderRadius: '6px',
+                                          width: '26px',
+                                          height: '26px',
+                                          display: 'flex',
+                                          alignItems: 'center',
+                                          justifyContent: 'center',
+                                          cursor: 'pointer',
+                                          color: 'var(--danger-text)'
+                                        }}
+                                      >
+                                        <Trash2 size={12} />
+                                      </button>
+                                    </>
+                                  )}
                                 </div>
                               </div>
 
@@ -949,7 +977,9 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
           }}
         >
           <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-            Tip: Changes to curriculum and lessons are instantly available to learners enrolled in this course.
+            {readOnly
+              ? 'Curriculum preview mode: Master courses and lessons are maintained by Platform Administrators.'
+              : 'Tip: Changes to curriculum and lessons are instantly available to learners enrolled in this course.'}
           </div>
           <button className="btn-secondary" onClick={onClose} style={{ padding: '8px 18px' }}>
             Close
@@ -958,7 +988,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
       </div>
 
       {/* --- ADD / EDIT MODULE SUB-MODAL --- */}
-      {moduleModal && (
+      {moduleModal && !readOnly && (
         <div
           role="dialog"
           style={{
@@ -1033,7 +1063,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
       )}
 
       {/* --- ADD / EDIT LESSON FULL EDITOR MODAL --- */}
-      {lessonModal && (
+      {lessonModal && !readOnly && (
         <div
           role="dialog"
           style={{
@@ -1444,7 +1474,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
       )}
 
       {/* --- DELETE CONFIRMATION DIALOG --- */}
-      {deleteConfirm && (
+      {deleteConfirm && !readOnly && (
         <div
           role="alertdialog"
           style={{

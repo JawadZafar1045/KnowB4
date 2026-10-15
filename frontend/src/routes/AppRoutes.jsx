@@ -63,6 +63,7 @@ export default function AppRoutes() {
         {/* Public Routes */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/verify" element={<CertificateVerificationPage />} />
         <Route path="/verify/:certificateId" element={<CertificateVerificationPage />} />
 
         {/* Super Admin Routes */}

@@ -251,8 +251,18 @@ export default function CompaniesManagement() {
                   </div>
                   <div>
                     <div style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text)' }}>{formatOrganizationName(company.name)}</div>
-                    <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-                      {company.industry} &bull; {company.email}
+                    <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                      <span style={{
+                        display: 'inline-flex', alignItems: 'center', gap: '4px',
+                        padding: '1px 7px', borderRadius: '4px', fontSize: '0.72rem', fontWeight: 700,
+                        background: (company.category || company.industry || '').toLowerCase().includes('tv') ? 'rgba(234, 88, 12, 0.12)' : 'rgba(99, 102, 241, 0.1)',
+                        color: (company.category || company.industry || '').toLowerCase().includes('tv') ? '#ea580c' : '#4f46e5',
+                        border: (company.category || company.industry || '').toLowerCase().includes('tv') ? '1px solid rgba(234, 88, 12, 0.3)' : '1px solid rgba(99, 102, 241, 0.25)'
+                      }}>
+                        {(company.category || company.industry || '').toLowerCase().includes('tv') ? '📺' : '🏢'} {company.category || company.industry || 'Technology'}
+                      </span>
+                      <span>&bull;</span>
+                      <span>{company.email}</span>
                     </div>
                     {/* Tenant ID */}
                     {company.tenantId && (
@@ -385,6 +395,7 @@ export default function CompaniesManagement() {
                         Organization Details
                       </h4>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.82rem' }}>
+                        <div><span style={{ color: 'var(--text-muted)' }}>Office Category:</span> <span style={{ color: 'var(--navy)', fontWeight: 700 }}>{company.category || company.industry || 'General'}</span></div>
                         <div><span style={{ color: 'var(--text-muted)' }}>Slug:</span> <span style={{ color: 'var(--text)', fontWeight: 600 }}>{company.slug}</span></div>
                         <div><span style={{ color: 'var(--text-muted)' }}>Tenant ID:</span> <span style={{ color: 'var(--navy)', fontWeight: 700, fontFamily: 'monospace' }}>{company.tenantId || 'N/A'}</span></div>
                         <div><span style={{ color: 'var(--text-muted)' }}>Subscription:</span> <span style={{ color: 'var(--text)', fontWeight: 600 }}>{company.subscriptionPlan} ({company.subscriptionStatus})</span></div>

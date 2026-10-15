@@ -25,57 +25,57 @@ router.get('/:id', getCourseById);
 
 router.post(
   '/',
-  authorize('SUPER_ADMIN', 'COMPANY_ADMIN'),
+  authorize('SUPER_ADMIN'),
   createCourse
 );
 
 router.put(
   '/:id',
-  authorize('SUPER_ADMIN', 'COMPANY_ADMIN'),
+  authorize('SUPER_ADMIN'),
   updateCourse
 );
 
 router.delete(
   '/:id',
-  authorize('SUPER_ADMIN', 'COMPANY_ADMIN'),
+  authorize('SUPER_ADMIN'),
   deleteCourse
 );
 
 // Module routes
 router.post(
   '/:id/modules',
-  authorize('SUPER_ADMIN', 'COMPANY_ADMIN'),
+  authorize('SUPER_ADMIN'),
   addModule
 );
 
 router.put(
   '/:id/modules/:moduleId',
-  authorize('SUPER_ADMIN', 'COMPANY_ADMIN'),
+  authorize('SUPER_ADMIN'),
   updateModule
 );
 
 router.delete(
   '/:id/modules/:moduleId',
-  authorize('SUPER_ADMIN', 'COMPANY_ADMIN'),
+  authorize('SUPER_ADMIN'),
   deleteModule
 );
 
 // Lesson routes
 router.post(
   '/:id/lessons',
-  authorize('SUPER_ADMIN', 'COMPANY_ADMIN'),
+  authorize('SUPER_ADMIN'),
   addLesson
 );
 
 router.put(
   '/:id/lessons/:lessonId',
-  authorize('SUPER_ADMIN', 'COMPANY_ADMIN'),
+  authorize('SUPER_ADMIN'),
   updateLesson
 );
 
 router.delete(
   '/:id/lessons/:lessonId',
-  authorize('SUPER_ADMIN', 'COMPANY_ADMIN'),
+  authorize('SUPER_ADMIN'),
   deleteLesson
 );
 

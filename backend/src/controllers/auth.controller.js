@@ -188,7 +188,8 @@ const changePassword = async (req, res, next) => {
 // @access  Public
 const registerCompany = async (req, res, next) => {
   try {
-    const { companyName, email, password, adminName, industry, phone, secretKey } = req.body;
+    const { companyName, email, password, adminName, industry, category, phone, secretKey } = req.body;
+    const compCategory = (category || industry || 'Technology').trim();
 
     // Validate secret key first
     if (!secretKey || secretKey.trim() !== config.platformSecretKey) {
@@ -245,7 +246,8 @@ const registerCompany = async (req, res, next) => {
       slug: finalSlug,
       email: email.toLowerCase(),
       phone: phone || '',
-      industry: industry || 'Technology',
+      industry: compCategory,
+      category: compCategory,
       status: 'PENDING_APPROVAL',
       subscriptionPlan: 'PROFESSIONAL',
       subscriptionStatus: 'TRIAL'

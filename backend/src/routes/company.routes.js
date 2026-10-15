@@ -3,6 +3,7 @@ const router = express.Router();
 const {
   getCompanies,
   createCompany,
+  updateCompany,
   updateCompanyStatus,
   activateCompany,
   rejectCompany,
@@ -17,6 +18,7 @@ router.use(protect);
 
 router.get('/', authorize('SUPER_ADMIN', 'COMPANY_ADMIN'), getCompanies);
 router.post('/', authorize('SUPER_ADMIN'), createCompany);
+router.put('/:id', authorize('SUPER_ADMIN'), updateCompany);
 router.put('/:id/status', authorize('SUPER_ADMIN'), updateCompanyStatus);
 router.put('/:id/activate', authorize('SUPER_ADMIN'), activateCompany);
 router.put('/:id/reject', authorize('SUPER_ADMIN'), rejectCompany);

@@ -1,209 +1,87 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
-import { BookOpen, Plus, Layers, FileText, Clock, Award, X, Pencil, Trash2, CheckCircle2, AlertTriangle, Sparkles } from 'lucide-react';
+import {
+  BookOpen,
+  Layers,
+  FileText,
+  Clock,
+  Award,
+  Search,
+  Filter,
+  Send,
+  Eye,
+  Building2,
+  CheckCircle2,
+  Briefcase,
+  Sparkles
+} from 'lucide-react';
 import CourseCurriculumModal from '../../components/course/CourseCurriculumModal';
 
-// DEMO SWITCH: true = Edit/Delete buttons work on ALL courses (for demo).
-// Set to false for production. Must match DEMO_MODE in courseController.js.
-const DEMO_MODE = true;
-
 export default function CompanyCourseManager() {
+  const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-  const [modalTab, setModalTab] = useState('basic'); // 'basic' | 'content'
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
+  const [companyInfo, setCompanyInfo] = useState(null);
 
-  // Course curriculum content manager state
+  // Search & Filter state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterType, setFilterType] = useState('ALL'); // 'ALL' | 'TAILORED' | 'UNIVERSAL'
+
+  // Curriculum Preview modal
   const [curriculumCourseId, setCurriculumCourseId] = useState(null);
 
-  // null = "Add" mode, course _id = "Edit" mode
-  const [editingId, setEditingId] = useState(null);
-  // success message shown after create / update / delete
-  const [successMsg, setSuccessMsg] = useState('');
-
-  // Delete flow: the course waiting for confirmation (null = dialog closed)
-  const [deleteTarget, setDeleteTarget] = useState(null);
-  const [deleting, setDeleting] = useState(false);
-  const [deleteError, setDeleteError] = useState('');
-
-  const emptyForm = {
-    title: '',
-    description: '',
-    category: 'General Security',
-    difficulty: 'BEGINNER',
-    estimatedDuration: 20,
-    passingScore: 80,
-    thumbnail: '',
-    includeInitialContent: false,
-    moduleTitle: 'Module 1: Security Fundamentals',
-    lessonTitle: '',
-    lessonContentType: 'TEXT',
-    lessonContentUrl: '',
-    lessonTextContent: '',
-    lessonDuration: 5,
-    openCurriculumAfterCreate: true
-  };
-
-  const [form, setForm] = useState(emptyForm);
-
-  // `silent` = true refreshes the list without flashing the "Loading..." screen
-  const loadCourses = async (silent = false) => {
-    if (!silent) setLoading(true);
+  const loadData = async () => {
+    setLoading(true);
     try {
-      const res = await api.get('/courses');
-      setCourses(res.data.courses || []);
+      const [crsRes, compRes] = await Promise.all([
+        api.get('/courses'),
+        api.get('/companies')
+      ]);
+      setCourses(crsRes.data.courses || []);
+      if (compRes.data?.company) {
+        setCompanyInfo(compRes.data.company);
+      }
     } catch (err) {
-      console.error(err);
+      console.error('Failed to load courses or company:', err);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadCourses();
+    loadData();
   }, []);
 
-  // Auto-hide the success message after 3 seconds
-  useEffect(() => {
-    if (!successMsg) return;
-    const t = setTimeout(() => setSuccessMsg(''), 3000);
-    return () => clearTimeout(t);
-  }, [successMsg]);
+  const companyCategory = companyInfo?.category || companyInfo?.industry || 'Technology';
+  const isMediaOrTv = companyCategory.toLowerCase().includes('tv') || companyCategory.toLowerCase().includes('media');
 
-  // Global/shared courses (companyId = null) belong to the platform.
-  // In normal mode a company admin can only edit or delete their own courses.
-  // In DEMO_MODE (top of file) all courses can be edited/deleted.
-  const isManageable = (course) => DEMO_MODE || Boolean(course.companyId);
+  const filteredCourses = courses.filter((course) => {
+    const target = (course.targetCategory || 'ALL').trim();
+    const isUniversal = !course.targetCategory || target.toUpperCase() === 'ALL';
 
-  const closeModal = () => {
-    setShowModal(false);
-    setEditingId(null);
-    setModalTab('basic');
-    setError('');
-  };
-
-  const openAddModal = () => {
-    setError('');
-    setEditingId(null);
-    setModalTab('basic');
-    setForm(emptyForm);
-    setShowModal(true);
-  };
-
-  // open the same modal pre-filled with the selected course
-  const openEditModal = (course) => {
-    setError('');
-    setEditingId(course._id);
-    setModalTab('basic');
-    setForm({
-      ...emptyForm,
-      title: course.title || '',
-      description: course.description || '',
-      category: course.category || 'General Security',
-      difficulty: course.difficulty || 'BEGINNER',
-      estimatedDuration: course.estimatedDuration ?? 20,
-      passingScore: course.passingScore ?? 80,
-      thumbnail: course.thumbnail || '',
-      includeInitialContent: false
-    });
-    setShowModal(true);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-
-    if (!form.title.trim() || !form.description.trim()) {
-      setError('Course title and description are required.');
-      return;
+    if (filterType === 'TAILORED') {
+      if (isUniversal) return false;
+    } else if (filterType === 'UNIVERSAL') {
+      if (!isUniversal) return false;
     }
 
-    const payload = {
-      title: form.title.trim(),
-      description: form.description.trim(),
-      category: form.category || 'General Security',
-      difficulty: form.difficulty || 'BEGINNER',
-      estimatedDuration: Number(form.estimatedDuration),
-      passingScore: Number(form.passingScore),
-      thumbnail: form.thumbnail || ''
-    };
-
-    // If initial module/lesson specified during creation
-    if (!editingId && form.includeInitialContent && form.moduleTitle.trim()) {
-      const initialMod = {
-        title: form.moduleTitle.trim(),
-        description: 'Foundational course module',
-        lessons: []
-      };
-      if (form.lessonTitle.trim()) {
-        initialMod.lessons.push({
-          title: form.lessonTitle.trim(),
-          contentType: form.lessonContentType || 'TEXT',
-          contentUrl: form.lessonContentUrl?.trim() || '',
-          textContent: form.lessonTextContent || `### ${form.lessonTitle}\n\nKey instructions and security protocols for learners.`,
-          duration: Number(form.lessonDuration) || 5,
-          isRequired: true
-        });
-      }
-      payload.modules = [initialMod];
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      const matchTitle = course.title?.toLowerCase().includes(q);
+      const matchDesc = course.description?.toLowerCase().includes(q);
+      const matchCat = course.category?.toLowerCase().includes(q);
+      const matchTarget = course.targetCategory?.toLowerCase().includes(q);
+      return matchTitle || matchDesc || matchCat || matchTarget;
     }
 
-    setSaving(true);
-    try {
-      let createdCourseId = null;
-      if (editingId) {
-        await api.put(`/courses/${editingId}`, payload);
-        setSuccessMsg('Course updated successfully.');
-      } else {
-        const res = await api.post('/courses', payload);
-        createdCourseId = res.data?.course?._id;
-        setSuccessMsg('Course created successfully.');
-      }
-      closeModal();
-      setForm(emptyForm);
-      await loadCourses(true);
+    return true;
+  });
 
-      // Auto-open curriculum manager if requested
-      if (createdCourseId && form.openCurriculumAfterCreate) {
-        setCurriculumCourseId(createdCourseId);
-      }
-    } catch (err) {
-      setError(
-        err.response?.data?.message ||
-          (editingId ? 'Failed to update course.' : 'Failed to create course.')
-      );
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const openDeleteDialog = (course) => {
-    setDeleteError('');
-    setDeleteTarget(course);
-  };
-
-  const closeDeleteDialog = () => {
-    if (deleting) return;
-    setDeleteTarget(null);
-    setDeleteError('');
-  };
-
-  const handleDelete = async () => {
-    if (!deleteTarget) return;
-    setDeleting(true);
-    setDeleteError('');
-    try {
-      await api.delete(`/courses/${deleteTarget._id}`);
-      setDeleteTarget(null);
-      setSuccessMsg('Course deleted successfully.');
-      await loadCourses(true);
-    } catch (err) {
-      setDeleteError(err.response?.data?.message || 'Failed to delete course.');
-    } finally {
-      setDeleting(false);
-    }
+  const diffColors = {
+    BEGINNER: 'badge-green',
+    INTERMEDIATE: 'badge-amber',
+    ADVANCED: 'badge-rose'
   };
 
   const difficultyStyles = {
@@ -212,196 +90,375 @@ export default function CompanyCourseManager() {
     ADVANCED: { background: 'var(--danger-bg)', color: 'var(--danger-text)' }
   };
 
-  const isEditing = Boolean(editingId);
-
-  // Shared look for the small square icon buttons on each card
-  const iconButtonStyle = (disabled) => ({
-    width: '30px',
-    height: '30px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    background: 'var(--card)',
-    border: '1px solid var(--border)',
-    borderRadius: '8px',
-    cursor: disabled ? 'not-allowed' : 'pointer',
-    color: disabled ? 'var(--border)' : 'var(--text-muted)',
-    transition: 'background 0.15s, color 0.15s, border-color 0.15s'
-  });
-
-  const hoverOn = (accent, bg) => (e) => {
-    e.currentTarget.style.background = bg;
-    e.currentTarget.style.color = accent;
-    e.currentTarget.style.borderColor = accent;
-  };
-  const hoverOff = (e) => {
-    e.currentTarget.style.background = 'var(--card)';
-    e.currentTarget.style.color = 'var(--text-muted)';
-    e.currentTarget.style.borderColor = 'var(--border)';
-  };
-
-  if (loading) return <div style={{ color: 'var(--text-muted)', padding: '40px' }}>Loading course library...</div>;
+  if (loading) {
+    return <div style={{ color: 'var(--text-muted)', padding: '50px', textAlign: 'center' }}>Loading course library...</div>;
+  }
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+      {/* Top Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text)' }}>Course Library</h1>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Create and manage training content for your organization</p>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text)' }}>
+            Course Library & Catalog
+          </h1>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '2px' }}>
+            Curated security awareness curriculum tailored for your organization. Launch campaigns to assign courses to your employees.
+          </p>
         </div>
-        <button className="btn-primary" onClick={openAddModal}>
-          <Plus size={16} /> Add Course
+
+        <button
+          className="btn-primary"
+          onClick={() => navigate('/company/campaigns')}
+          style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+        >
+          <Send size={15} /> View Active Campaigns
         </button>
       </div>
 
-      {successMsg && (
-        <div
-          role="status"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            background: 'var(--success-bg)',
-            border: '1px solid var(--success-border)',
-            color: 'var(--success-text)',
-            padding: '10px 14px',
-            borderRadius: '8px',
-            fontSize: '0.85rem',
-            marginBottom: '16px'
-          }}
-        >
-          <CheckCircle2 size={16} /> {successMsg}
+      {/* Office Category Info Banner */}
+      {companyInfo && (
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          background: 'var(--surface-subtle)',
+          border: '1px solid var(--border)',
+          borderRadius: '12px',
+          padding: '14px 20px',
+          marginBottom: '20px',
+          gap: '14px',
+          flexWrap: 'wrap',
+          boxShadow: 'var(--shadow-card)'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{
+              width: '42px',
+              height: '42px',
+              borderRadius: '10px',
+              background: 'var(--card)',
+              border: '1px solid var(--border)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '1.3rem',
+              flexShrink: 0
+            }}>
+              {isMediaOrTv ? '📺' : '🏢'}
+            </div>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text)' }}>
+                  Office Category:
+                </span>
+                <span style={{
+                  fontSize: '0.82rem',
+                  fontWeight: 800,
+                  color: isMediaOrTv ? '#ea580c' : 'var(--navy)',
+                  background: isMediaOrTv ? 'rgba(234, 88, 12, 0.12)' : 'rgba(99, 102, 241, 0.1)',
+                  padding: '2px 10px',
+                  borderRadius: '6px',
+                  border: isMediaOrTv ? '1px solid rgba(234, 88, 12, 0.3)' : '1px solid rgba(99, 102, 241, 0.25)'
+                }}>
+                  {companyCategory}
+                </span>
+              </div>
+              <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '2px' }}>
+                All course content is professionally tailored and maintained by platform security administrators. Select any course below to launch a training campaign.
+              </div>
+            </div>
+          </div>
+
+          <div style={{
+            fontSize: '0.75rem',
+            fontWeight: 700,
+            padding: '5px 12px',
+            borderRadius: '20px',
+            background: 'var(--card)',
+            border: '1px solid var(--border)',
+            color: 'var(--navy)'
+          }}>
+            {courses.length} Available Courses
+          </div>
         </div>
       )}
 
-      {courses.length === 0 ? (
+      {/* Search & Filter Bar */}
+      <div style={{
+        background: 'var(--card)',
+        border: '1px solid var(--border)',
+        borderRadius: '12px',
+        padding: '12px 16px',
+        marginBottom: '20px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: '14px',
+        flexWrap: 'wrap',
+        boxShadow: 'var(--shadow-card)'
+      }}>
+        {/* Search */}
+        <div style={{ position: 'relative', flex: '1', minWidth: '220px' }}>
+          <Search size={15} color="var(--text-muted)" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search courses by title, topic, or keyword..."
+            style={{
+              width: '100%',
+              padding: '8px 12px 8px 34px',
+              background: 'var(--bg)',
+              border: '1px solid var(--border)',
+              borderRadius: '8px',
+              color: 'var(--text)',
+              fontSize: '0.84rem',
+              outline: 'none',
+              boxSizing: 'border-box'
+            }}
+          />
+        </div>
+
+        {/* Filter Pills */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          {[
+            { id: 'ALL', label: 'All Courses' },
+            { id: 'TAILORED', label: `🎯 Tailored for ${companyCategory}` },
+            { id: 'UNIVERSAL', label: '🌐 Universal' }
+          ].map(pill => {
+            const active = filterType === pill.id;
+            return (
+              <button
+                key={pill.id}
+                type="button"
+                onClick={() => setFilterType(pill.id)}
+                style={{
+                  padding: '5px 12px',
+                  borderRadius: '20px',
+                  border: '1px solid',
+                  borderColor: active ? 'var(--navy)' : 'var(--border)',
+                  background: active ? 'var(--navy)' : 'var(--surface-subtle)',
+                  color: active ? 'var(--card)' : 'var(--text)',
+                  fontSize: '0.76rem',
+                  fontWeight: active ? 700 : 500,
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                {pill.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Courses Grid */}
+      {filteredCourses.length === 0 ? (
         <div style={{ padding: '60px', textAlign: 'center', backgroundColor: 'var(--card)', border: '1px solid var(--border)', borderRadius: '12px' }}>
           <BookOpen size={40} color="var(--text-muted)" />
-          <p style={{ color: 'var(--text-muted)', marginTop: '14px' }}>No courses yet. Create your first learning module from this panel.</p>
+          <p style={{ color: 'var(--text-muted)', marginTop: '14px', fontSize: '0.9rem' }}>
+            No courses match the current search or category filter.
+          </p>
+          {(searchQuery || filterType !== 'ALL') && (
+            <button
+              type="button"
+              onClick={() => { setSearchQuery(''); setFilterType('ALL'); }}
+              style={{
+                marginTop: '10px',
+                padding: '6px 14px',
+                borderRadius: '6px',
+                border: '1px solid var(--border)',
+                background: 'var(--surface-subtle)',
+                color: 'var(--navy)',
+                fontSize: '0.80rem',
+                fontWeight: 600,
+                cursor: 'pointer'
+              }}
+            >
+              Reset Filters
+            </button>
+          )}
         </div>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '16px' }}>
-          {courses.map(course => {
-            const manageable = isManageable(course);
-            const lockedTip = 'Shared platform course. Only the platform admin can change it.';
+          {filteredCourses.map(course => {
+            const isTailored = course.targetCategory && course.targetCategory !== 'ALL';
 
             return (
-              <div key={course._id} style={{ padding: '24px', backgroundColor: 'var(--card)', border: '1px solid var(--border)', borderRadius: '12px', boxShadow: 'var(--shadow-card)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px', gap: '10px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: 'var(--navy)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <BookOpen size={20} color="var(--card)" />
-                    </div>
-                    <div>
-                      <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text)' }}>{course.title}</h3>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{course.category}</div>
-                    </div>
-                  </div>
+              <div
+                key={course._id}
+                style={{
+                  padding: '22px',
+                  backgroundColor: 'var(--card)',
+                  border: '1px solid var(--border)',
+                  borderRadius: '12px',
+                  boxShadow: 'var(--shadow-card)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between'
+                }}
+              >
+                <div>
+                  {/* Card Header */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px', gap: '10px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <div style={{
+                        width: '42px',
+                        height: '42px',
+                        borderRadius: '10px',
+                        backgroundColor: 'var(--navy)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0
+                      }}>
+                        <BookOpen size={20} color="var(--card)" />
+                      </div>
+                      <div>
+                        <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text)', margin: 0 }}>
+                          {course.title}
+                        </h3>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px', flexWrap: 'wrap' }}>
+                          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                            {course.category}
+                          </span>
 
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-                    <span style={{ ...difficultyStyles[course.difficulty], fontSize: '0.72rem', fontWeight: 700, padding: '3px 10px', borderRadius: '9999px' }}>
+                          {/* Office / Target Category Badge */}
+                          {!isTailored ? (
+                            <span style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '3px',
+                              padding: '2px 7px',
+                              borderRadius: '5px',
+                              fontSize: '0.70rem',
+                              fontWeight: 600,
+                              background: 'rgba(6, 182, 212, 0.1)',
+                              color: '#0284c7',
+                              border: '1px solid rgba(6, 182, 212, 0.25)'
+                            }}>
+                              🌐 All Offices
+                            </span>
+                          ) : (
+                            <span style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '3px',
+                              padding: '2px 7px',
+                              borderRadius: '5px',
+                              fontSize: '0.70rem',
+                              fontWeight: 700,
+                              background: course.targetCategory.toLowerCase().includes('tv') ? 'rgba(234, 88, 12, 0.12)' : 'rgba(99, 102, 241, 0.1)',
+                              color: course.targetCategory.toLowerCase().includes('tv') ? '#ea580c' : '#4f46e5',
+                              border: course.targetCategory.toLowerCase().includes('tv') ? '1px solid rgba(234, 88, 12, 0.3)' : '1px solid rgba(99, 102, 241, 0.25)'
+                            }}>
+                              {course.targetCategory.toLowerCase().includes('tv') ? '📺' : '🏢'} {course.targetCategory}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <span style={{
+                      ...difficultyStyles[course.difficulty],
+                      fontSize: '0.72rem',
+                      fontWeight: 700,
+                      padding: '3px 10px',
+                      borderRadius: '9999px',
+                      flexShrink: 0
+                    }}>
                       {course.difficulty}
                     </span>
-
-                    {/* Manage Curriculum & Content */}
-                    <button
-                      type="button"
-                      disabled={!manageable}
-                      onClick={() => setCurriculumCourseId(course._id)}
-                      title={manageable ? 'Manage course modules and lessons' : lockedTip}
-                      aria-label={`Manage content for ${course.title}`}
-                      style={{
-                        ...iconButtonStyle(!manageable),
-                        width: 'auto',
-                        padding: '0 10px',
-                        gap: '6px',
-                        fontSize: '0.75rem',
-                        fontWeight: 600,
-                        color: manageable ? 'var(--navy)' : 'var(--text-muted)',
-                        borderColor: manageable ? 'var(--orange-border)' : 'var(--border)',
-                        background: manageable ? 'var(--surface-subtle)' : 'var(--card)'
-                      }}
-                      onMouseEnter={manageable ? hoverOn('var(--navy)', 'var(--surface-subtle)') : undefined}
-                      onMouseLeave={manageable ? (e) => {
-                        e.currentTarget.style.background = 'var(--surface-subtle)';
-                        e.currentTarget.style.color = 'var(--navy)';
-                        e.currentTarget.style.borderColor = 'var(--orange-border)';
-                      } : undefined}
-                    >
-                      <Layers size={13} /> Curriculum
-                    </button>
-
-                    {/* Edit */}
-                    <button
-                      type="button"
-                      disabled={!manageable}
-                      onClick={() => openEditModal(course)}
-                      title={manageable ? 'Edit course' : lockedTip}
-                      aria-label={`Edit ${course.title}`}
-                      style={iconButtonStyle(!manageable)}
-                      onMouseEnter={manageable ? hoverOn('var(--navy)', 'var(--bg)') : undefined}
-                      onMouseLeave={manageable ? hoverOff : undefined}
-                    >
-                      <Pencil size={14} />
-                    </button>
-
-                    {/* Delete */}
-                    <button
-                      type="button"
-                      disabled={!manageable}
-                      onClick={() => openDeleteDialog(course)}
-                      title={manageable ? 'Delete course' : lockedTip}
-                      aria-label={`Delete ${course.title}`}
-                      style={iconButtonStyle(!manageable)}
-                      onMouseEnter={manageable ? hoverOn('var(--danger-text)', 'var(--danger-bg)') : undefined}
-                      onMouseLeave={manageable ? hoverOff : undefined}
-                    >
-                      <Trash2 size={14} />
-                    </button>
                   </div>
+
+                  {/* Description */}
+                  <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '14px', lineHeight: 1.5 }}>
+                    {course.description?.substring(0, 130)}...
+                  </p>
                 </div>
 
-                <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '14px', lineHeight: '1.5' }}>
-                  {course.description?.substring(0, 120)}...
-                </p>
+                <div>
+                  {/* Stats */}
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '14px',
+                    fontSize: '0.76rem',
+                    color: 'var(--text-muted)',
+                    marginBottom: '16px',
+                    paddingBottom: '14px',
+                    borderBottom: '1px solid var(--border)'
+                  }}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <Layers size={13} color="var(--navy)" /> {course.moduleCount || 0} Modules
+                    </span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <FileText size={13} color="var(--navy)" /> {course.lessonCount || 0} Lessons
+                    </span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <Clock size={13} color="var(--navy)" /> {course.estimatedDuration}m
+                    </span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <Award size={13} color="var(--navy)" /> Pass: {course.passingScore}%
+                    </span>
+                  </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '0.78rem', color: 'var(--text-muted)', flexWrap: 'wrap' }}>
-                  <button
-                    type="button"
-                    onClick={() => manageable && setCurriculumCourseId(course._id)}
-                    style={{
-                      background: 'transparent',
-                      border: 'none',
-                      color: 'var(--navy)',
-                      fontWeight: 600,
-                      cursor: manageable ? 'pointer' : 'default',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      padding: 0
-                    }}
-                  >
-                    <Layers size={13} /> {course.moduleCount || 0} Modules
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => manageable && setCurriculumCourseId(course._id)}
-                    style={{
-                      background: 'transparent',
-                      border: 'none',
-                      color: 'var(--navy)',
-                      fontWeight: 600,
-                      cursor: manageable ? 'pointer' : 'default',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      padding: 0
-                    }}
-                  >
-                    <FileText size={13} /> {course.lessonCount || 0} Lessons
-                  </button>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={13} /> {course.estimatedDuration}m</span>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Award size={13} /> Pass: {course.passingScore}%</span>
+                  {/* Action Buttons: Preview Course & Launch Campaign */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <button
+                      type="button"
+                      onClick={() => setCurriculumCourseId(course._id)}
+                      style={{
+                        flex: '1',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px',
+                        padding: '9px 12px',
+                        borderRadius: '8px',
+                        border: '1px solid var(--border)',
+                        background: 'var(--surface-subtle)',
+                        color: 'var(--navy)',
+                        fontSize: '0.80rem',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = 'var(--navy)';
+                        e.currentTarget.style.background = 'var(--bg)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = 'var(--border)';
+                        e.currentTarget.style.background = 'var(--surface-subtle)';
+                      }}
+                    >
+                      <Eye size={14} /> Preview Curriculum
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => navigate('/company/campaigns', {
+                        state: {
+                          preselectedCourseId: course._id,
+                          courseTitle: course.title
+                        }
+                      })}
+                      className="btn-primary"
+                      style={{
+                        flex: '1.2',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px',
+                        padding: '9px 14px',
+                        fontSize: '0.80rem',
+                        fontWeight: 700
+                      }}
+                    >
+                      <Send size={14} /> Launch Campaign
+                    </button>
+                  </div>
                 </div>
               </div>
             );
@@ -409,308 +466,12 @@ export default function CompanyCourseManager() {
         </div>
       )}
 
-      {/* Add / Edit modal */}
-      {showModal && (
-        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'var(--navy)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: '20px' }}>
-          <div style={{ width: modalTab === 'content' ? '680px' : '560px', maxWidth: '100%', padding: '28px', maxHeight: '90vh', overflowY: 'auto', backgroundColor: 'var(--card)', border: '1px solid var(--border)', borderRadius: '12px', boxShadow: 'var(--shadow-card)', transition: 'width 0.2s ease' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <div>
-                <h2 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text)' }}>
-                  {isEditing ? 'Edit Course' : 'Create Course & Content'}
-                </h2>
-                <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                  {isEditing ? 'Update course information or open curriculum builder' : 'Configure course details and learning materials'}
-                </p>
-              </div>
-              <button onClick={closeModal} aria-label="Close" style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}>
-                <X size={20} color="var(--text-muted)" />
-              </button>
-            </div>
-
-            {/* Quick jump to curriculum for editing */}
-            {isEditing && (
-              <div style={{ marginBottom: '18px', padding: '12px 16px', background: 'var(--surface-muted)', border: '1px solid var(--border)', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                  <div style={{ fontSize: '0.84rem', fontWeight: 700, color: 'var(--navy)' }}>Course Curriculum & Lessons</div>
-                  <div style={{ fontSize: '0.74rem', color: 'var(--navy)' }}>Create, preview, or edit learning modules and lesson content</div>
-                </div>
-                <button
-                  type="button"
-                  className="btn-primary"
-                  style={{ fontSize: '0.78rem', padding: '6px 14px' }}
-                  onClick={() => {
-                    const id = editingId;
-                    closeModal();
-                    setCurriculumCourseId(id);
-                  }}
-                >
-                  <Layers size={14} /> Open Curriculum
-                </button>
-              </div>
-            )}
-
-            {/* Mode Tabs for Create Course */}
-            {!isEditing && (
-              <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid var(--border)', paddingBottom: '12px', marginBottom: '18px' }}>
-                <button
-                  type="button"
-                  onClick={() => setModalTab('basic')}
-                  style={{
-                    padding: '6px 14px',
-                    borderRadius: '6px',
-                    border: '1px solid var(--border)',
-                    borderBottom: modalTab === 'basic' ? '2px solid var(--orange)' : '2px solid transparent',
-                    fontSize: '0.82rem',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                    background: modalTab === 'basic' ? 'var(--surface-subtle)' : 'var(--card)',
-                    color: 'var(--navy)'
-                  }}
-                >
-                  1. Course Info
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setModalTab('content')}
-                  style={{
-                    padding: '6px 14px',
-                    borderRadius: '6px',
-                    border: '1px solid var(--border)',
-                    borderBottom: modalTab === 'content' ? '2px solid var(--orange)' : '2px solid transparent',
-                    fontSize: '0.82rem',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                    background: modalTab === 'content' ? 'var(--surface-subtle)' : 'var(--card)',
-                    color: 'var(--navy)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px'
-                  }}
-                >
-                  2. Initial Lesson (Optional)
-                  {form.includeInitialContent && <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--success-text)' }} />}
-                </button>
-              </div>
-            )}
-
-            {error && (
-              <div style={{ background: 'var(--danger-bg)', border: '1px solid var(--danger-border)', color: 'var(--danger-text)', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', marginBottom: '16px' }}>
-                {error}
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit}>
-              {modalTab === 'basic' ? (
-                <>
-                  <div style={{ marginBottom: '14px' }}>
-                    <label className="form-label">Course Title *</label>
-                    <input className="form-input" required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="e.g. Advanced Phishing Defense & Incident Response" />
-                  </div>
-
-                  <div style={{ marginBottom: '14px' }}>
-                    <label className="form-label">Description *</label>
-                    <textarea className="form-input" rows={3} required value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="What will learners understand after completing this course?" style={{ resize: 'vertical' }} />
-                  </div>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
-                    <div>
-                      <label className="form-label">Category</label>
-                      <input className="form-input" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} placeholder="e.g. Email Security" />
-                    </div>
-                    <div>
-                      <label className="form-label">Difficulty</label>
-                      <select className="form-input" value={form.difficulty} onChange={(e) => setForm({ ...form, difficulty: e.target.value })}>
-                        <option value="BEGINNER">Beginner</option>
-                        <option value="INTERMEDIATE">Intermediate</option>
-                        <option value="ADVANCED">Advanced</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '20px' }}>
-                    <div>
-                      <label className="form-label">Estimated Duration (minutes)</label>
-                      <input type="number" className="form-input" value={form.estimatedDuration} onChange={(e) => setForm({ ...form, estimatedDuration: e.target.value })} min={1} />
-                    </div>
-                    <div>
-                      <label className="form-label">Passing Score (%)</label>
-                      <input type="number" className="form-input" value={form.passingScore} onChange={(e) => setForm({ ...form, passingScore: e.target.value })} min={1} max={100} />
-                    </div>
-                  </div>
-
-                  {!isEditing && (
-                    <div style={{ marginBottom: '18px', padding: '12px 14px', background: 'var(--surface-muted)', border: '1px solid var(--border)', borderRadius: '8px' }}>
-                      <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem', color: 'var(--navy)', fontWeight: 600, cursor: 'pointer' }}>
-                        <input
-                          type="checkbox"
-                          checked={form.openCurriculumAfterCreate}
-                          onChange={(e) => setForm({ ...form, openCurriculumAfterCreate: e.target.checked })}
-                        />
-                        Open Curriculum & Lesson Builder immediately after creating
-                      </label>
-                      <p style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginTop: '4px', marginLeft: '24px' }}>
-                        Recommended: easily add multiple modules, interactive reading materials, and video links.
-                      </p>
-                    </div>
-                  )}
-                </>
-              ) : (
-                /* Tab 2: Initial content during creation */
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginBottom: '18px' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: 'var(--navy)', fontWeight: 700, cursor: 'pointer' }}>
-                    <input
-                      type="checkbox"
-                      checked={form.includeInitialContent}
-                      onChange={(e) => setForm({ ...form, includeInitialContent: e.target.checked })}
-                    />
-                    Add an initial module & lesson right now
-                  </label>
-
-                  {form.includeInitialContent && (
-                    <div style={{ padding: '16px', background: 'var(--surface-muted)', border: '1px solid var(--border)', borderRadius: '10px' }}>
-                      <div style={{ marginBottom: '12px' }}>
-                        <label className="form-label">Initial Module Title *</label>
-                        <input
-                          className="form-input"
-                          value={form.moduleTitle}
-                          onChange={(e) => setForm({ ...form, moduleTitle: e.target.value })}
-                          placeholder="e.g. Module 1: Foundational Security Principles"
-                        />
-                      </div>
-
-                      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '12px', marginBottom: '12px' }}>
-                        <div>
-                          <label className="form-label">Initial Lesson Title *</label>
-                          <input
-                            className="form-input"
-                            value={form.lessonTitle}
-                            onChange={(e) => setForm({ ...form, lessonTitle: e.target.value })}
-                            placeholder="e.g. Identifying Spear-Phishing Indicators"
-                          />
-                        </div>
-                        <div>
-                          <label className="form-label">Content Type</label>
-                          <select
-                            className="form-input"
-                            value={form.lessonContentType}
-                            onChange={(e) => setForm({ ...form, lessonContentType: e.target.value })}
-                          >
-                            <option value="TEXT">Reading (Markdown)</option>
-                            <option value="VIDEO">Video URL</option>
-                            <option value="PDF">PDF Guide</option>
-                          </select>
-                        </div>
-                      </div>
-
-                      {form.lessonContentType !== 'TEXT' ? (
-                        <div style={{ marginBottom: '12px' }}>
-                          <label className="form-label">Resource / Video URL</label>
-                          <input
-                            className="form-input"
-                            value={form.lessonContentUrl}
-                            onChange={(e) => setForm({ ...form, lessonContentUrl: e.target.value })}
-                            placeholder="https://..."
-                          />
-                        </div>
-                      ) : (
-                        <div style={{ marginBottom: '12px' }}>
-                          <label className="form-label">Lesson Reading Content (Markdown)</label>
-                          <textarea
-                            className="form-input"
-                            rows={5}
-                            value={form.lessonTextContent}
-                            onChange={(e) => setForm({ ...form, lessonTextContent: e.target.value })}
-                            placeholder="### Key Takeaways&#10;&#10;- Always verify suspicious emails out of band.&#10;- Report incidents to security."
-                            style={{ fontFamily: 'monospace', fontSize: '0.82rem' }}
-                          />
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  <div style={{ padding: '12px 14px', background: 'var(--success-bg)', border: '1px solid var(--success-border)', borderRadius: '8px', fontSize: '0.8rem', color: 'var(--success-text)' }}>
-                    💡 You can always add, edit, or remove modules and lessons later using the <strong>Curriculum</strong> button on any course card.
-                  </div>
-                </div>
-              )}
-
-              <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '16px' }}>
-                <button type="button" className="btn-secondary" onClick={closeModal}>Cancel</button>
-                <button type="submit" className="btn-primary" disabled={saving}>
-                  {saving
-                    ? (isEditing ? 'Saving...' : 'Creating...')
-                    : (isEditing ? 'Save Changes' : 'Create Course')}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Delete confirmation dialog */}
-      {deleteTarget && (
-        <div
-          role="alertdialog"
-          aria-modal="true"
-          aria-labelledby="delete-course-title"
-          style={{ position: 'fixed', inset: 0, backgroundColor: 'var(--navy)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 110, padding: '20px' }}
-        >
-          <div style={{ width: '440px', maxWidth: '100%', padding: '28px', backgroundColor: 'var(--card)', border: '1px solid var(--border)', borderRadius: '12px', boxShadow: 'var(--shadow-card)' }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', marginBottom: '18px' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: 'var(--danger-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <AlertTriangle size={20} color="var(--danger-text)" />
-              </div>
-              <div>
-                <h2 id="delete-course-title" style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>
-                  Delete this course?
-                </h2>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
-                  <strong>{deleteTarget.title}</strong> and all of its modules, lessons and quiz will be permanently removed. This cannot be undone.
-                </p>
-              </div>
-            </div>
-
-            {deleteError && (
-              <div style={{ background: 'var(--danger-bg)', border: '1px solid var(--danger-border)', color: 'var(--danger-text)', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', marginBottom: '16px' }}>
-                {deleteError}
-              </div>
-            )}
-
-            <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-              <button type="button" className="btn-secondary" onClick={closeDeleteDialog} disabled={deleting}>
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleDelete}
-                disabled={deleting}
-                style={{
-                  background: 'var(--danger-text)',
-                  color: 'var(--card)',
-                  border: 'none',
-                  borderRadius: '8px',
-                  padding: '9px 16px',
-                  fontSize: '0.85rem',
-                  fontWeight: 600,
-                  cursor: deleting ? 'not-allowed' : 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px'
-                }}
-              >
-                <Trash2 size={14} /> {deleting ? 'Deleting...' : 'Delete Course'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Curriculum & Lesson Content Manager Modal */}
+      {/* Read-Only Course Curriculum Modal */}
       {curriculumCourseId && (
         <CourseCurriculumModal
           courseId={curriculumCourseId}
+          readOnly={true}
           onClose={() => setCurriculumCourseId(null)}
-          onCourseUpdated={() => loadCourses(true)}
         />
       )}
     </div>

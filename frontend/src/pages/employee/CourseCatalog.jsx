@@ -33,7 +33,25 @@ export default function CourseCatalog() {
                   </div>
                   <div>
                     <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text)' }}>{c.title}</h3>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{c.category}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px', flexWrap: 'wrap' }}>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{c.category}</span>
+                      {(!c.targetCategory || c.targetCategory === 'ALL') ? (
+                        <span style={{
+                          fontSize: '0.68rem', fontWeight: 600, padding: '1px 6px', borderRadius: '4px',
+                          background: 'rgba(6, 182, 212, 0.1)', color: '#0284c7'
+                        }}>
+                          🌐 Global
+                        </span>
+                      ) : (
+                        <span style={{
+                          fontSize: '0.68rem', fontWeight: 700, padding: '1px 6px', borderRadius: '4px',
+                          background: c.targetCategory.toLowerCase().includes('tv') ? 'rgba(234, 88, 12, 0.12)' : 'rgba(99, 102, 241, 0.1)',
+                          color: c.targetCategory.toLowerCase().includes('tv') ? '#ea580c' : '#4f46e5'
+                        }}>
+                          {c.targetCategory.toLowerCase().includes('tv') ? '📺' : '🏢'} {c.targetCategory}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <span className={`badge ${diffColors[c.difficulty] || 'badge-slate'}`}>{c.difficulty}</span>

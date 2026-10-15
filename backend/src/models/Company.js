@@ -39,6 +39,10 @@ const CompanySchema = new mongoose.Schema({
     type: String,
     default: 'Technology'
   },
+  category: {
+    type: String,
+    default: 'Technology'
+  },
   address: {
     type: String,
     default: ''
@@ -103,6 +107,13 @@ CompanySchema.pre('validate', async function(next) {
 
     this.tenantId = id;
   }
+
+  if (this.category && !this.industry) {
+    this.industry = this.category;
+  } else if (this.industry && !this.category) {
+    this.category = this.industry;
+  }
+
   next();
 });
 
