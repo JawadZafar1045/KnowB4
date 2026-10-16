@@ -62,7 +62,11 @@ app.use('/api/reports', reportRoutes);
 app.use('/api/notifications', notificationRoutes);
 
 // ─── Serve React frontend (production) ───
-const frontendDist = path.join(__dirname, '..', 'frontend', 'dist');
+const fs = require('fs');
+let frontendDist = path.join(__dirname, '..', '..', 'frontend', 'dist');
+if (!fs.existsSync(frontendDist)) {
+  frontendDist = path.join(__dirname, '..', 'frontend', 'dist');
+}
 
 app.use(express.static(frontendDist));
 
