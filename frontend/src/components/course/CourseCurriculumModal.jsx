@@ -21,6 +21,8 @@ import {
   HelpCircle,
   Play
 } from 'lucide-react';
+import ModalBackButton from '../common/ModalBackButton';
+import ModalPortal from '../common/ModalPortal';
 
 export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdated, readOnly = false }) {
   const [course, setCourse] = useState(null);
@@ -281,46 +283,52 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
   );
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      style={{
-        position: 'fixed',
-        inset: 0,
-        backgroundColor: 'var(--navy)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 120,
-        padding: '20px'
-      }}
-    >
+    <ModalPortal>
       <div
+        role="dialog"
+        className="course-curriculum-modal"
+        aria-modal="true"
         style={{
-          width: '900px',
-          maxWidth: '100%',
-          maxHeight: '92vh',
-          backgroundColor: 'var(--card)',
-          borderRadius: '12px',
-          boxShadow: 'var(--shadow-card)',
+          position: 'fixed',
+          inset: 0,
+          backgroundColor: 'var(--navy)',
           display: 'flex',
-          flexDirection: 'column',
-          border: '1px solid var(--border)',
-          overflow: 'hidden'
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1200,
+          padding: '16px'
         }}
       >
+        <div
+          className="course-curriculum-card"
+          style={{
+            width: 'min(900px, calc(100vw - 32px))',
+            maxWidth: '100%',
+            maxHeight: 'calc(100vh - 32px)',
+            backgroundColor: 'var(--card)',
+            borderRadius: '12px',
+            boxShadow: 'var(--shadow-card)',
+            display: 'flex',
+            flexDirection: 'column',
+            border: '1px solid var(--border)',
+            overflow: 'hidden'
+          }}
+        >
         {/* Modal Top Header */}
         <div
+          className="course-curriculum-header"
           style={{
             padding: '20px 24px',
             borderBottom: '1px solid var(--border)',
             display: 'flex',
-            justifyContent: 'space-between',
+            gap: '12px',
             alignItems: 'center',
-            background: 'var(--surface-subtle)'
+            background: 'var(--surface-subtle)',
+            flexShrink: 0
           }}
         >
-          <div>
+          <ModalBackButton onClick={onClose} />
+          <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
               <span
                 style={{
@@ -358,6 +366,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
               </button>
             )}
             <button
+              className="course-modal-close"
               onClick={onClose}
               aria-label="Close"
               style={{
@@ -366,6 +375,8 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                 borderRadius: '8px',
                 width: '32px',
                 height: '32px',
+                minWidth: '32px',
+                padding: 0,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -417,7 +428,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
         )}
 
         {/* Scrollable Content Body */}
-        <div style={{ padding: '20px 24px', overflowY: 'auto', flex: 1 }}>
+        <div className="course-curriculum-body" style={{ padding: '20px 24px', overflowY: 'auto', flex: 1, minHeight: 0 }}>
           {loading ? (
             <div style={{ padding: '60px', textAlign: 'center', color: 'var(--text-muted)' }}>
               Loading course structure & lessons...
@@ -967,13 +978,15 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
 
         {/* Modal Footer */}
         <div
+          className="course-curriculum-footer"
           style={{
             padding: '14px 24px',
             borderTop: '1px solid var(--border)',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            backgroundColor: 'var(--card)'
+            backgroundColor: 'var(--card)',
+            flexShrink: 0
           }}
         >
           <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
@@ -986,11 +999,14 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
           </button>
         </div>
       </div>
+      </div>
 
       {/* --- ADD / EDIT MODULE SUB-MODAL --- */}
       {moduleModal && !readOnly && (
+        <ModalPortal>
         <div
           role="dialog"
+          className="course-curriculum-submodal"
           style={{
             position: 'fixed',
             inset: 0,
@@ -998,26 +1014,32 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            zIndex: 130,
-            padding: '20px'
+            zIndex: 1300,
+            padding: '16px'
           }}
         >
           <div
             style={{
-              width: '460px',
+              width: 'min(460px, calc(100vw - 32px))',
               maxWidth: '100%',
+              maxHeight: 'calc(100vh - 32px)',
+              display: 'flex',
+              flexDirection: 'column',
               backgroundColor: 'var(--card)',
               borderRadius: '12px',
               padding: '24px',
               border: '1px solid var(--border)',
-              boxShadow: 'var(--shadow-card)'
+              boxShadow: 'var(--shadow-card)',
+              overflow: 'hidden'
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text)' }}>
+            <div className="course-modal-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', marginBottom: '16px', flexShrink: 0 }}>
+              <ModalBackButton onClick={() => setModuleModal(null)} />
+              <h3 style={{ flex: 1, fontSize: '1.05rem', fontWeight: 700, color: 'var(--text)' }}>
                 {moduleModal.isNew ? 'Create New Module' : 'Edit Module'}
               </h3>
               <button
+                className="course-modal-close"
                 onClick={() => setModuleModal(null)}
                 style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}
               >
@@ -1025,7 +1047,8 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
               </button>
             </div>
 
-            <form onSubmit={handleSaveModule}>
+            <form onSubmit={handleSaveModule} style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, overflow: 'hidden' }}>
+              <div style={{ overflowY: 'auto', flex: 1, minHeight: 0 }}>
               <div style={{ marginBottom: '14px' }}>
                 <label className="form-label">Module Title *</label>
                 <input
@@ -1049,7 +1072,8 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                 />
               </div>
 
-              <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+              </div>
+              <div className="course-modal-footer" style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', flexShrink: 0, paddingTop: '14px' }}>
                 <button type="button" className="btn-secondary" onClick={() => setModuleModal(null)}>
                   Cancel
                 </button>
@@ -1060,12 +1084,15 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
             </form>
           </div>
         </div>
+        </ModalPortal>
       )}
 
       {/* --- ADD / EDIT LESSON FULL EDITOR MODAL --- */}
       {lessonModal && !readOnly && (
+        <ModalPortal>
         <div
           role="dialog"
+          className="course-curriculum-submodal"
           style={{
             position: 'fixed',
             inset: 0,
@@ -1073,15 +1100,15 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            zIndex: 130,
-            padding: '20px'
+            zIndex: 1300,
+            padding: '16px'
           }}
         >
           <div
             style={{
-              width: '740px',
+              width: 'min(740px, calc(100vw - 32px))',
               maxWidth: '100%',
-              maxHeight: '90vh',
+              maxHeight: 'calc(100vh - 32px)',
               display: 'flex',
               flexDirection: 'column',
               backgroundColor: 'var(--card)',
@@ -1093,15 +1120,18 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
           >
             {/* Header */}
             <div
+              className="course-lesson-header"
               style={{
                 padding: '18px 24px',
                 borderBottom: '1px solid var(--border)',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                backgroundColor: 'var(--surface-muted)'
+                backgroundColor: 'var(--surface-muted)',
+                flexShrink: 0
               }}
             >
+              <ModalBackButton onClick={() => setLessonModal(null)} />
               <div>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--navy)' }}>
                   {lessonModal.isNew ? 'Add New Lesson' : 'Edit Lesson'}
@@ -1111,6 +1141,7 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                 </p>
               </div>
               <button
+                className="course-modal-close"
                 onClick={() => setLessonModal(null)}
                 style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}
               >
@@ -1119,8 +1150,8 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
             </div>
 
             {/* Scrollable Form Body */}
-            <form onSubmit={handleSaveLesson} style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
-              <div style={{ padding: '20px 24px', overflowY: 'auto', flex: 1 }}>
+            <form onSubmit={handleSaveLesson} style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, overflow: 'hidden' }}>
+              <div className="course-lesson-form-body" style={{ padding: '20px 24px', overflowY: 'auto', flex: 1, minHeight: 0 }}>
                 {/* Module Selector & Lesson Title */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '14px', marginBottom: '14px' }}>
                   <div>
@@ -1458,7 +1489,8 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                   display: 'flex',
                   justifyContent: 'flex-end',
                   gap: '10px',
-                  backgroundColor: 'var(--card)'
+                  backgroundColor: 'var(--card)',
+                  flexShrink: 0
                 }}
               >
                 <button type="button" className="btn-secondary" onClick={() => setLessonModal(null)}>
@@ -1471,12 +1503,15 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
             </form>
           </div>
         </div>
+        </ModalPortal>
       )}
 
       {/* --- DELETE CONFIRMATION DIALOG --- */}
       {deleteConfirm && !readOnly && (
+        <ModalPortal>
         <div
           role="alertdialog"
+          className="course-curriculum-submodal"
           style={{
             position: 'fixed',
             inset: 0,
@@ -1484,21 +1519,29 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            zIndex: 140,
-            padding: '20px'
+            zIndex: 1400,
+            padding: '16px'
           }}
         >
           <div
             style={{
-              width: '420px',
+              width: 'min(420px, calc(100vw - 32px))',
               maxWidth: '100%',
+              maxHeight: 'calc(100vh - 32px)',
+              display: 'flex',
+              flexDirection: 'column',
               padding: '24px',
               backgroundColor: 'var(--card)',
               borderRadius: '12px',
               border: '1px solid var(--border)',
-              boxShadow: 'var(--shadow-card)'
+              boxShadow: 'var(--shadow-card)',
+              overflow: 'hidden'
             }}
           >
+            <div style={{ display: 'flex', marginBottom: '12px' }}>
+              <ModalBackButton onClick={() => setDeleteConfirm(null)} disabled={deleting} />
+            </div>
+            <div style={{ overflowY: 'auto', flex: 1, minHeight: 0 }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
               <div
                 style={{
@@ -1525,8 +1568,9 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
                 </p>
               </div>
             </div>
+                  </div>
 
-            <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+                  <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', flexShrink: 0 }}>
               <button
                 type="button"
                 className="btn-secondary"
@@ -1555,7 +1599,8 @@ export default function CourseCurriculumModal({ courseId, onClose, onCourseUpdat
             </div>
           </div>
         </div>
+        </ModalPortal>
       )}
-    </div>
+    </ModalPortal>
   );
 }
