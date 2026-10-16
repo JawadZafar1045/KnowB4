@@ -20,6 +20,8 @@ import {
   Filter
 } from 'lucide-react';
 import CourseCurriculumModal from '../../components/course/CourseCurriculumModal';
+import ModalBackButton from '../../components/common/ModalBackButton';
+import ModalPortal from '../../components/common/ModalPortal';
 
 const PRESET_OFFICE_CATEGORIES = [
   { value: 'ALL', label: '🌐 All Offices & Companies (Universal)' },
@@ -455,8 +457,8 @@ export default function GlobalCourseManager() {
                   borderRadius: '20px',
                   border: '1px solid',
                   borderColor: isActive ? 'var(--navy)' : 'var(--border)',
-                  background: isActive ? 'var(--navy)' : 'var(--surface-subtle)',
-                  color: isActive ? 'var(--card)' : 'var(--text)',
+                  background: isActive ? 'var(--navy)' : '#FFFFFF',
+                  color: isActive ? '#FFFFFF' : 'var(--navy)',
                   fontSize: '0.76rem',
                   fontWeight: isActive ? 700 : 500,
                   cursor: 'pointer',
@@ -617,9 +619,9 @@ export default function GlobalCourseManager() {
                             borderRadius: '5px',
                             fontSize: '0.70rem',
                             fontWeight: 600,
-                            background: 'rgba(6, 182, 212, 0.1)',
-                            color: '#0284c7',
-                            border: '1px solid rgba(6, 182, 212, 0.25)'
+                            background: 'var(--navy)',
+                            color: '#FFFFFF',
+                            border: '1px solid var(--navy)'
                           }}>
                             🌐 All Offices
                           </span>
@@ -632,9 +634,9 @@ export default function GlobalCourseManager() {
                             borderRadius: '5px',
                             fontSize: '0.70rem',
                             fontWeight: 700,
-                            background: course.targetCategory.toLowerCase().includes('tv') ? 'rgba(234, 88, 12, 0.12)' : 'rgba(99, 102, 241, 0.1)',
-                            color: course.targetCategory.toLowerCase().includes('tv') ? '#ea580c' : '#4f46e5',
-                            border: course.targetCategory.toLowerCase().includes('tv') ? '1px solid rgba(234, 88, 12, 0.3)' : '1px solid rgba(99, 102, 241, 0.25)'
+                            background: 'var(--navy)',
+                            color: '#FFFFFF',
+                            border: '1px solid var(--navy)'
                           }}>
                             {course.targetCategory.toLowerCase().includes('tv') ? '📺' : '🏢'} {course.targetCategory}
                           </span>
@@ -809,6 +811,7 @@ export default function GlobalCourseManager() {
 
       {/* Add / Edit Course Modal */}
       {showAddModal && (
+        <ModalPortal>
         <div
           style={{
             position: 'fixed',
@@ -840,10 +843,12 @@ export default function GlobalCourseManager() {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
+                gap: '12px',
                 marginBottom: '16px'
               }}
             >
-              <div>
+              <ModalBackButton onClick={closeModal} />
+              <div style={{ flex: 1, minWidth: 0 }}>
                 <h2
                   style={{
                     fontSize: '1.2rem',
@@ -1285,10 +1290,12 @@ export default function GlobalCourseManager() {
             </form>
           </div>
         </div>
+        </ModalPortal>
       )}
 
       {/* Delete Confirmation Dialog */}
       {deleteTarget && (
+        <ModalPortal>
         <div
           role="alertdialog"
           aria-modal="true"
@@ -1315,6 +1322,9 @@ export default function GlobalCourseManager() {
               boxShadow: 'var(--shadow-card)'
             }}
           >
+            <div style={{ display: 'flex', marginBottom: '12px' }}>
+              <ModalBackButton onClick={closeDeleteDialog} disabled={deleting} />
+            </div>
             <div
               style={{
                 display: 'flex',
@@ -1430,6 +1440,7 @@ export default function GlobalCourseManager() {
             </div>
           </div>
         </div>
+        </ModalPortal>
       )}
 
       {/* Course Curriculum & Content Builder Modal */}

@@ -8,8 +8,6 @@ lerna-debug.log*
 .pnpm-debug.log*
 
 # Environment & Credentials
-.env
-.env.local
 .env.development.local
 .env.test.local
 .env.production.local
@@ -25,7 +23,6 @@ dist-ssr/
 .DS_Store
 Thumbs.db
 .idea/
-.vscode/
 *.swp
 *.swo
 
@@ -35,3 +32,4 @@ mongodb-binaries/
 branch_structure.json
 temp_auto_push.bat
 temp_interactive_push.bat
+config.bat

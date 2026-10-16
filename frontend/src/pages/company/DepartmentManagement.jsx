@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { Layers, Plus, Users, X, Pencil, Trash2, CheckCircle2, AlertTriangle } from 'lucide-react';
+import ModalBackButton from '../../components/common/ModalBackButton';
+import ModalPortal from '../../components/common/ModalPortal';
 
 export default function DepartmentManagement() {
   const [departments, setDepartments] = useState([]);
@@ -195,9 +197,11 @@ export default function DepartmentManagement() {
 
       {/* Add / Edit modal (same modal, now also handles edit) */}
       {showModal && (
+        <ModalPortal>
         <div style={{ position: 'fixed', inset: 0, background: 'var(--navy)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
           <div className="surface-card" style={{ padding: '32px', width: '440px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+              <ModalBackButton onClick={closeModal} />
               <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text)' }}>
                 {isEditing ? 'Edit Department' : 'Create Department'}
               </h2>
@@ -221,10 +225,12 @@ export default function DepartmentManagement() {
             </form>
           </div>
         </div>
+        </ModalPortal>
       )}
 
       {/* NEW: Delete confirmation */}
       {deleteTarget && (
+        <ModalPortal>
         <div
           role="alertdialog"
           aria-modal="true"
@@ -232,7 +238,10 @@ export default function DepartmentManagement() {
           style={{ position: 'fixed', inset: 0, background: 'var(--navy)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 110 }}
         >
           <div className="surface-card" style={{ padding: '28px', width: '420px' }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', marginBottom: '18px' }}>
+          <div style={{ display: 'flex', marginBottom: '12px' }}>
+            <ModalBackButton onClick={closeDeleteDialog} disabled={deleting} />
+          </div>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', marginBottom: '18px' }}>
               <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: 'var(--danger-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                 <AlertTriangle size={20} color="var(--danger-text)" />
               </div>
@@ -269,6 +278,7 @@ export default function DepartmentManagement() {
             </div>
           </div>
         </div>
+        </ModalPortal>
       )}
     </div>
   );

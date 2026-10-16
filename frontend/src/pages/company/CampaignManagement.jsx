@@ -3,6 +3,8 @@ import { useLocation } from 'react-router-dom';
 import api from '../../services/api';
 import { formatStatus } from '../../utils/displayFormatters';
 import { Send, Plus, CalendarDays, BookOpen, Users, Target, X, Edit2, Trash2, CheckCircle } from 'lucide-react';
+import ModalBackButton from '../../components/common/ModalBackButton';
+import ModalPortal from '../../components/common/ModalPortal';
 
 export default function CampaignManagement() {
   const location = useLocation();
@@ -201,10 +203,12 @@ export default function CampaignManagement() {
 
       {/* Edit Campaign Modal */}
       {editingCampaign && (
+        <ModalPortal>
         <div style={{ position: 'fixed', inset: 0, background: 'var(--navy)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
           <div className="surface-card" style={{ padding: '32px', width: '480px', borderRadius: '12px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text)' }}>Edit Campaign Details</h2>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+              <ModalBackButton onClick={() => setEditingCampaign(null)} />
+              <h2 style={{ flex: 1, fontSize: '1.15rem', fontWeight: 700, color: 'var(--text)' }}>Edit Campaign Details</h2>
               <button onClick={() => setEditingCampaign(null)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}><X size={18}/></button>
             </div>
             <form onSubmit={handleUpdate} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -238,14 +242,17 @@ export default function CampaignManagement() {
             </form>
           </div>
         </div>
+        </ModalPortal>
       )}
 
       {/* Create Campaign Modal */}
       {showCreate && (
+        <ModalPortal>
         <div style={{ position: 'fixed', inset: 0, background: 'var(--navy)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, overflowY: 'auto', padding: '40px 0' }}>
           <div className="surface-card" style={{ padding: '32px', width: '560px', maxHeight: '90vh', overflowY: 'auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-              <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text)' }}>Launch New Campaign</h2>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+              <ModalBackButton onClick={() => setShowCreate(false)} />
+              <h2 style={{ flex: 1, fontSize: '1.15rem', fontWeight: 700, color: 'var(--text)' }}>Launch New Campaign</h2>
               <button onClick={() => setShowCreate(false)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}><X size={18}/></button>
             </div>
             <form onSubmit={handleLaunch} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -292,6 +299,7 @@ export default function CampaignManagement() {
             </form>
           </div>
         </div>
+        </ModalPortal>
       )}
     </div>
   );
