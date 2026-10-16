@@ -6,6 +6,8 @@ import {
   CheckCircle2, AlertTriangle, AlertCircle, Loader2, Clock, Award,
   RotateCcw, Shuffle, Layers
 } from 'lucide-react';
+import ModalBackButton from '../../components/common/ModalBackButton';
+import ModalPortal from '../../components/common/ModalPortal';
 
 // ---- CSV template ----
 const TEMPLATE_HEADERS = [
@@ -499,9 +501,13 @@ export default function QuizManager() {
 
       {/*  Delete confirmation  */}
       {deleteTarget && (
+        <ModalPortal>
         <div role="alertdialog" aria-modal="true" aria-labelledby="delete-quiz-title"
           style={{ position: 'fixed', inset: 0, backgroundColor: 'var(--navy)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 110, padding: '20px' }}>
           <div style={{ width: '440px', maxWidth: '100%', padding: '28px', backgroundColor: 'var(--card)', border: '1px solid var(--border)', borderRadius: '12px', boxShadow: 'var(--shadow-card)' }}>
+            <div style={{ display: 'flex', marginBottom: '12px' }}>
+              <ModalBackButton onClick={closeDeleteDialog} disabled={deleting} />
+            </div>
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', marginBottom: '18px' }}>
               <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: 'var(--danger-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                 <AlertTriangle size={20} color="var(--danger-text)" />
@@ -537,6 +543,7 @@ export default function QuizManager() {
             </div>
           </div>
         </div>
+        </ModalPortal>
       )}
 
       <style>{`@keyframes spin { from { transform: rotate(0deg);} to { transform: rotate(360deg);} }`}</style>

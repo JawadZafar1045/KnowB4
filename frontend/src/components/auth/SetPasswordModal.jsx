@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { Shield, Key, Lock, CheckCircle2, ArrowRight } from 'lucide-react';
 import api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
+import ModalBackButton from '../common/ModalBackButton';
+import ModalPortal from '../common/ModalPortal';
 
 export default function SetPasswordModal({ onComplete }) {
   const { user, setUser } = useAuth();
+  const [isVisible, setIsVisible] = useState(true);
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -45,7 +48,10 @@ export default function SetPasswordModal({ onComplete }) {
     }
   };
 
+  if (!isVisible) return null;
+
   return (
+    <ModalPortal>
     <div style={{
       position: 'fixed',
       inset: 0,
@@ -65,6 +71,9 @@ export default function SetPasswordModal({ onComplete }) {
         boxShadow: 'var(--shadow-card)',
         border: '1px solid var(--border)'
       }}>
+        <div style={{ display: 'flex', marginBottom: '8px' }}>
+          <ModalBackButton onClick={() => setIsVisible(false)} />
+        </div>
         <div style={{ textAlign: 'center', marginBottom: '24px' }}>
           <div style={{
             width: '56px',
@@ -155,5 +164,6 @@ export default function SetPasswordModal({ onComplete }) {
         </form>
       </div>
     </div>
+    </ModalPortal>
   );
 }

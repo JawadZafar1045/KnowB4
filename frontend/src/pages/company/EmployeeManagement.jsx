@@ -3,6 +3,8 @@ import api from '../../services/api';
 import { formatStatus } from '../../utils/displayFormatters';
 import { Users, Search, Plus, Upload, ChevronDown, Award, BookOpen, X, Key, Copy, Check, RefreshCw, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import ModalBackButton from '../../components/common/ModalBackButton';
+import ModalPortal from '../../components/common/ModalPortal';
 
 export default function EmployeeManagement() {
   const { user } = useAuth();
@@ -169,10 +171,12 @@ export default function EmployeeManagement() {
 
       {/* Add Employee Modal */}
       {showAddModal && (
+        <ModalPortal>
         <div style={{ position: 'fixed', inset: 0, background: 'var(--navy)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
           <div className="surface-card" style={{ padding: '32px', width: '480px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+              <ModalBackButton onClick={() => setShowAddModal(false)} />
+              <h2 style={{ flex: 1, fontSize: '1.15rem', fontWeight: 700, color: 'var(--text)' }}>
                 {createdCredentials ? 'Account Created Successfully 🎉' : 'Add New Employee'}
               </h2>
               <button onClick={() => setShowAddModal(false)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}><X size={18}/></button>
@@ -239,14 +243,17 @@ export default function EmployeeManagement() {
             )}
           </div>
         </div>
+        </ModalPortal>
       )}
 
       {/* CSV Import Modal */}
       {showCSVModal && (
+        <ModalPortal>
         <div style={{ position: 'fixed', inset: 0, background: 'var(--navy)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
           <div className="surface-card" style={{ padding: '32px', width: '560px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text)' }}>Bulk CSV Import</h2>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+              <ModalBackButton onClick={() => { setShowCSVModal(false); setCsvResult(null); }} />
+              <h2 style={{ flex: 1, fontSize: '1.15rem', fontWeight: 700, color: 'var(--text)' }}>Bulk CSV Import</h2>
               <button onClick={() => { setShowCSVModal(false); setCsvResult(null); }} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}><X size={18}/></button>
             </div>
             <label className="form-label">Paste CSV (Required: name, email | Optional: department)</label>
@@ -263,6 +270,7 @@ export default function EmployeeManagement() {
             )}
           </div>
         </div>
+        </ModalPortal>
       )}
     </div>
   );
