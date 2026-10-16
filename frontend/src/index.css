@@ -757,6 +757,108 @@ textarea:focus {
   stroke: #FFFFFF !important;
 }
 
+button.modal-back-button {
+  border-radius: 50% !important;
+}
+
+body .modal-back-button svg {
+  color: #18181b !important;
+  stroke: #18181b !important;
+}
+
+.course-curriculum-modal button.modal-back-button svg,
+.course-curriculum-submodal button.modal-back-button svg {
+  color: #18181b !important;
+  stroke: #18181b !important;
+}
+
+.course-curriculum-modal button[title='Delete Module'] svg,
+.course-curriculum-modal button[title='Delete lesson'] svg {
+  color: var(--danger-text) !important;
+  stroke: var(--danger-text) !important;
+}
+
+.course-curriculum-modal button[title='Edit Module Title/Description'] svg,
+.course-curriculum-modal button[title='Edit lesson'] svg,
+.course-curriculum-modal button[title='New Module'] svg {
+  color: var(--navy) !important;
+  stroke: var(--navy) !important;
+}
+
+.course-curriculum-header,
+.course-lesson-header {
+  gap: 12px;
+}
+
+.course-curriculum-modal .course-modal-close,
+.course-curriculum-submodal .course-modal-close {
+  color: #52525b !important;
+}
+
+.course-curriculum-modal .course-modal-close:hover,
+.course-curriculum-submodal .course-modal-close:hover {
+  color: #18181b !important;
+}
+
+.course-curriculum-modal[role='dialog'] .course-modal-close svg,
+.course-curriculum-submodal[role='dialog'] .course-modal-close svg {
+  color: #52525b !important;
+  stroke: #52525b !important;
+}
+
+.course-curriculum-modal[role='dialog'] .course-modal-close:hover svg,
+.course-curriculum-submodal[role='dialog'] .course-modal-close:hover svg {
+  color: #18181b !important;
+  stroke: #18181b !important;
+}
+
+@media (max-width: 639px) {
+  .course-curriculum-modal,
+  .course-curriculum-submodal {
+    padding: 8px !important;
+  }
+
+  .course-curriculum-card,
+  .course-curriculum-submodal > div {
+    width: calc(100vw - 16px) !important;
+    max-height: calc(100vh - 16px) !important;
+    border-radius: 10px !important;
+  }
+
+  .course-curriculum-header,
+  .course-lesson-header {
+    padding: 12px !important;
+  }
+
+  .course-curriculum-body,
+  .course-lesson-form-body {
+    padding: 14px !important;
+  }
+
+  .course-lesson-form-body > div[style*='grid-template-columns'] {
+    grid-template-columns: 1fr !important;
+  }
+
+  .course-curriculum-footer {
+    padding: 10px 12px !important;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .course-curriculum-footer > div {
+    flex: 1 1 100%;
+  }
+
+  .course-modal-footer {
+    flex-wrap: wrap;
+  }
+
+  .course-modal-footer button,
+  .course-curriculum-footer button {
+    flex: 1;
+  }
+}
+
 .home-page [style*='background: var(--navy)'] svg,
 .home-page [style*='background-color: var(--navy)'] svg,
 .home-page [style*='background: var(--orange)'] svg,
@@ -1330,4 +1432,8 @@ div[style*='position: fixed'][style*='inset: 0'] {
 .auth-register-card [style*='var(--warning-bg)'] div[style*='position: relative'] > svg {
   color: var(--navy) !important;
   stroke: var(--navy) !important;
+}
+/* Text inside solid green / orange / red status boxes must be white */
+:is([style*='var(--danger-bg)'], [style*='var(--success-bg)'], [style*='var(--warning-bg)']) :is(p, span, strong, em, li, label, h1, h2, h3, h4, h5, h6, div) {
+  color: #FFFFFF !important;
 }
