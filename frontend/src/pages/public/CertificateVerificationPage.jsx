@@ -12,20 +12,23 @@ import {
   ExternalLink,
   Search,
   ArrowLeft,
-  ShieldCheck
+  ShieldCheck,
+  RotateCcw
 } from 'lucide-react';
 import logoImg from '../../assets/logo-transparent.png';
 import { resolveAssetUrl } from '../../services/api';
 import { formatOrganizationName, formatStatus } from '../../utils/displayFormatters';
+import { useAuth } from '../../context/AuthContext';
 
 export default function CertificateVerificationPage() {
   const { certificateId } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [cert, setCert] = useState(null);
   const [loading, setLoading] = useState(Boolean(certificateId));
   const [error, setError] = useState(null);
 
-  // Search input state for verifying another certificate or when landing on /verify directly
+  // Search input state
   const [searchId, setSearchId] = useState(certificateId || '');
 
   const verifyId = (idToVerify) => {
@@ -47,7 +50,7 @@ export default function CertificateVerificationPage() {
         if (data.success && data.certificate) {
           setCert(data.certificate);
         } else {
-          setError(data.message || 'Certificate not found. Please double-check the ID.');
+          setError(data.message || 'No certificate record found matching this ID.');
         }
       })
       .catch(() => setError('Unable to connect to verification service'))
@@ -62,17 +65,36 @@ export default function CertificateVerificationPage() {
       setLoading(false);
       setCert(null);
       setError(null);
+      setSearchId('');
     }
   }, [certificateId]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (searchId.trim()) {
-      navigate(`/verify/${encodeURIComponent(searchId.trim())}`);
+    const clean = searchId.trim();
+    if (clean) {
+      navigate(`/verify/${encodeURIComponent(clean)}`);
     }
   };
 
+  const handleClear = () => {
+    setSearchId('');
+    setCert(null);
+    setError(null);
+    navigate('/verify');
+  };
+
   const isValid = cert?.status === 'VALID';
+
+  // Back link based on auth role
+  const getBackLink = () => {
+    if (!user) return { to: '/login', label: 'Back to Sign In' };
+    if (user.role === 'SUPER_ADMIN') return { to: '/super-admin', label: 'Back to Super Admin Console' };
+    if (user.role === 'COMPANY_ADMIN') return { to: '/company', label: 'Back to Org Dashboard' };
+    return { to: '/employee', label: 'Back to Employee Training' };
+  };
+
+  const backLink = getBackLink();
 
   return (
     <div
@@ -89,9 +111,9 @@ export default function CertificateVerificationPage() {
       }}
     >
       {/* Top Navigation */}
-      <div style={{ width: '100%', maxWidth: '540px', marginBottom: '20px' }}>
+      <div style={{ width: '100%', maxWidth: '560px', marginBottom: '18px' }}>
         <Link
-          to="/login"
+          to={backLink.to}
           style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -102,7 +124,7 @@ export default function CertificateVerificationPage() {
             fontWeight: 700
           }}
         >
-          <ArrowLeft size={16} /> Back to Sign In
+          <ArrowLeft size={16} /> {backLink.label}
         </Link>
       </div>
 
@@ -140,7 +162,7 @@ export default function CertificateVerificationPage() {
         className="certificate-card"
         style={{
           width: '100%',
-          maxWidth: '540px',
+          maxWidth: '560px',
           background: 'var(--card)',
           border: isValid
             ? '1px solid var(--success-border)'
@@ -154,52 +176,96 @@ export default function CertificateVerificationPage() {
       >
         {/* Search Bar on Portal */}
         <form onSubmit={handleSearchSubmit} style={{ marginBottom: '24px' }}>
-          <label
-            style={{
-              display: 'block',
-              fontSize: '0.8rem',
-              fontWeight: 700,
-              color: 'var(--navy)',
-              marginBottom: '6px'
-            }}
-          >
-            Enter Certificate ID to Verify
-          </label>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+            <label
+              style={{
+                fontSize: '0.85rem',
+                fontWeight: 700,
+                color: 'var(--navy)',
+                margin: 0
+              }}
+            >
+              Search & Validate Certificate
+            </label>
+            {certificateId && (
+              <button
+                type="button"
+                onClick={handleClear}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--orange-dark)',
+                  fontSize: '0.78rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  padding: 0
+                }}
+              >
+                <RotateCcw size={12} /> Clear search
+              </button>
+            )}
+          </div>
+
           <div style={{ display: 'flex', gap: '8px' }}>
             <div style={{ position: 'relative', flex: 1 }}>
               <Award
                 size={16}
                 color="var(--text-muted)"
-                style={{ position: 'absolute', left: '12px', top: '12px' }}
+                style={{ position: 'absolute', left: '12px', top: '13px' }}
               />
               <input
                 type="text"
+                autoFocus
                 value={searchId}
                 onChange={(e) => setSearchId(e.target.value.toUpperCase())}
-                placeholder="e.g. CERT-2026-0001"
+                placeholder="Enter Certificate Number or ID (e.g. CERT-2026-0001)"
                 required
                 style={{
                   width: '100%',
-                  padding: '10px 12px 10px 36px',
+                  padding: '11px 12px 11px 36px',
                   background: 'var(--surface-muted)',
                   border: '1px solid var(--border)',
                   borderRadius: '10px',
                   color: 'var(--navy)',
-                  fontSize: '0.88rem',
+                  fontSize: '0.9rem',
                   fontFamily: 'monospace',
                   fontWeight: 700,
+                  letterSpacing: '0.04em',
                   outline: 'none',
                   boxSizing: 'border-box'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = 'var(--orange)';
+                  e.target.style.outline = '2px solid var(--orange)';
+                  e.target.style.outlineOffset = '1px';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'var(--border)';
+                  e.target.style.outline = 'none';
                 }}
               />
             </div>
             <button
               type="submit"
               className="btn-primary"
-              style={{ padding: '10px 18px', fontSize: '0.85rem' }}
+              style={{
+                padding: '11px 20px',
+                fontSize: '0.86rem',
+                fontWeight: 700,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                whiteSpace: 'nowrap'
+              }}
             >
-              <Search size={15} /> Verify
+              <Search size={15} /> Validate
             </button>
+          </div>
+          <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginTop: '6px' }}>
+            Enter the certificate serial number printed on the credential, transcript, or completion email.
           </div>
         </form>
 
@@ -218,14 +284,14 @@ export default function CertificateVerificationPage() {
               border: '1px solid var(--danger-border)'
             }}
           >
-            <XCircle size={48} color="var(--danger-text)" style={{ margin: '0 auto 10px' }} />
-            <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--danger-text)', margin: '0 0 6px' }}>
+            <XCircle size={44} color="var(--danger-text)" style={{ margin: '0 auto 10px' }} />
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--danger-text)', margin: '0 0 6px' }}>
               Certificate Not Found
             </h2>
-            <p style={{ color: 'var(--danger-text)', fontSize: '0.88rem', margin: 0 }}>{error}</p>
+            <p style={{ color: 'var(--danger-text)', fontSize: '0.86rem', margin: 0 }}>{error}</p>
             {certificateId && (
               <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '8px' }}>
-                Searched ID: <span style={{ fontFamily: 'monospace', color: 'var(--text)' }}>{certificateId}</span>
+                Searched ID: <span style={{ fontFamily: 'monospace', fontWeight: 700, color: 'var(--text)' }}>{certificateId}</span>
               </p>
             )}
           </div>
@@ -381,18 +447,18 @@ export default function CertificateVerificationPage() {
           <div
             style={{
               textAlign: 'center',
-              padding: '24px 20px',
+              padding: '36px 20px',
               backgroundColor: 'var(--surface-muted)',
               borderRadius: '12px',
               border: '1px dashed var(--border)'
             }}
           >
-            <ShieldCheck size={40} color="var(--navy)" style={{ margin: '0 auto 8px' }} />
-            <h3 style={{ fontSize: '0.98rem', fontWeight: 700, color: 'var(--navy)', margin: '0 0 6px' }}>
+            <ShieldCheck size={44} color="var(--navy)" style={{ margin: '0 auto 10px' }} />
+            <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--navy)', margin: '0 0 6px' }}>
               Ready to Validate
             </h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', margin: 0, maxWidth: '380px', marginInline: 'auto' }}>
-              Enter the unique certificate serial number printed on the credential or PDF to confirm validity, grade score, and student authenticity.
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.84rem', margin: 0, maxWidth: '400px', marginInline: 'auto' }}>
+              Enter any issued certificate number or serial ID in the search box above to immediately confirm validity, assessment grade, recipient identity, and issuing organization.
             </p>
           </div>
         )}

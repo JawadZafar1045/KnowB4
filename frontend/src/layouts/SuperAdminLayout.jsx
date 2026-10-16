@@ -35,7 +35,7 @@ export default function SuperAdminLayout() {
           <span>{label}</span>
         </NavLink>
       ))}
-      <a className="app-verify-link" href="/verify/CA-2026-000001" target="_blank" rel="noreferrer">
+      <a className="app-verify-link" href="/verify" target="_blank" rel="noreferrer">
         <ExternalLink size={18} aria-hidden="true" />
         <span>Verify Certificate</span>
       </a>
