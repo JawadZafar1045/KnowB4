@@ -258,12 +258,26 @@ label:has(> input[type='radio']) {
   margin-bottom: 0 !important;
 }
 
-form button[type='submit'],
-form .btn-primary,
-.modal-overlay .btn-primary,
-[role='dialog'] .btn-primary,
-[style*='position: fixed'] .btn-primary {
+form button[type='submit']:not(.btn-inline):not(.btn-auto),
+form .btn-primary:not(.btn-inline):not(.btn-auto),
+.modal-overlay .btn-primary:not(.btn-inline):not(.btn-auto),
+[role='dialog'] .btn-primary:not(.btn-inline):not(.btn-auto),
+[style*='position: fixed'] .btn-primary:not(.btn-inline):not(.btn-auto) {
   width: 100%;
+}
+
+.btn-inline,
+.btn-auto,
+.verification-search-form button[type='submit'],
+.public-verification-widget button[type='submit'] {
+  width: auto !important;
+  flex: 0 0 auto !important;
+  flex-shrink: 0 !important;
+}
+
+.search-input-wrapper {
+  flex: 1 1 0% !important;
+  min-width: 0 !important;
 }
 
 .form-input:focus,

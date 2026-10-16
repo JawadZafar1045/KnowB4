@@ -175,11 +175,12 @@ export default function CertificateVerificationPage() {
         }}
       >
         {/* Search Bar on Portal */}
-        <form onSubmit={handleSearchSubmit} style={{ marginBottom: '24px' }}>
+        <form onSubmit={handleSearchSubmit} className="verification-search-form" style={{ marginBottom: '24px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
             <label
+              htmlFor="cert-search-input"
               style={{
-                fontSize: '0.85rem',
+                fontSize: '0.88rem',
                 fontWeight: 700,
                 color: 'var(--navy)',
                 margin: 0
@@ -209,14 +210,22 @@ export default function CertificateVerificationPage() {
             )}
           </div>
 
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <div style={{ position: 'relative', flex: 1 }}>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'stretch' }}>
+            <div
+              className="search-input-wrapper"
+              style={{
+                position: 'relative',
+                flex: '1 1 0%',
+                minWidth: '180px'
+              }}
+            >
               <Award
-                size={16}
+                size={18}
                 color="var(--text-muted)"
-                style={{ position: 'absolute', left: '12px', top: '13px' }}
+                style={{ position: 'absolute', left: '14px', top: '14px', pointerEvents: 'none' }}
               />
               <input
+                id="cert-search-input"
                 type="text"
                 autoFocus
                 value={searchId}
@@ -225,12 +234,13 @@ export default function CertificateVerificationPage() {
                 required
                 style={{
                   width: '100%',
-                  padding: '11px 12px 11px 36px',
+                  height: '46px',
+                  padding: '0 14px 0 42px',
                   background: 'var(--surface-muted)',
                   border: '1px solid var(--border)',
                   borderRadius: '10px',
                   color: 'var(--navy)',
-                  fontSize: '0.9rem',
+                  fontSize: '0.92rem',
                   fontFamily: 'monospace',
                   fontWeight: 700,
                   letterSpacing: '0.04em',
@@ -250,21 +260,28 @@ export default function CertificateVerificationPage() {
             </div>
             <button
               type="submit"
-              className="btn-primary"
+              className="btn-primary btn-inline"
               style={{
-                padding: '11px 20px',
-                fontSize: '0.86rem',
+                width: 'auto',
+                minWidth: '130px',
+                flex: '0 0 auto',
+                flexShrink: 0,
+                height: '46px',
+                padding: '0 22px',
+                fontSize: '0.88rem',
                 fontWeight: 700,
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '6px',
-                whiteSpace: 'nowrap'
+                justifyContent: 'center',
+                gap: '8px',
+                whiteSpace: 'nowrap',
+                cursor: 'pointer'
               }}
             >
-              <Search size={15} /> Validate
+              <Search size={16} /> Validate
             </button>
           </div>
-          <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginTop: '6px' }}>
+          <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginTop: '8px' }}>
             Enter the certificate serial number printed on the credential, transcript, or completion email.
           </div>
         </form>

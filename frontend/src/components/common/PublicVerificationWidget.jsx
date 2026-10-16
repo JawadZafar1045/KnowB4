@@ -77,11 +77,11 @@ export default function PublicVerificationWidget({ style = {} }) {
       {/* Input Form */}
       <form onSubmit={handleVerify} style={{ marginTop: '14px' }}>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
-          <div style={{ position: 'relative', flex: 1, minWidth: '180px' }}>
+          <div className="search-input-wrapper" style={{ position: 'relative', flex: '1 1 0%', minWidth: '160px' }}>
             <Award
               size={15}
               color="var(--text-muted)"
-              style={{ position: 'absolute', left: '12px', top: '12px' }}
+              style={{ position: 'absolute', left: '12px', top: '12px', pointerEvents: 'none' }}
             />
             <input
               type="text"
@@ -120,10 +120,14 @@ export default function PublicVerificationWidget({ style = {} }) {
 
           <button
             type="submit"
+            className="btn-inline"
             onMouseEnter={() => setIsBtnHovered(true)}
             onMouseLeave={() => setIsBtnHovered(false)}
             style={{
-              padding: '9px 16px',
+              width: 'auto',
+              flex: '0 0 auto',
+              flexShrink: 0,
+              padding: '9px 18px',
               background: isBtnHovered ? 'var(--orange-dark)' : 'var(--orange)',
               border: 'none',
               borderRadius: '8px',
